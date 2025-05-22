@@ -2,4 +2,4 @@
 
 (defn -main
   [& args]
-  (println "Hello World"))
+  (println "git test"))
