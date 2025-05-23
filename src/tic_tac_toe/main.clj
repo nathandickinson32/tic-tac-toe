@@ -1,11 +1,7 @@
 (ns tic-tac-toe.main
-  (:require [tic-tac-toe.core :refer :all :as core]
-            [tic-tac-toe.board :refer :all :as board]))
-
-(defn greeting []
-  (let [greeting "Welcome to Tic Tac Toe!\nPlease enter board size:"]
-    (core/output greeting)))
+  (:require [tic-tac-toe.core :as core]
+            [tic-tac-toe.board :as board]))
 
 (defn -main []
-  (greeting)
+  (core/greeting)
   (board/->start-board))
