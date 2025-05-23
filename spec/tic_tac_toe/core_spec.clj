@@ -2,6 +2,10 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.core :refer :all]))
 
-(describe "a test"
-  (it "FIXME, I fail."
-    (should= 0 1)))
+(describe "tic tac toe"
+
+(context "output message"
+  (it "returns correct output message"
+    (should= "Welcome to Tic Tac Toe!" (output "Welcome to Tic Tac Toe!"))))
+
+  )

@@ -1,5 +1,4 @@
 (ns tic-tac-toe.core)
 
-(defn -main
-  [& args]
-  (println "git test"))
+(defn output [message]
+  (println message))
