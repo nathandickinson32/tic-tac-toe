@@ -72,18 +72,19 @@
    [\X \O \X]
    [\X \O \O]])
 
-
 (describe "game conditions"
 
   (context "switching player"
 
     (it "switches from player X to player O"
 
-      (should= \O (sut/switch-player \X)))
+      (should= \O (sut/switch-player \X))
+      )
 
     (it "switches from player O to player X"
 
-      (should= \X (sut/switch-player \O)))
+      (should= \X (sut/switch-player \O))
+      )
 
     )
 
@@ -91,15 +92,15 @@
 
     (it "returns false when the board has available spaces"
 
-      (should= false (sut/full-board? not-full-board))
-      (should= false (sut/full-board? winning-col1))
-      (should= false (sut/full-board? winning-row1))
+      (should-not (sut/full-board? not-full-board))
+      (should-not (sut/full-board? winning-col1))
+      (should-not (sut/full-board? winning-row1))
       )
 
     (it "returns true when the board is full with no winner"
 
-      (should= true (sut/full-board? full-board))
-      (should= true (sut/full-board? full-board2))
+      (should (sut/full-board? full-board))
+      (should (sut/full-board? full-board2))
       )
 
     )
@@ -108,25 +109,25 @@
 
     (it "returns false when no rows have all matching symbols"
 
-      (should= false (sut/three-matches? (first winning-row1) \O))
-      (should= false (sut/three-matches? (nth winning-row1 2) \O))
-      (should= false (sut/three-matches? (second winning-row2) \O))
-      (should= false (sut/three-matches? (nth winning-row3 1) \X))
-      (should= false (sut/three-matches? (nth winning-row3 2) \X))
+      (should-not (sut/three-matches? (first winning-row1) \O))
+      (should-not (sut/three-matches? (nth winning-row1 2) \O))
+      (should-not (sut/three-matches? (second winning-row2) \O))
+      (should-not (sut/three-matches? (nth winning-row3 1) \X))
+      (should-not (sut/three-matches? (nth winning-row3 2) \X))
       )
 
     (it "returns true for a single row of matching symbols"
 
-      (should= true (sut/three-matches? (first winning-row1) \X))
-      (should= true (sut/three-matches? (nth winning-row2 2) \X))
-      (should= true (sut/three-matches? (second winning-row3) \O))
+      (should (sut/three-matches? (first winning-row1) \X))
+      (should (sut/three-matches? (nth winning-row2 2) \X))
+      (should (sut/three-matches? (second winning-row3) \O))
       )
 
-    (it "defines a winning row"
+    (it "is a winning row"
 
-      (should= true (sut/winning-row? winning-row1 \X))
-      (should= true (sut/winning-row? winning-row2 \X))
-      (should= true (sut/winning-row? winning-row3 \O))
+      (should (sut/winning-row? winning-row1 \X))
+      (should (sut/winning-row? winning-row2 \X))
+      (should (sut/winning-row? winning-row3 \O))
       )
 
     )
@@ -135,16 +136,16 @@
 
     (it "returns false when no cols have all matching symbols"
 
-      (should= false (sut/winning-col? winning-col1 \O))
-      (should= false (sut/winning-col? winning-col2 \O))
-      (should= false (sut/winning-col? winning-col1 \O))
+      (should-not (sut/winning-col? winning-col1 \O))
+      (should-not (sut/winning-col? winning-col2 \O))
+      (should-not (sut/winning-col? winning-col1 \O))
       )
 
-    (it "defines a winning column"
+    (it "is a winning column"
 
-      (should= true (sut/winning-col? winning-col1 \X))
-      (should= true (sut/winning-col? winning-col2 \X))
-      (should= true (sut/winning-col? winning-col3 \O))
+      (should (sut/winning-col? winning-col1 \X))
+      (should (sut/winning-col? winning-col2 \X))
+      (should (sut/winning-col? winning-col3 \O))
       )
 
     )
@@ -153,67 +154,94 @@
 
     (it "false for same symbol diagonal"
 
-      (should= false (sut/winning-diagonal? not-full-board \X))
-      (should= false (sut/winning-diagonal? no-winners-board \X))
-      (should= false (sut/winning-diagonal? not-full-board \O))
-      (should= false (sut/winning-diagonal? no-winners-board \O))
-      (should= false (sut/winning-diagonal? diagonal-win1 \O))
-      (should= false (sut/winning-diagonal? diagonal-win3 \X))
+      (should-not (sut/winning-diagonal? not-full-board \X))
+      (should-not (sut/winning-diagonal? no-winners-board \X))
+      (should-not (sut/winning-diagonal? not-full-board \O))
+      (should-not (sut/winning-diagonal? no-winners-board \O))
+      (should-not (sut/winning-diagonal? diagonal-win1 \O))
+      (should-not (sut/winning-diagonal? diagonal-win3 \X))
       )
 
     (it "true for same symbol diagonal"
 
-      (should= true (sut/winning-diagonal? diagonal-win1 \X))
-      (should= true (sut/winning-diagonal? diagonal-win2 \X))
-      (should= true (sut/winning-diagonal? diagonal-win3 \O))
-      (should= true (sut/winning-diagonal? diagonal-win4 \O))
+      (should (sut/winning-diagonal? diagonal-win1 \X))
+      (should (sut/winning-diagonal? diagonal-win2 \X))
+      (should (sut/winning-diagonal? diagonal-win3 \O))
+      (should (sut/winning-diagonal? diagonal-win4 \O))
       )
 
     )
 
   (context "win?"
 
-    (it "returns false if no row, column or diagonal is filled by same player symbol"
+    (it "no row, column or diagonal is filled by X"
 
-      (should= false (sut/win? no-winners-board \X))
-      (should= false (sut/win? no-winners-board \O))
+      (should-not (sut/win? no-winners-board \X))
       )
 
-    (it "returns true if a row, column or diagonal is filled by same player symbol"
+    (it "no row, column or diagonal is filled by O"
 
-      (should= true (sut/win? winning-row1 \X))
-      (should= true (sut/win? winning-row2 \X))
-      (should= true (sut/win? winning-row3 \O))
-      (should= true (sut/win? winning-col1 \X))
-      (should= true (sut/win? winning-col2 \X))
-      (should= true (sut/win? winning-col3 \O))
-      (should= true (sut/win? diagonal-win1 \X))
-      (should= true (sut/win? diagonal-win2 \X))
-      (should= true (sut/win? diagonal-win3 \O))
-      (should= true (sut/win? diagonal-win4 \O))
+      (should-not (sut/win? no-winners-board \O))
+      )
+
+
+    (it "a row is filled by same player symbol"
+
+      (should (sut/win? winning-row1 \X))
+      (should (sut/win? winning-row2 \X))
+      (should (sut/win? winning-row3 \O))
+      )
+
+    (it "a column is filled by same player symbol"
+
+      (should (sut/win? winning-col1 \X))
+      (should (sut/win? winning-col2 \X))
+      (should (sut/win? winning-col3 \O))
+      )
+
+    (it "a diagonal is filled by same player symbol"
+
+      (should (sut/win? diagonal-win1 \X))
+      (should (sut/win? diagonal-win2 \X))
+      (should (sut/win? diagonal-win3 \O))
+      (should (sut/win? diagonal-win4 \O))
       )
 
     )
 
+  (around [context] (with-out-str (context)))
   (context "game-over?"
 
-    (it "returns false if there is no winners"
+    (it "returns false if there is no winners for X"
 
-      (should= false (sut/game-over? no-winners-board \X))
-      (should= false (sut/game-over? no-winners-board \O))
+      (should-not (sut/game-over? no-winners-board \X))
       )
 
-    (it "returns true if there is a winner"
+    (it "returns false if there is no winners for O"
 
-      (should= true (sut/game-over? winning-col1 \X))
-      (should= true (sut/game-over? winning-col2 \X))
-      (should= true (sut/game-over? winning-col3 \O))
-      (should= true (sut/game-over? winning-row1 \X))
-      (should= true (sut/game-over? winning-row3 \O))
-      (should= true (sut/game-over? diagonal-win1 \X))
-      (should= true (sut/game-over? diagonal-win2 \X))
-      (should= true (sut/game-over? diagonal-win3 \O))
-      (should= true (sut/game-over? diagonal-win4 \O))
+      (should-not (sut/game-over? no-winners-board \O))
+      )
+
+    (it "returns true if there is a winning row"
+
+      (should (sut/game-over? winning-row1 \X))
+      (should (sut/game-over? winning-row2 \X))
+      (should (sut/game-over? winning-row3 \O))
+      )
+
+    (it "returns true if there is a winning column"
+
+      (should (sut/game-over? winning-col1 \X))
+      (should (sut/game-over? winning-col2 \X))
+      (should (sut/game-over? winning-col3 \O))
+      )
+
+    (it "returns true if there is a winning diagonal"
+
+      (should (sut/game-over? diagonal-win1 \X))
+      (should (sut/game-over? diagonal-win2 \X))
+      (should (sut/game-over? diagonal-win3 \O))
+      (should (sut/game-over? diagonal-win4 \O))
       )
 
     )
