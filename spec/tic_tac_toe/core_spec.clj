@@ -1,13 +1,13 @@
 (ns tic-tac-toe.core-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.core :as core]
-            [tic-tac-toe.main :as main]))
+            [tic-tac-toe.core :as core]))
 
 (describe "tic tac toe"
 
   (context "output message"
 
     (it "returns correct output message"
+
       (let
         [output
          (str

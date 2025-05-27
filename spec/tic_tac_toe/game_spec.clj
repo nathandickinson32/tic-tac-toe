@@ -47,7 +47,45 @@
    [\O \O \X]
    [\X \O \X]])
 
+(def full-board2
+  [[\O \X \O]
+   [\O \X \X]
+   [\X \O \X]])
+
+(def diagonal-win1
+  [[\X \O \O]
+   [\O \X \X]
+   [\X \O \X]])
+
+(def diagonal-win2
+  [[\X \O \X]
+   [\O \X \X]
+   [\X \O \O]])
+
+(def diagonal-win3
+  [[\X \space \O]
+   [\O \O \X]
+   [\O \X \X]])
+
+(def diagonal-win4
+  [[\O \space \X]
+   [\X \O \X]
+   [\X \O \O]])
+
+
 (describe "game conditions"
+
+  (context "switching player"
+
+    (it "switches from player X to player O"
+
+      (should= \O (sut/switch-player \X)))
+
+    (it "switches from player O to player X"
+
+      (should= \X (sut/switch-player \O)))
+
+    )
 
   (context "draw/tie game"
 
@@ -61,6 +99,7 @@
     (it "returns true when the board is full with no winner"
 
       (should= true (sut/full-board? full-board))
+      (should= true (sut/full-board? full-board2))
       )
 
     )
@@ -110,15 +149,37 @@
 
     )
 
+  (context "diagonals"
+
+    (it "false for same symbol diagonal"
+
+      (should= false (sut/winning-diagonal? not-full-board \X))
+      (should= false (sut/winning-diagonal? no-winners-board \X))
+      (should= false (sut/winning-diagonal? not-full-board \O))
+      (should= false (sut/winning-diagonal? no-winners-board \O))
+      (should= false (sut/winning-diagonal? diagonal-win1 \O))
+      (should= false (sut/winning-diagonal? diagonal-win3 \X))
+      )
+
+    (it "true for same symbol diagonal"
+
+      (should= true (sut/winning-diagonal? diagonal-win1 \X))
+      (should= true (sut/winning-diagonal? diagonal-win2 \X))
+      (should= true (sut/winning-diagonal? diagonal-win3 \O))
+      (should= true (sut/winning-diagonal? diagonal-win4 \O))
+      )
+
+    )
+
   (context "win?"
 
-    (it "returns false if no row or column is filled by same player symbol"
+    (it "returns false if no row, column or diagonal is filled by same player symbol"
 
       (should= false (sut/win? no-winners-board \X))
       (should= false (sut/win? no-winners-board \O))
       )
 
-    (it "returns true if a row or column is filled by same player symbol"
+    (it "returns true if a row, column or diagonal is filled by same player symbol"
 
       (should= true (sut/win? winning-row1 \X))
       (should= true (sut/win? winning-row2 \X))
@@ -126,6 +187,10 @@
       (should= true (sut/win? winning-col1 \X))
       (should= true (sut/win? winning-col2 \X))
       (should= true (sut/win? winning-col3 \O))
+      (should= true (sut/win? diagonal-win1 \X))
+      (should= true (sut/win? diagonal-win2 \X))
+      (should= true (sut/win? diagonal-win3 \O))
+      (should= true (sut/win? diagonal-win4 \O))
       )
 
     )
@@ -144,8 +209,11 @@
       (should= true (sut/game-over? winning-col2 \X))
       (should= true (sut/game-over? winning-col3 \O))
       (should= true (sut/game-over? winning-row1 \X))
-      (should= true (sut/game-over? winning-row1 \X))
       (should= true (sut/game-over? winning-row3 \O))
+      (should= true (sut/game-over? diagonal-win1 \X))
+      (should= true (sut/game-over? diagonal-win2 \X))
+      (should= true (sut/game-over? diagonal-win3 \O))
+      (should= true (sut/game-over? diagonal-win4 \O))
       )
 
     )

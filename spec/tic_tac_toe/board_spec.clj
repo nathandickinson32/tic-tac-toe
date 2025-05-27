@@ -7,6 +7,7 @@
   (context "printing"
 
     (it "prints an empty board"
+
       (let
         [output
          (str
@@ -20,6 +21,7 @@
         (should= output (with-out-str (sut/print-board sut/starting-board)))))
 
     (it "prints a board after one move"
+
       (let
         [board
          (assoc-in sut/starting-board [0 0] \x)
@@ -35,6 +37,7 @@
         (should= output (with-out-str (sut/print-board board)))))
 
     (it "prints board when token is in first row"
+
       (let
         [board
          (assoc-in sut/starting-board [0 2] \x)
@@ -50,6 +53,7 @@
         (should= output (with-out-str (sut/print-board board)))))
 
     (it "prints three in a row, down the middle"
+
       (let
         [board
          (-> sut/starting-board
@@ -68,6 +72,7 @@
         (should= output (with-out-str (sut/print-board board)))))
 
     (it "prints three in a row, across the middle row"
+
       (let
         [board
          (-> sut/starting-board
@@ -86,6 +91,7 @@
         (should= output (with-out-str (sut/print-board board)))))
 
     (it "prints a full board"
+
       (let
         [board
          [[\a \b \c]
@@ -108,36 +114,40 @@
 
     (it "marks grid with X"
 
-      (let [test-board [
-                        [\space \space \space]
-                        [\space \X \space]
-                        [\space \space \space]]
-            move       [1 1]]
+      (let
+        [test-board
+              [[\space \space \space]
+               [\space \X \space]
+               [\space \space \space]]
+         move [1 1]]
         (should= test-board (sut/make-move sut/starting-board move \X)))
 
-      (let [test-board [
-                        [\X \space \space]
-                        [\space \space \space]
-                        [\space \space \space]]
-            move       [0 0]]
+      (let
+        [test-board
+              [[\X \space \space]
+               [\space \space \space]
+               [\space \space \space]]
+         move [0 0]]
         (should= test-board (sut/make-move sut/starting-board move \X)))
 
       )
 
     (it "marks grid with O"
 
-      (let [test-board [
-                        [\O \space \space]
-                        [\space \space \space]
-                        [\space \space \space]]
-            move       [0 0]]
+      (let
+        [test-board
+              [[\O \space \space]
+               [\space \space \space]
+               [\space \space \space]]
+         move [0 0]]
         (should= test-board (sut/make-move sut/starting-board move \O)))
 
-      (let [test-board [
-                        [\space \space \space]
-                        [\space \space \space]
-                        [\space \space \O]]
-            move       [2 2]]
+      (let
+        [test-board
+              [[\space \space \space]
+               [\space \space \space]
+               [\space \space \O]]
+         move [2 2]]
         (should= test-board (sut/make-move sut/starting-board move \O)))
 
       )
@@ -168,14 +178,21 @@
 
     (it "parses input from the console"
 
-      (let [test-board [
-                        [\space \space \space]
-                        [\space \space \space]
-                        [\space \space \space]]] (with-in-str "1 0\n"
-                                                              (should= [1 0] (sut/get-user-move test-board)))
+      (let
+        [test-board
+         [[\space \space \space]
+          [\space \space \space]
+          [\space \space \space]]]
+        (with-in-str "1 0\n"
+                     (should= [1 0] (sut/get-user-move test-board))))
 
-                                                 (with-in-str "2 2\n"
-                                                              (should= [2 2] (sut/get-user-move test-board))))
+      (let
+        [test-board
+         [[\space \space \space]
+          [\space \space \space]
+          [\space \space \space]]]
+        (with-in-str "2 2\n"
+                     (should= [2 2] (sut/get-user-move test-board))))
 
       )
 
@@ -226,10 +243,11 @@
 
     (it "returns true when grid point is empty"
 
-      (let [test-board [
-                        [\space \X \O]
-                        [\X \space \space]
-                        [\O \X \space]]]
+      (let
+        [test-board
+         [[\space \X \O]
+          [\X \space \space]
+          [\O \X \space]]]
         (should= true (sut/space-available? test-board [0 0]))
         (should= true (sut/space-available? test-board [2 2]))
         (should= true (sut/space-available? test-board [1 1]))
@@ -240,10 +258,11 @@
 
     (it "returns false when grid point is taken"
 
-      (let [test-board [
-                        [\space \X \O]
-                        [\X \space \space]
-                        [\O \X \space]]]
+      (let
+        [test-board
+         [[\space \X \O]
+          [\X \space \space]
+          [\O \X \space]]]
         (should= false (sut/space-available? test-board [0 1]))
         (should= false (sut/space-available? test-board [0 2]))
         (should= false (sut/space-available? test-board [1 0]))
