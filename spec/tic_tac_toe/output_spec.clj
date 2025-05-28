@@ -4,21 +4,9 @@
 
 (describe "console output messages"
 
-  (context "validity"
+  (context "greeting"
 
-    (it "prints invalid input message"
-
-      (let [output (str "Invalid Move. Try again\n")]
-        (should= output (with-out-str (sut/invalid-response)))
-        )
-
-      )
-
-    )
-
-  (context "output message"
-
-    (it "returns correct output message"
+    (it "returns correct greeting message"
 
       (let [output (str "Welcome to Tic Tac Toe\n"
                         "Select position for symbol 1-9\n"
@@ -116,6 +104,18 @@
                         "| g | h | i |\n"
                         "-------------\n")]
         (should= output (with-out-str (sut/print-board board)))))
+
+    )
+
+  (context "validity"
+
+    (it "prints invalid input message"
+
+      (let [output (str "Invalid Move. Try again\n")]
+        (should= output (with-out-str (sut/invalid-response)))
+        )
+
+      )
 
     )
 
