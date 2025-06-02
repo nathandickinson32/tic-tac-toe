@@ -1,6 +1,6 @@
 (ns tic-tac-toe.game
-  (require [tic-tac-toe.board :as board]
-           [tic-tac-toe.output :as output]))
+  (:require [tic-tac-toe.board :as board]
+            [tic-tac-toe.output :as output]))
 
 (defn switch-player [current-player]
   (if (= \X current-player)
@@ -8,7 +8,7 @@
     \X))
 
 (defn full-board? [board]
-  (not-any? #(= \space %) (flatten board)))
+  (every? #{\X \O} (flatten board)))
 
 (defn three-matches? [row player]
   (every? #(= % player) row))

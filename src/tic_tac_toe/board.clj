@@ -7,7 +7,8 @@
    "7" [2 0] "8" [2 1] "9" [2 2]})
 
 (defn space-available? [board move]
-  (= \space (get-in board move)))
+  (let [symbol (get-in board move)]
+    (not (or (= symbol \X) (= symbol \O)))))
 
 (defn ->grid-coordinates [input]
   (get single-digit-positions input))

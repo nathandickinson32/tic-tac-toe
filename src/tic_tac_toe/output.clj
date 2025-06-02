@@ -2,14 +2,7 @@
 
 (defn greeting []
   (print (str "Welcome to Tic Tac Toe\n"
-              "Select position for symbol 1-9\n"
-              "-------------\n"
-              "| 1 | 2 | 3 |\n"
-              "-------------\n"
-              "| 4 | 5 | 6 |\n"
-              "-------------\n"
-              "| 7 | 8 | 9 |\n"
-              "-------------\n")))
+              "Select position for symbol 1-9\n")))
 
 (defn invalid-response []
   (println "Invalid Move. Try again"))
@@ -27,9 +20,9 @@
        "-------------\n"))
 
 (def starting-board
-  [[\space \space \space]
-   [\space \space \space]
-   [\space \space \space]])
+  [[\1 \2 \3]
+   [\4 \5 \6]
+   [\7 \8 \9]])
 
 (defn print-board [board]
   (print (apply format board-format (flatten board))))
