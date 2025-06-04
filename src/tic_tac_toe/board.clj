@@ -13,7 +13,7 @@
 (defn ->grid-coordinates [input]
   (get single-digit-positions input))
 
-(defn maybe-valid-move [board input]
+(defn- maybe-valid-move [board input]
   (when-let [move (->grid-coordinates input)]
     (when (space-available? board move)
       move)))

@@ -1,5 +1,7 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
+            [tic-tac-toe.ai :as ai]
+            [tic-tac-toe.board :as board]
             [tic-tac-toe.game :as sut]
             [tic-tac-toe.output :as output]))
 
@@ -43,6 +45,11 @@
    [\space \space \O]
    [\X \O \space]])
 
+(def not-full-board1
+  [[\X \space \X]
+   [\space \space \O]
+   [\X \O \O]])
+
 (def full-board
   [[\X \X \O]
    [\O \O \X]
@@ -73,7 +80,94 @@
    [\X \O \X]
    [\X \O \O]])
 
+(def state-human-v-human
+  {\X :human \O :human :board output/starting-board :current-token \X})
+
+(def state-human-v-ai
+  {\X :human \O :ai :board output/starting-board :current-token \X})
+
+(def state-ai-v-human
+  {\X :ai \O :human :board output/starting-board :current-token \X})
+
+(def take-turn-state-human-v-human
+  {\X :human \O :human :board not-full-board1 :current-token \X})
+
+(def take-turn-state-human-v-ai
+  {\X :human \O :ai :board not-full-board1 :current-token \O})
+
+(def take-turns-state-ai-v-human
+  {\X :ai \O :human :board not-full-board1 :current-token \X})
+
 (describe "game conditions"
+
+  (context "game modes"
+
+    (it "returns nil for anything outside of game-modes map"
+      (should= nil (sut/game-modes "0"))
+      (should= nil (sut/game-modes "4"))
+      (should= nil (sut/game-modes "*"))
+      (should= nil (sut/game-modes ""))
+      (should= nil (sut/game-modes " "))
+      (should= nil (sut/game-modes "-1")))
+
+    (it "returns human vs human state for 1"
+      (should= state-human-v-human
+               (sut/game-modes "1")))
+
+    (it "returns human vs ai state for 2"
+      (should= state-human-v-ai
+               (sut/game-modes "2")))
+
+    (it "returns ai vs human state for 3"
+      (should= state-ai-v-human
+               (sut/game-modes "3")))
+    )
+
+  (context "maybe-valid-input"
+
+    (it "returns nil for anything outside of game-modes map"
+      (should= nil (sut/maybe-valid-game-mode "0"))
+      (should= nil (sut/maybe-valid-game-mode "4"))
+      (should= nil (sut/maybe-valid-game-mode "*"))
+      (should= nil (sut/maybe-valid-game-mode ""))
+      (should= nil (sut/maybe-valid-game-mode " "))
+      (should= nil (sut/maybe-valid-game-mode "-1"))
+      )
+
+    (it "returns human vs human state for 1"
+      (should= state-human-v-human
+               (sut/maybe-valid-game-mode "1")))
+
+    (it "returns human vs ai state for 2"
+      (should= state-human-v-ai
+               (sut/maybe-valid-game-mode "2")))
+
+    (it "returns human vs ai state for 3"
+      (should= {\X :ai \O :human :board output/starting-board :current-token \X}
+               (sut/maybe-valid-game-mode "3")))
+    )
+
+  (context "when choosing a game mode"
+    (with-stubs)
+
+    (it "displays game-mode-prompt"
+      (with-redefs [output/game-mode-prompt   (stub :game-mode-prompt)
+                    output/invalid-response   (stub :invalid-response)
+                    sut/take-turns            (stub :take-turns)
+                    sut/maybe-valid-game-mode (fn [_] {:fake :state})]
+        (with-in-str "1\n" (sut/choose-game-mode))
+        (should-have-invoked :game-mode-prompt)))
+
+    (it "continues to accept user input until valid mode is selected"
+      (with-redefs [output/game-mode-prompt   (stub :game-mode-prompt)
+                    output/invalid-response   (stub :invalid-response)
+                    sut/take-turns            (stub :take-turns)
+                    sut/maybe-valid-game-mode (fn [x] (when (= x "1") {:fake :state}))]
+        (with-in-str ":\nHuman\n*\\n\n21\n1\n" (sut/choose-game-mode))
+        (should-have-invoked :invalid-response)
+        (should-have-invoked :take-turns)))
+    )
+
 
   (context "switching player"
 
@@ -82,7 +176,6 @@
 
     (it "switches from player O to player X"
       (should= \X (sut/switch-player \O)))
-
     )
 
   (context "draw/tie game"
@@ -95,7 +188,6 @@
     (it "returns true when the board is full with no winner"
       (should (sut/full-board? full-board))
       (should (sut/full-board? full-board2)))
-
     )
 
   (context "rows"
@@ -116,7 +208,6 @@
       (should (sut/winning-row? winning-row1 \X))
       (should (sut/winning-row? winning-row2 \X))
       (should (sut/winning-row? winning-row3 \O)))
-
     )
 
   (context "columns"
@@ -130,7 +221,6 @@
       (should (sut/winning-col? winning-col1 \X))
       (should (sut/winning-col? winning-col2 \X))
       (should (sut/winning-col? winning-col3 \O)))
-
     )
 
   (context "diagonals"
@@ -148,7 +238,6 @@
       (should (sut/winning-diagonal? diagonal-win2 \X))
       (should (sut/winning-diagonal? diagonal-win3 \O))
       (should (sut/winning-diagonal? diagonal-win4 \O)))
-
     )
 
   (context "win?"
@@ -174,7 +263,6 @@
       (should (sut/win? diagonal-win2 \X))
       (should (sut/win? diagonal-win3 \O))
       (should (sut/win? diagonal-win4 \O)))
-
     )
 
   (around [context] (with-out-str (context)))
@@ -201,7 +289,6 @@
       (should (sut/game-over? diagonal-win2 \X))
       (should (sut/game-over? diagonal-win3 \O))
       (should (sut/game-over? diagonal-win4 \O)))
-
     )
 
   (context "winner-message"
@@ -217,7 +304,6 @@
     (it "does not respond with winner message"
       (should-not (sut/game-over? winning-row1 \O)))
 
-
     (it "responds to a tie game with draw message"
       (sut/game-over? full-board \X)
       (should-have-invoked :output/draw-message {:with [full-board]}))
@@ -229,19 +315,33 @@
     (redefs-around [output/print-board (stub :output/print-board)])
 
     (it "displays board before each turn"
-      (with-in-str "2\n" (sut/take-turns no-winners-board \X))
+      (with-in-str "2\n" (sut/take-turns {:board no-winners-board :current-token \X}))
       (should-have-invoked :output/print-board {:with [no-winners-board]}))
 
     (it "ends the game"
       (with-redefs [output/winner-message (stub :output/winner-message)]
-        (with-in-str "2\n" (sut/take-turns no-winners-board \X))
+        (with-in-str "2\n" (sut/take-turns {:board no-winners-board :current-token \X \X :human \O :human}))
         (should-have-invoked :output/winner-message {:with [winning-row1 \X]})))
 
     (it "repeats until game ends"
       (with-redefs [output/winner-message (stub :output/winner-message)]
-        (with-in-str "7\n6\n" (sut/take-turns no-winners-board \X))
+        (with-in-str "7\n6\n" (sut/take-turns {:board no-winners-board :current-token \X \X :human \O :human}))
         (should-have-invoked :output/winner-message {:with [winning-row3 \O]})))
 
-    )
+    (it "gets user input for game mode"
+      (with-redefs [board/get-user-move (stub :user {:return [0 1]})
+                    ai/choose-move      (stub :ai {:return [1 0]})]
 
+        (sut/take-turns take-turn-state-human-v-human)
+        (should-have-invoked :user)
+        (should-not-have-invoked :ai)))
+
+    (it "gets computer input for game mode on computer turn"
+      (with-redefs [board/get-user-move (stub :user {:return [0 1]})
+                    ai/choose-move      (stub :ai {:return [2 0]})]
+
+        (sut/take-turns take-turn-state-human-v-ai)
+        (should-have-invoked :ai)
+        (should-not-have-invoked :user)))
+    )
   )

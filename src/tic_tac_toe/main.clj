@@ -4,4 +4,4 @@
 
 (defn -main []
   (output/greeting)
-  (game/take-turns output/starting-board \X))
+  (game/choose-game-mode))

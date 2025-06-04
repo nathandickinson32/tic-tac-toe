@@ -31,9 +31,7 @@
                         [\4 \5 \6]
                         [\7 \8 \O]]
             move       [2 2]]
-        (should= test-board (sut/make-move output/starting-board move \O)))
-      )
-
+        (should= test-board (sut/make-move output/starting-board move \O))))
     )
 
   (context "parse-user-input"
@@ -71,14 +69,7 @@
     (with-stubs)
 
     (redefs-around [output/player-prompt (stub :output/player-prompt)
-                    output/invalid-response (stub :output/invalid-response)
-                    sut/maybe-valid-move (stub :sut/maybe-valid-move
-                                               {:invoke
-                                                (fn [board input]
-                                                  (cond
-                                                    (= input "1") [0 0]
-                                                    (= input "2") [0 1]
-                                                    :else nil))})])
+                    output/invalid-response (stub :output/invalid-response)])
 
     (it "displays player prompt"
       (with-in-str "1\n"
@@ -93,44 +84,35 @@
     (it "returns [0 1] for 2"
       (let [test-board output/starting-board]
         (with-in-str "2\n"
-          (should= [0 1] (sut/get-user-move test-board \X)))))
-
-    (it "checks for valid move"
-      (with-in-str "2\n"
-        (sut/get-user-move output/starting-board \X))
-      (should-have-invoked :sut/maybe-valid-move {:with [output/starting-board "2"]}))
+          (should= [0 1] (sut/get-user-move test-board \X)))
+        (should-not-have-invoked :output/invalid-response)))
 
     (it "responds to invalid move"
       (with-in-str "a\n2\n"
         (sut/get-user-move output/starting-board \X))
       (should-have-invoked :output/invalid-response)
       (should-have-invoked :output/player-prompt {:times 2}))
-
-    (context "valid input"
-
-      (it "returns true when grid point is empty"
-        (let [test-board [[\space \X \O]
-                          [\X \space \space]
-                          [\O \X \space]]]
-          (should= true (sut/space-available? test-board [0 0]))
-          (should= true (sut/space-available? test-board [2 2]))
-          (should= true (sut/space-available? test-board [1 1]))
-          (should= true (sut/space-available? test-board [1 2]))))
-
-      (it "returns false when grid point is taken"
-        (let [test-board [[\space \X \O]
-                          [\X \space \space]
-                          [\O \X \space]]]
-          (should= false (sut/space-available? test-board [0 1]))
-          (should= false (sut/space-available? test-board [0 2]))
-          (should= false (sut/space-available? test-board [1 0]))
-          (should= false (sut/space-available? test-board [2 0]))
-          (should= false (sut/space-available? test-board [2 1])))
-        )
-
-      )
-
     )
 
-  )
+  (context "valid input"
 
+    (it "returns true when grid point is empty"
+      (let [test-board [[\space \X \O]
+                        [\X \space \space]
+                        [\O \X \space]]]
+        (should= true (sut/space-available? test-board [0 0]))
+        (should= true (sut/space-available? test-board [2 2]))
+        (should= true (sut/space-available? test-board [1 1]))
+        (should= true (sut/space-available? test-board [1 2]))))
+
+    (it "returns false when grid point is taken"
+      (let [test-board [[\space \X \O]
+                        [\X \space \space]
+                        [\O \X \space]]]
+        (should= false (sut/space-available? test-board [0 1]))
+        (should= false (sut/space-available? test-board [0 2]))
+        (should= false (sut/space-available? test-board [1 0]))
+        (should= false (sut/space-available? test-board [2 0]))
+        (should= false (sut/space-available? test-board [2 1]))))
+    )
+  )

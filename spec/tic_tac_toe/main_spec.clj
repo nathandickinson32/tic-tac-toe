@@ -8,13 +8,13 @@
   (with-stubs)
 
   (redefs-around [output/greeting (stub :output/greeting)
-                  game/take-turns (stub :game/take-turns)])
+                  game/choose-game-mode (stub :game/choose-game-mode)])
 
   (it "displays a greeting"
     (sut/-main)
     (should-have-invoked :output/greeting))
 
-  (it "plays tic tac toe"
+  (it "gets user to select game mode"
     (sut/-main)
-    (should-have-invoked :game/take-turns {:with [output/starting-board \X]}))
+    (should-have-invoked :game/choose-game-mode))
   )

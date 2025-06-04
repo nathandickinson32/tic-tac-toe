@@ -7,13 +7,22 @@
   (context "greeting"
 
     (it "returns correct greeting message"
-      (let [output (str "Welcome to Tic Tac Toe\n"
-                        "Select position for symbol 1-9\n")]
+      (let [output (str "Welcome to Tic Tac Toe!\n")]
         (should= output (with-out-str (sut/greeting)))))
 
     (it "player prompt test"
       (let [output (str "Player X Enter your move 1-9\n")]
         (should= output (with-out-str (sut/player-prompt \X)))))
+    )
+
+  (context "prompt for choosing a game mode"
+
+    (it "game mode prompt test"
+      (let [output (str "Choose Game:\n"
+                        "1 Human VS. Human\n"
+                        "2 Human VS. AI\n"
+                        "3 AI VS. Human\n")]
+        (should= output (with-out-str (sut/game-mode-prompt)))))
     )
 
   (context "board output"
@@ -89,15 +98,13 @@
                         "| 7 | 8 | 9 |\n"
                         "-------------\n")]
         (should= output (with-out-str (sut/print-board board)))))
-
     )
 
   (context "validity"
 
     (it "prints invalid input message"
-      (let [output (str "Invalid Move. Try again\n")]
+      (let [output (str "Invalid Input. Try again\n")]
         (should= output (with-out-str (sut/invalid-response)))))
-
     )
 
   (context "game-over"
@@ -144,5 +151,4 @@
                         "-------------\n")]
         (should= output (with-out-str (sut/draw-message board)))))
     )
-
   )

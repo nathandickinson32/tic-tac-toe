@@ -1,11 +1,18 @@
 (ns tic-tac-toe.output)
 
 (defn greeting []
-  (print (str "Welcome to Tic Tac Toe\n"
-              "Select position for symbol 1-9\n")))
+  (print "Welcome to Tic Tac Toe!\n")
+  (flush))
+
+(defn game-mode-prompt []
+  (print (str "Choose Game:\n"
+              "1 Human VS. Human\n"
+              "2 Human VS. AI\n"
+              "3 AI VS. Human\n"))
+  (flush))
 
 (defn invalid-response []
-  (println "Invalid Move. Try again"))
+  (println "Invalid Input. Try again"))
 
 (defn player-prompt [player]
   (println "Player" player "Enter your move 1-9"))

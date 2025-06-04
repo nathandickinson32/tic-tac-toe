@@ -1,6 +1,15 @@
 (ns tic-tac-toe.game
   (:require [tic-tac-toe.board :as board]
-            [tic-tac-toe.output :as output]))
+            [tic-tac-toe.output :as output]
+            [tic-tac-toe.ai :as ai]))
+
+(def game-modes
+  {"1" {\X :human \O :human :board output/starting-board :current-token \X}
+   "2" {\X :human \O :ai :board output/starting-board :current-token \X}
+   "3" {\X :ai \O :human :board output/starting-board :current-token \X}})
+
+(defn maybe-valid-game-mode [input]
+  (get game-modes input))
 
 (defn switch-player [current-player]
   (if (= \X current-player)
@@ -44,10 +53,23 @@
     (win? board player) (do (output/winner-message board player) true)
     (full-board? board) (do (output/draw-message board) true)))
 
-(defn take-turns [board current-player]
+(defn take-turns [{:keys [board current-token] :as state}]
   (output/print-board board)
-  (let [move        (board/get-user-move board current-player)
-        new-board   (board/make-move board move current-player)
-        next-player (switch-player current-player)]
-    (when-not (game-over? new-board current-player)
-      (recur new-board next-player))))
+  (let [type        (state current-token)
+        move        (if (= type :human)
+                      (board/get-user-move board current-token)
+                      (ai/choose-move board))
+        new-board   (board/make-move board move current-token)
+        next-player (switch-player current-token)]
+    (when-not (game-over? new-board current-token)
+      (recur (assoc state :current-token next-player :board new-board)))))
+
+(defn choose-game-mode []
+  (output/game-mode-prompt)
+  (let [input (read-line)
+        state (maybe-valid-game-mode input)]
+    (if state
+      (take-turns state)
+      (do
+        (output/invalid-response)
+        (recur)))))
