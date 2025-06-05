@@ -37,21 +37,21 @@
   (context "parse-user-input"
 
     (it "returns nil for 0"
-      (should= nil (sut/->grid-coordinates "0")))
+      (should-be-nil (sut/->grid-coordinates "0")))
 
     (it "returns nil for numbers greater than 9"
-      (should= nil (sut/->grid-coordinates "10"))
-      (should= nil (sut/->grid-coordinates "11"))
-      (should= nil (sut/->grid-coordinates "201")))
+      (should-be-nil (sut/->grid-coordinates "10"))
+      (should-be-nil (sut/->grid-coordinates "11"))
+      (should-be-nil (sut/->grid-coordinates "201")))
 
     (it "returns nil for strings"
-      (should= nil (sut/->grid-coordinates "a"))
-      (should= nil (sut/->grid-coordinates "asd"))
-      (should= nil (sut/->grid-coordinates "a a"))
-      (should= nil (sut/->grid-coordinates " ")))
+      (should-be-nil (sut/->grid-coordinates "a"))
+      (should-be-nil (sut/->grid-coordinates "asd"))
+      (should-be-nil (sut/->grid-coordinates "a a"))
+      (should-be-nil (sut/->grid-coordinates " ")))
 
     (it "returns nil for empty input"
-      (should= nil (sut/->grid-coordinates "")))
+      (should-be-nil (sut/->grid-coordinates "")))
 
     (it "parses input string 1-9 into grid coordinates"
       (should= [0 0] (sut/->grid-coordinates "1"))

@@ -100,15 +100,17 @@
 
 (describe "game conditions"
 
+  (around [context] (with-out-str (context)))
+
   (context "game modes"
 
     (it "returns nil for anything outside of game-modes map"
-      (should= nil (sut/game-modes "0"))
-      (should= nil (sut/game-modes "4"))
-      (should= nil (sut/game-modes "*"))
-      (should= nil (sut/game-modes ""))
-      (should= nil (sut/game-modes " "))
-      (should= nil (sut/game-modes "-1")))
+      (should-be-nil (sut/game-modes "0"))
+      (should-be-nil (sut/game-modes "4"))
+      (should-be-nil (sut/game-modes "*"))
+      (should-be-nil (sut/game-modes ""))
+      (should-be-nil (sut/game-modes " "))
+      (should-be-nil (sut/game-modes "-1")))
 
     (it "returns human vs human state for 1"
       (should= state-human-v-human
@@ -126,12 +128,12 @@
   (context "maybe-valid-input"
 
     (it "returns nil for anything outside of game-modes map"
-      (should= nil (sut/maybe-valid-game-mode "0"))
-      (should= nil (sut/maybe-valid-game-mode "4"))
-      (should= nil (sut/maybe-valid-game-mode "*"))
-      (should= nil (sut/maybe-valid-game-mode ""))
-      (should= nil (sut/maybe-valid-game-mode " "))
-      (should= nil (sut/maybe-valid-game-mode "-1"))
+      (should-be-nil (sut/maybe-valid-game-mode "0"))
+      (should-be-nil (sut/maybe-valid-game-mode "4"))
+      (should-be-nil (sut/maybe-valid-game-mode "*"))
+      (should-be-nil (sut/maybe-valid-game-mode ""))
+      (should-be-nil (sut/maybe-valid-game-mode " "))
+      (should-be-nil (sut/maybe-valid-game-mode "-1"))
       )
 
     (it "returns human vs human state for 1"
@@ -143,7 +145,7 @@
                (sut/maybe-valid-game-mode "2")))
 
     (it "returns human vs ai state for 3"
-      (should= {\X :ai \O :human :board output/starting-board :current-token \X}
+      (should= state-ai-v-human
                (sut/maybe-valid-game-mode "3")))
     )
 
@@ -151,23 +153,18 @@
     (with-stubs)
 
     (it "displays game-mode-prompt"
-      (with-redefs [output/game-mode-prompt   (stub :game-mode-prompt)
-                    output/invalid-response   (stub :invalid-response)
-                    sut/take-turns            (stub :take-turns)
-                    sut/maybe-valid-game-mode (fn [_] {:fake :state})]
+      (with-redefs [output/game-mode-prompt (stub :game-mode-prompt)
+                    sut/take-turns          (stub :take-turns)]
         (with-in-str "1\n" (sut/choose-game-mode))
         (should-have-invoked :game-mode-prompt)))
 
     (it "continues to accept user input until valid mode is selected"
-      (with-redefs [output/game-mode-prompt   (stub :game-mode-prompt)
-                    output/invalid-response   (stub :invalid-response)
-                    sut/take-turns            (stub :take-turns)
-                    sut/maybe-valid-game-mode (fn [x] (when (= x "1") {:fake :state}))]
+      (with-redefs [output/invalid-response (stub :invalid-response)
+                    sut/take-turns          (stub :take-turns)]
         (with-in-str ":\nHuman\n*\\n\n21\n1\n" (sut/choose-game-mode))
         (should-have-invoked :invalid-response)
         (should-have-invoked :take-turns)))
     )
-
 
   (context "switching player"
 
@@ -265,7 +262,6 @@
       (should (sut/win? diagonal-win4 \O)))
     )
 
-  (around [context] (with-out-str (context)))
   (context "game-over?"
 
     (it "returns false if there is no winners for X"
