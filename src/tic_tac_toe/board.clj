@@ -23,7 +23,7 @@
 
 (defn get-user-move [board player]
   (output/player-prompt player)
-  (let [input (read-line)]
+  (let [input (clojure.string/trim (read-line))]
     (or (maybe-valid-move board input)
         (do
           (output/invalid-response)

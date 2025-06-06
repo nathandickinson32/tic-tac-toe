@@ -92,6 +92,11 @@
         (sut/get-user-move output/starting-board \X))
       (should-have-invoked :output/invalid-response)
       (should-have-invoked :output/player-prompt {:times 2}))
+
+    (it "accepts leading and trailing whitespace"
+      (let [test-board output/starting-board]
+        (with-in-str " 1\n"
+          (should= [0 0] (sut/get-user-move test-board \X)))))
     )
 
   (context "valid input"

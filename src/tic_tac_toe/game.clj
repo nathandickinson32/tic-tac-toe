@@ -66,7 +66,7 @@
 
 (defn choose-game-mode []
   (output/game-mode-prompt)
-  (let [input (read-line)
+  (let [input (clojure.string/trim (read-line))
         state (maybe-valid-game-mode input)]
     (if state
       (take-turns state)

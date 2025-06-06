@@ -164,6 +164,12 @@
         (with-in-str ":\nHuman\n*\\n\n21\n1\n" (sut/choose-game-mode))
         (should-have-invoked :invalid-response)
         (should-have-invoked :take-turns)))
+
+    (it "accepts leading and trailing whitespace whitespace"
+      (with-redefs [output/game-mode-prompt (stub :game-mode-prompt)
+                    sut/take-turns          (stub :take-turns)]
+        (with-in-str " 1 \n" (sut/choose-game-mode))
+        (should-have-invoked :game-mode-prompt)))
     )
 
   (context "switching player"
@@ -308,21 +314,21 @@
   (context "take-turns"
     (with-stubs)
 
-    (redefs-around [output/print-board (stub :output/print-board)])
+    (redefs-around [output/print-board (stub :print-board)])
 
     (it "displays board before each turn"
       (with-in-str "2\n" (sut/take-turns {:board no-winners-board :current-token \X}))
-      (should-have-invoked :output/print-board {:with [no-winners-board]}))
+      (should-have-invoked :print-board {:with [no-winners-board]}))
 
     (it "ends the game"
-      (with-redefs [output/winner-message (stub :output/winner-message)]
+      (with-redefs [output/winner-message (stub :winner-message)]
         (with-in-str "2\n" (sut/take-turns {:board no-winners-board :current-token \X \X :human \O :human}))
-        (should-have-invoked :output/winner-message {:with [winning-row1 \X]})))
+        (should-have-invoked :winner-message {:with [winning-row1 \X]})))
 
     (it "repeats until game ends"
-      (with-redefs [output/winner-message (stub :output/winner-message)]
+      (with-redefs [output/winner-message (stub :winner-message)]
         (with-in-str "7\n6\n" (sut/take-turns {:board no-winners-board :current-token \X \X :human \O :human}))
-        (should-have-invoked :output/winner-message {:with [winning-row3 \O]})))
+        (should-have-invoked :winner-message {:with [winning-row3 \O]})))
 
     (it "gets user input for game mode"
       (with-redefs [board/get-user-move (stub :user {:return [0 1]})
