@@ -18,13 +18,13 @@
     (when (space-available? board move)
       move)))
 
-(defn make-move [board move player]
-  (assoc-in board move player))
+(defn make-move [board move token]
+  (assoc-in board move token))
 
-(defn get-user-move [board player]
-  (output/player-prompt player)
+(defn get-user-move [board token]
+  (output/player-prompt token)
   (let [input (clojure.string/trim (read-line))]
     (or (maybe-valid-move board input)
         (do
           (output/invalid-response)
-          (recur board player)))))
+          (recur board token)))))
