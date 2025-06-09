@@ -4,7 +4,7 @@
 
 (describe "an AI Player"
 
-  (context "when getting an AI move"
+  (context "when getting a random AI move"
 
     (it "gets all 9 board positions"
       (should= [[0 0] [0 1] [0 2]
@@ -43,20 +43,24 @@
                         [\4 \X \6]
                         [\X \O \9]]]
         (with-redefs [rand-nth (constantly [2 2])]
-          (should= [2 2] (sut/choose-move test-board)))))
+          (should= [2 2] (sut/choose-random-move test-board)))))
 
     (it "chooses move from available moves"
       (let [test-board [[\O \X \O]
                         [\4 \X \6]
                         [\X \O \9]]]
         (with-redefs [rand-nth (constantly [1 0])]
-          (should= [1 0] (sut/choose-move test-board)))))
+          (should= [1 0] (sut/choose-random-move test-board)))))
 
     (it "chooses move from available moves"
       (let [test-board [[\O \X \O]
                         [\4 \X \6]
                         [\X \O \9]]]
         (with-redefs [rand-nth (constantly [1 2])]
-          (should= [1 2] (sut/choose-move test-board)))))
+          (should= [1 2] (sut/choose-random-move test-board)))))
     )
+
+  #_(context "when playing an unbeatable AI"
+
+    (it ""))
   )

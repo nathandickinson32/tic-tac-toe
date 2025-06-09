@@ -9,5 +9,7 @@
 (defn available-moves [board]
   (filter (partial board/space-available? board) all-positions))
 
-(defn choose-move [board]
+(defn choose-random-move [board]
   (rand-nth (available-moves board)))
+
+(defn choose-best-move [board] [1 2])

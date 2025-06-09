@@ -5,8 +5,10 @@
 
 (def game-modes
   {"1" {\X :human \O :human :board output/starting-board :current-token \X}
-   "2" {\X :human \O :ai :board output/starting-board :current-token \X}
-   "3" {\X :ai \O :human :board output/starting-board :current-token \X}})
+   "2" {\X :human \O :easy-ai :board output/starting-board :current-token \X}
+   "3" {\X :easy-ai \O :human :board output/starting-board :current-token \X}
+   "4" {\X :human \O :expert-ai :board output/starting-board :current-token \X}
+   "5" {\X :expert-ai \O :human :board output/starting-board :current-token \X}})
 
 (defn maybe-valid-game-mode [input]
   (get game-modes input))
@@ -56,15 +58,16 @@
 (defn take-turns [{:keys [board current-token] :as state}]
   (output/print-board board)
   (let [type        (state current-token)
-        move        (if (= type :human)
-                      (board/get-user-move board current-token)
-                      (ai/choose-move board))
+        move        (cond
+                      (= type :human) (board/get-user-move board current-token)
+                      (= type :easy-ai) (ai/choose-random-move board)
+                      :else (ai/choose-best-move board))
         new-board   (board/make-move board move current-token)
         next-player (switch-player current-token)]
     (when-not (game-over? new-board current-token)
       (recur (assoc state :current-token next-player :board new-board)))))
 
-(defn choose-game-mode []
+(defn play-game []
   (output/game-mode-prompt)
   (let [input (clojure.string/trim (read-line))
         state (maybe-valid-game-mode input)]

@@ -11,8 +11,10 @@
 (defn game-mode-prompt []
   (print (str "Choose Game:\n"
               "1 Human VS. Human\n"
-              "2 Human VS. AI\n"
-              "3 AI VS. Human\n"))
+              "2 Human VS. Easy AI\n"
+              "3 Easy AI VS. Human\n"
+              "4 Human VS. Expert AI\n"
+              "5 Expert AI VS. Human\n"))
   (flush))
 
 (defn invalid-response []

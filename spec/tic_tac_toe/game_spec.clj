@@ -10,6 +10,11 @@
    [\O \O \space]
    [\space \space \space]])
 
+(def no-winners-board1
+  [[\X \space \X]
+   [\O \O \space]
+   [\X \space \space]])
+
 (def winning-row1
   [[\X \X \X]
    [\O \O \space]
@@ -83,20 +88,26 @@
 (def state-human-v-human
   {\X :human \O :human :board output/starting-board :current-token \X})
 
-(def state-human-v-ai
-  {\X :human \O :ai :board output/starting-board :current-token \X})
+(def state-human-v-easy-ai
+  {\X :human \O :easy-ai :board output/starting-board :current-token \X})
 
-(def state-ai-v-human
-  {\X :ai \O :human :board output/starting-board :current-token \X})
+(def state-easy-ai-v-human
+  {\X :easy-ai \O :human :board output/starting-board :current-token \X})
+
+(def state-human-v-expert-ai
+  {\X :human \O :expert-ai :board output/starting-board :current-token \X})
+
+(def state-expert-ai-v-human
+  {\X :expert-ai \O :human :board output/starting-board :current-token \X})
 
 (def take-turn-state-human-v-human
   {\X :human \O :human :board not-full-board1 :current-token \X})
 
-(def take-turn-state-human-v-ai
-  {\X :human \O :ai :board not-full-board1 :current-token \O})
+(def take-turn-state-human-v-easy-ai
+  {\X :human \O :easy-ai :board not-full-board1 :current-token \O})
 
-(def take-turns-state-ai-v-human
-  {\X :ai \O :human :board not-full-board1 :current-token \X})
+(def take-turn-state-human-v-expert-ai
+  {\X :human \O :expert-ai :board no-winners-board1 :current-token \O})
 
 (describe "game conditions"
 
@@ -106,7 +117,7 @@
 
     (it "returns nil for anything outside of game-modes map"
       (should-be-nil (sut/game-modes "0"))
-      (should-be-nil (sut/game-modes "4"))
+      (should-be-nil (sut/game-modes "100"))
       (should-be-nil (sut/game-modes "*"))
       (should-be-nil (sut/game-modes ""))
       (should-be-nil (sut/game-modes " "))
@@ -116,20 +127,29 @@
       (should= state-human-v-human
                (sut/game-modes "1")))
 
-    (it "returns human vs ai state for 2"
-      (should= state-human-v-ai
+    (it "returns human vs easy ai state for 2"
+      (should= state-human-v-easy-ai
                (sut/game-modes "2")))
 
-    (it "returns ai vs human state for 3"
-      (should= state-ai-v-human
+    (it "returns easy ai vs human state for 3"
+      (should= state-easy-ai-v-human
                (sut/game-modes "3")))
+
+    (it "returns human vs expert ai state for 4"
+      (should= state-human-v-expert-ai
+               (sut/game-modes "4")))
+
+    (it "returns expert ai vs human state for 5"
+      (should= state-expert-ai-v-human
+               (sut/game-modes "5")))
+
     )
 
   (context "maybe-valid-input"
 
     (it "returns nil for anything outside of game-modes map"
       (should-be-nil (sut/maybe-valid-game-mode "0"))
-      (should-be-nil (sut/maybe-valid-game-mode "4"))
+      (should-be-nil (sut/maybe-valid-game-mode "100"))
       (should-be-nil (sut/maybe-valid-game-mode "*"))
       (should-be-nil (sut/maybe-valid-game-mode ""))
       (should-be-nil (sut/maybe-valid-game-mode " "))
@@ -141,11 +161,11 @@
                (sut/maybe-valid-game-mode "1")))
 
     (it "returns human vs ai state for 2"
-      (should= state-human-v-ai
+      (should= state-human-v-easy-ai
                (sut/maybe-valid-game-mode "2")))
 
     (it "returns human vs ai state for 3"
-      (should= state-ai-v-human
+      (should= state-easy-ai-v-human
                (sut/maybe-valid-game-mode "3")))
     )
 
@@ -155,20 +175,20 @@
     (it "displays game-mode-prompt"
       (with-redefs [output/game-mode-prompt (stub :game-mode-prompt)
                     sut/take-turns          (stub :take-turns)]
-        (with-in-str "1\n" (sut/choose-game-mode))
+        (with-in-str "1\n" (sut/play-game))
         (should-have-invoked :game-mode-prompt)))
 
     (it "continues to accept user input until valid mode is selected"
       (with-redefs [output/invalid-response (stub :invalid-response)
                     sut/take-turns          (stub :take-turns)]
-        (with-in-str ":\nHuman\n*\\n\n21\n1\n" (sut/choose-game-mode))
+        (with-in-str ":\nHuman\n*\\n\n21\n1\n" (sut/play-game))
         (should-have-invoked :invalid-response)
         (should-have-invoked :take-turns)))
 
     (it "accepts leading and trailing whitespace whitespace"
       (with-redefs [output/game-mode-prompt (stub :game-mode-prompt)
                     sut/take-turns          (stub :take-turns)]
-        (with-in-str " 1 \n" (sut/choose-game-mode))
+        (with-in-str " 1 \n" (sut/play-game))
         (should-have-invoked :game-mode-prompt)))
     )
 
@@ -331,19 +351,27 @@
         (should-have-invoked :winner-message {:with [winning-row3 \O]})))
 
     (it "gets user input for game mode"
-      (with-redefs [board/get-user-move (stub :user {:return [0 1]})
-                    ai/choose-move      (stub :ai {:return [1 0]})]
+      (with-redefs [board/get-user-move   (stub :user {:return [0 1]})
+                    ai/choose-random-move (stub :easy-ai {:return [1 0]})]
 
         (sut/take-turns take-turn-state-human-v-human)
         (should-have-invoked :user)
-        (should-not-have-invoked :ai)))
+        (should-not-have-invoked :easy-ai)))
 
-    (it "gets computer input for game mode on computer turn"
+    (it "gets random ai input for easy ai game mode on ai turn"
+      (with-redefs [board/get-user-move   (stub :user {:return [0 1]})
+                    ai/choose-random-move (stub :easy-ai {:return [2 0]})]
+
+        (sut/take-turns take-turn-state-human-v-easy-ai)
+        (should-have-invoked :easy-ai)
+        (should-not-have-invoked :user)))
+
+    (it "gets expert ai input for expert ai game mode on ai turn"
       (with-redefs [board/get-user-move (stub :user {:return [0 1]})
-                    ai/choose-move      (stub :ai {:return [2 0]})]
+                    ai/choose-best-move (stub :expert-ai {:return [1 2]})]
 
-        (sut/take-turns take-turn-state-human-v-ai)
-        (should-have-invoked :ai)
+        (sut/take-turns take-turn-state-human-v-expert-ai)
+        (should-have-invoked :expert-ai)
         (should-not-have-invoked :user)))
     )
   )

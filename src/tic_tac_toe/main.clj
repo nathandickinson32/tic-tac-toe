@@ -4,4 +4,4 @@
 
 (defn -main []
   (output/greeting)
-  (game/choose-game-mode))
+  (game/play-game))
