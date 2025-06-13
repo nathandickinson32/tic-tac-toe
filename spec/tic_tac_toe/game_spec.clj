@@ -1,6 +1,7 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.ai :as ai]
+            [tic-tac-toe.expert-ai :as expert-ai]
             [tic-tac-toe.human :as human]
             [tic-tac-toe.human]
             [tic-tac-toe.game :as sut]
@@ -193,7 +194,7 @@
 
     (it "gets expert ai input for expert ai game mode on ai turn"
       (with-redefs [human/get-user-move (stub :user {:return [0 1]})
-                    ai/choose-best-move (stub :expert-ai {:return [1 2]})]
+                    expert-ai/choose-best-move (stub :expert-ai {:return [1 2]})]
 
         (sut/take-turns take-turn-state-human-v-expert-ai)
         (should-have-invoked :expert-ai)

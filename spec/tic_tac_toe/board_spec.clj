@@ -6,6 +6,44 @@
 
 (describe "core functions"
 
+  (context "getting all positions"
+
+    (it "gets all 9 board positions"
+      (should= [[0 0] [0 1] [0 2]
+                [1 0] [1 1] [1 2]
+                [2 0] [2 1] [2 2]]
+               (sort sut/all-positions)))
+    )
+
+  (context "getting available moves"
+
+    (it "gets one available move"
+      (let [test-board
+            [[:O :X :O]
+             [:X :X :O]
+             [:X :O \9]]]
+        (should= [[2 2]] (sut/available-moves test-board))))
+
+    (it "gets all available moves"
+      (let [test-board
+            [[:O :X :O]
+             [\4 :X \6]
+             [:X :O \9]]]
+        (should= [[1 0] [1 2] [2 2]] (sort (sut/available-moves test-board)))))
+
+    (it "does not contain moves that are taken"
+      (let [test-board
+            [[:O :X :O]
+             [\4 :X \6]
+             [:X :O \9]]]
+        (should-not-contain [0 0] (sut/available-moves test-board))
+        (should-not-contain [0 1] (sut/available-moves test-board))
+        (should-not-contain [0 2] (sut/available-moves test-board))
+        (should-not-contain [1 1] (sut/available-moves test-board))
+        (should-not-contain [2 0] (sut/available-moves test-board))
+        (should-not-contain [2 1] (sut/available-moves test-board))))
+    )
+
   (context "make-move"
 
     (it "marks grid with X"

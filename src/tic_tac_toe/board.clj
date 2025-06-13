@@ -1,9 +1,21 @@
 (ns tic-tac-toe.board)
 
+(def all-positions
+  (for [row (range 3)
+        col (range 3)]
+    [row col]))
+
 (defn switch-player [current-player]
   (if (= :X current-player)
     :O
     :X))
+
+(defn space-available? [board move]
+  (let [symbol (get-in board move)]
+    (not (or (= symbol :X) (= symbol :O)))))
+
+(defn available-moves [board]
+  (filter (partial space-available? board) all-positions))
 
 (defn make-move [board move token]
   (assoc-in board move token))

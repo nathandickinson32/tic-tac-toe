@@ -140,9 +140,14 @@
 
   (context "when printing the tokens"
 
-    #_(it "colors red"
-        ;(should= "" sut/red)
-        )
+    (it "colors red"
+        (should= "\u001b[31m" sut/red))
+
+    (it "colors green"
+      (should= "\u001B[32m" sut/green))
+
+    (it "resets the color"
+      (should= "\u001B[0m" sut/reset))
 
     (it "prints X token in green"
       (should= (str sut/green "X" sut/reset) (sut/colorize-token :X)))

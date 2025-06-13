@@ -3,7 +3,8 @@
             [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.human]
-            [tic-tac-toe.ai]))
+            [tic-tac-toe.ai]
+            [tic-tac-toe.expert-ai]))
 
 (def game-modes
   {"1" {:X :human :O :human :board output/starting-board :current-token :X}

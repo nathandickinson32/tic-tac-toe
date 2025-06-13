@@ -1,5 +1,6 @@
 (ns tic-tac-toe.human-spec
   (:require [speclj.core :refer :all]
+            [tic-tac-toe.board :as board]
             [tic-tac-toe.human :as sut]
             [tic-tac-toe.output :as output]))
 
@@ -76,19 +77,19 @@
       (let [test-board [[\space :X :O]
                         [:X \space \space]
                         [:O :X \space]]]
-        (should= true (sut/space-available? test-board [0 0]))
-        (should= true (sut/space-available? test-board [2 2]))
-        (should= true (sut/space-available? test-board [1 1]))
-        (should= true (sut/space-available? test-board [1 2]))))
+        (should= true (board/space-available? test-board [0 0]))
+        (should= true (board/space-available? test-board [2 2]))
+        (should= true (board/space-available? test-board [1 1]))
+        (should= true (board/space-available? test-board [1 2]))))
 
     (it "returns false when grid point is taken"
       (let [test-board [[\space :X :O]
                         [:X \space \space]
                         [:O :X \space]]]
-        (should= false (sut/space-available? test-board [0 1]))
-        (should= false (sut/space-available? test-board [0 2]))
-        (should= false (sut/space-available? test-board [1 0]))
-        (should= false (sut/space-available? test-board [2 0]))
-        (should= false (sut/space-available? test-board [2 1]))))
+        (should= false (board/space-available? test-board [0 1]))
+        (should= false (board/space-available? test-board [0 2]))
+        (should= false (board/space-available? test-board [1 0]))
+        (should= false (board/space-available? test-board [2 0]))
+        (should= false (board/space-available? test-board [2 1]))))
     )
   )

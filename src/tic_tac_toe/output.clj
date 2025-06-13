@@ -44,6 +44,7 @@
     :else token))
 
 (defn colorize-board [board]
+
   (map #(map colorize-token %) board))
 
 (defn print-board [board]
