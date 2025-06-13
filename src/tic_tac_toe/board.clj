@@ -1,30 +1,41 @@
-(ns tic-tac-toe.board
-  (:require [tic-tac-toe.output :as output]))
+(ns tic-tac-toe.board)
 
-(def single-digit-positions
-  {"1" [0 0] "2" [0 1] "3" [0 2]
-   "4" [1 0] "5" [1 1] "6" [1 2]
-   "7" [2 0] "8" [2 1] "9" [2 2]})
-
-(defn space-available? [board move]
-  (let [symbol (get-in board move)]
-    (not (or (= symbol \X) (= symbol \O)))))
-
-(defn ->grid-coordinates [input]
-  (get single-digit-positions input))
-
-(defn- maybe-valid-move [board input]
-  (when-let [move (->grid-coordinates input)]
-    (when (space-available? board move)
-      move)))
+(defn switch-player [current-player]
+  (if (= :X current-player)
+    :O
+    :X))
 
 (defn make-move [board move token]
   (assoc-in board move token))
 
-(defn get-user-move [board token]
-  (output/player-prompt token)
-  (let [input (clojure.string/trim (read-line))]
-    (or (maybe-valid-move board input)
-        (do
-          (output/invalid-response)
-          (recur board token)))))
+(defn full-board? [board]
+  (every? #{:X :O} (flatten board)))
+
+(defn three-matches? [row token]
+  (every? #(= % token) row))
+
+(defn diagonal-right [board]
+  [(get-in board [0 0])
+   (get-in board [1 1])
+   (get-in board [2 2])])
+
+(defn diagonal-left [board]
+  [(get-in board [0 2])
+   (get-in board [1 1])
+   (get-in board [2 0])])
+
+(defn winning-row? [board token]
+  (some #(three-matches? % token) board))
+
+(defn winning-col? [board token]
+  (let [columns-as-rows (apply mapv vector board)]
+    (winning-row? columns-as-rows token)))
+
+(defn winning-diagonal? [board token]
+  (or (three-matches? (diagonal-right board) token)
+      (three-matches? (diagonal-left board) token)))
+
+(defn win? [board token]
+  (or (winning-row? board token)
+      (winning-col? board token)
+      (winning-diagonal? board token)))

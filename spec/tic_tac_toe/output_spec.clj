@@ -12,7 +12,7 @@
 
     (it "player prompt test"
       (let [output (str "Player X Enter your move 1-9\n")]
-        (should= output (with-out-str (sut/player-prompt \X)))))
+        (should= output (with-out-str (sut/player-prompt :X)))))
     )
 
   (context "prompt for choosing a game mode"
@@ -52,9 +52,9 @@
           (should= output (with-out-str (sut/print-board board))))))
 
     (it "prints board when token is in first row"
-      (let [board  (assoc-in sut/starting-board [0 2] \x)
+      (let [board  (assoc-in sut/starting-board [0 2] \X)
             output (str "-------------\n"
-                        "| 1 | 2 | x |\n"
+                        "| 1 | 2 | X |\n"
                         "-------------\n"
                         "| 4 | 5 | 6 |\n"
                         "-------------\n"
@@ -63,27 +63,27 @@
         (should= output (with-out-str (sut/print-board board)))))
 
     (it "prints three in a row, down the middle"
-      (let [board  (-> sut/starting-board (assoc-in [0 1] \o)
-                       (assoc-in [1 1] \o)
-                       (assoc-in [2 1] \o))
+      (let [board  (-> sut/starting-board (assoc-in [0 1] \O)
+                       (assoc-in [1 1] \O)
+                       (assoc-in [2 1] \O))
             output (str "-------------\n"
-                        "| 1 | o | 3 |\n"
+                        "| 1 | O | 3 |\n"
                         "-------------\n"
-                        "| 4 | o | 6 |\n"
+                        "| 4 | O | 6 |\n"
                         "-------------\n"
-                        "| 7 | o | 9 |\n"
+                        "| 7 | O | 9 |\n"
                         "-------------\n")]
         (should= output (with-out-str (sut/print-board board)))))
 
     (it "prints three in a row, across the middle row"
       (let [board  (-> sut/starting-board
-                       (assoc-in [1 0] \o)
-                       (assoc-in [1 1] \o)
-                       (assoc-in [1 2] \o))
+                       (assoc-in [1 0] \O)
+                       (assoc-in [1 1] \O)
+                       (assoc-in [1 2] \O))
             output (str "-------------\n"
                         "| 1 | 2 | 3 |\n"
                         "-------------\n"
-                        "| o | o | o |\n"
+                        "| O | O | O |\n"
                         "-------------\n"
                         "| 7 | 8 | 9 |\n"
                         "-------------\n")]
@@ -115,12 +115,12 @@
     (it "returns winner message for X"
       (let [output (str sut/green "X" sut/reset " wins!\n")]
         (with-redefs [sut/print-board (fn [_] nil)]
-          (should= output (with-out-str (sut/winner-message nil \X))))))
+          (should= output (with-out-str (sut/winner-message nil :X))))))
 
     (it "returns winner message for O"
       (let [output (str sut/red "O" sut/reset " wins!\n")]
         (with-redefs [sut/print-board (fn [_] nil)]
-          (should= output (with-out-str (sut/winner-message nil \O))))))
+          (should= output (with-out-str (sut/winner-message nil :O))))))
 
     (it "returns draw message"
       (with-redefs [sut/colorize-token identity]
@@ -140,10 +140,14 @@
 
   (context "when printing the tokens"
 
+    #_(it "colors red"
+        ;(should= "" sut/red)
+        )
+
     (it "prints X token in green"
-      (should= (str sut/green "X" sut/reset) (sut/colorize-token \X)))
+      (should= (str sut/green "X" sut/reset) (sut/colorize-token :X)))
 
     (it "prints O token in red"
-      (should= (str sut/red "O" sut/reset) (sut/colorize-token \O)))
+      (should= (str sut/red "O" sut/reset) (sut/colorize-token :O)))
     )
   )

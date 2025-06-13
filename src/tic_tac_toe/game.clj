@@ -1,25 +1,27 @@
 (ns tic-tac-toe.game
   (:require [tic-tac-toe.board :as board]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.ai :as ai]))
+            [tic-tac-toe.player-types :refer [->player-move]]
+            [tic-tac-toe.human]
+            [tic-tac-toe.ai]))
 
 (def game-modes
-  {"1" {\X :human \O :human :board output/starting-board :current-token \X}
-   "2" {\X :human \O :easy-ai :board output/starting-board :current-token \X}
-   "3" {\X :easy-ai \O :human :board output/starting-board :current-token \X}
-   "4" {\X :human \O :expert-ai :board output/starting-board :current-token \X}
-   "5" {\X :expert-ai \O :human :board output/starting-board :current-token \X}})
+  {"1" {:X :human :O :human :board output/starting-board :current-token :X}
+   "2" {:X :human :O :easy-ai :board output/starting-board :current-token :X}
+   "3" {:X :easy-ai :O :human :board output/starting-board :current-token :X}
+   "4" {:X :human :O :expert-ai :board output/starting-board :current-token :X}
+   "5" {:X :expert-ai :O :human :board output/starting-board :current-token :X}})
 
 (defn maybe-valid-game-mode [input]
   (get game-modes input))
 
 (defn switch-player [current-player]
-  (if (= \X current-player)
-    \O
-    \X))
+  (if (= :X current-player)
+    :O
+    :X))
 
 (defn full-board? [board]
-  (every? #{\X \O} (flatten board)))
+  (every? #{:X :O} (flatten board)))
 
 (defn three-matches? [row token]
   (every? #(= % token) row))
@@ -57,11 +59,7 @@
 
 (defn take-turns [{:keys [board current-token] :as state}]
   (output/print-board board)
-  (let [type        (state current-token)
-        move        (cond
-                      (= type :human) (board/get-user-move board current-token)
-                      (= type :easy-ai) (ai/choose-random-move board)
-                      :else (ai/choose-best-move board))
+  (let [move        (->player-move state)
         new-board   (board/make-move board move current-token)
         next-player (switch-player current-token)]
     (when-not (game-over? new-board current-token)

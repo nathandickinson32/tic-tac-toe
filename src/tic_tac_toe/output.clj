@@ -21,7 +21,7 @@
   (println "Invalid Input. Try again"))
 
 (defn player-prompt [token]
-  (println "Player" token "Enter your move 1-9"))
+  (println "Player" (name token) "Enter your move 1-9"))
 
 (def board-format
   (str "-------------\n"
@@ -39,8 +39,8 @@
 
 (defn colorize-token [token]
   (cond
-    (= token \X) (str green token reset)
-    (= token \O) (str red token reset)
+    (= token :X) (str green (name token) reset)
+    (= token :O) (str red (name token) reset)
     :else token))
 
 (defn colorize-board [board]

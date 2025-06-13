@@ -1,123 +1,133 @@
 (ns tic-tac-toe.board-spec
-  (:require [speclj.core :refer :all]
-            [tic-tac-toe.board :as sut]
-            [tic-tac-toe.output :as output]))
+  (:require [tic-tac-toe.board :as sut]
+            [speclj.core :refer :all]
+            [tic-tac-toe.output :as output]
+            [tic-tac-toe.test-boards-spec :as test-board]))
 
-(describe "tic tac toe board"
+(describe "core functions"
 
   (context "make-move"
 
     (it "marks grid with X"
       (let [test-board [[\1 \2 \3]
-                        [\4 \X \6]
+                        [\4 :X \6]
                         [\7 \8 \9]]
             move       [1 1]]
-        (should= test-board (sut/make-move output/starting-board move \X)))
+        (should= test-board (sut/make-move output/starting-board move :X)))
 
-      (let [test-board [[\X \2 \3]
+      (let [test-board [[:X \2 \3]
                         [\4 \5 \6]
                         [\7 \8 \9]]
             move       [0 0]]
-        (should= test-board (sut/make-move output/starting-board move \X))))
+        (should= test-board (sut/make-move output/starting-board move :X))))
 
     (it "marks grid with O"
-      (let [test-board [[\O \2 \3]
+      (let [test-board [[:O \2 \3]
                         [\4 \5 \6]
                         [\7 \8 \9]]
             move       [0 0]]
-        (should= test-board (sut/make-move output/starting-board move \O)))
+        (should= test-board (sut/make-move output/starting-board move :O)))
 
       (let [test-board [[\1 \2 \3]
                         [\4 \5 \6]
-                        [\7 \8 \O]]
+                        [\7 \8 :O]]
             move       [2 2]]
-        (should= test-board (sut/make-move output/starting-board move \O))))
+        (should= test-board (sut/make-move output/starting-board move :O))))
     )
 
-  (context "parse-user-input"
+  (context "draw/tie game"
 
-    (it "returns nil for 0"
-      (should-be-nil (sut/->grid-coordinates "0")))
+    (it "returns false when the board has available spaces"
+      (should-not (sut/full-board? test-board/not-full-board))
+      (should-not (sut/full-board? test-board/winning-col1))
+      (should-not (sut/full-board? test-board/winning-row1)))
 
-    (it "returns nil for numbers greater than 9"
-      (should-be-nil (sut/->grid-coordinates "10"))
-      (should-be-nil (sut/->grid-coordinates "11"))
-      (should-be-nil (sut/->grid-coordinates "201")))
-
-    (it "returns nil for strings"
-      (should-be-nil (sut/->grid-coordinates "a"))
-      (should-be-nil (sut/->grid-coordinates "asd"))
-      (should-be-nil (sut/->grid-coordinates "a a"))
-      (should-be-nil (sut/->grid-coordinates " ")))
-
-    (it "returns nil for empty input"
-      (should-be-nil (sut/->grid-coordinates "")))
-
-    (it "parses input string 1-9 into grid coordinates"
-      (should= [0 0] (sut/->grid-coordinates "1"))
-      (should= [0 1] (sut/->grid-coordinates "2"))
-      (should= [0 2] (sut/->grid-coordinates "3"))
-      (should= [1 0] (sut/->grid-coordinates "4"))
-      (should= [1 1] (sut/->grid-coordinates "5"))
-      (should= [1 2] (sut/->grid-coordinates "6"))
-      (should= [2 0] (sut/->grid-coordinates "7"))
-      (should= [2 1] (sut/->grid-coordinates "8"))
-      (should= [2 2] (sut/->grid-coordinates "9")))
+    (it "returns true when the board is full with no winner"
+      (should (sut/full-board? test-board/full-board))
+      (should (sut/full-board? test-board/full-board2)))
     )
 
-  (context "get-user-move"
-    (with-stubs)
+  (context "rows"
 
-    (redefs-around [output/player-prompt (stub :output/player-prompt)
-                    output/invalid-response (stub :output/invalid-response)])
+    (it "returns false when no rows have all matching symbols"
+      (should-not (sut/three-matches? (first test-board/winning-row1) :O))
+      (should-not (sut/three-matches? (nth test-board/winning-row1 2) :O))
+      (should-not (sut/three-matches? (second test-board/winning-row2) :O))
+      (should-not (sut/three-matches? (nth test-board/winning-row3 1) :X))
+      (should-not (sut/three-matches? (nth test-board/winning-row3 2) :X)))
 
-    (it "displays player prompt"
-      (with-in-str "1\n"
-        (sut/get-user-move output/starting-board \X))
-      (should-have-invoked :output/player-prompt {:with [\X]}))
+    (it "returns true for a single row of matching symbols"
+      (should (sut/three-matches? (first test-board/winning-row1) :X))
+      (should (sut/three-matches? (nth test-board/winning-row2 2) :X))
+      (should (sut/three-matches? (second test-board/winning-row3) :O)))
 
-    (it "returns [0 0] for 1"
-      (let [test-board output/starting-board]
-        (with-in-str "1\n"
-          (should= [0 0] (sut/get-user-move test-board \X)))))
-
-    (it "returns [0 1] for 2"
-      (let [test-board output/starting-board]
-        (with-in-str "2\n"
-          (should= [0 1] (sut/get-user-move test-board \X)))
-        (should-not-have-invoked :output/invalid-response)))
-
-    (it "responds to invalid move"
-      (with-in-str "a\n2\n"
-        (sut/get-user-move output/starting-board \X))
-      (should-have-invoked :output/invalid-response)
-      (should-have-invoked :output/player-prompt {:times 2}))
-
-    (it "accepts leading and trailing whitespace"
-      (let [test-board output/starting-board]
-        (with-in-str " 1\n"
-          (should= [0 0] (sut/get-user-move test-board \X)))))
+    (it "is a winning row"
+      (should (sut/winning-row? test-board/winning-row1 :X))
+      (should (sut/winning-row? test-board/winning-row2 :X))
+      (should (sut/winning-row? test-board/winning-row3 :O)))
     )
 
-  (context "valid input"
+  (context "columns"
 
-    (it "returns true when grid point is empty"
-      (let [test-board [[\space \X \O]
-                        [\X \space \space]
-                        [\O \X \space]]]
-        (should= true (sut/space-available? test-board [0 0]))
-        (should= true (sut/space-available? test-board [2 2]))
-        (should= true (sut/space-available? test-board [1 1]))
-        (should= true (sut/space-available? test-board [1 2]))))
+    (it "returns false when no cols have all matching symbols"
+      (should-not (sut/winning-col? test-board/winning-col1 :O))
+      (should-not (sut/winning-col? test-board/winning-col2 :O))
+      (should-not (sut/winning-col? test-board/winning-col1 :O)))
 
-    (it "returns false when grid point is taken"
-      (let [test-board [[\space \X \O]
-                        [\X \space \space]
-                        [\O \X \space]]]
-        (should= false (sut/space-available? test-board [0 1]))
-        (should= false (sut/space-available? test-board [0 2]))
-        (should= false (sut/space-available? test-board [1 0]))
-        (should= false (sut/space-available? test-board [2 0]))
-        (should= false (sut/space-available? test-board [2 1]))))
+    (it "is a winning column"
+      (should (sut/winning-col? test-board/winning-col1 :X))
+      (should (sut/winning-col? test-board/winning-col2 :X))
+      (should (sut/winning-col? test-board/winning-col3 :O)))
+    )
+
+  (context "diagonals"
+
+    (it "false for same symbol diagonal"
+      (should-not (sut/winning-diagonal? test-board/not-full-board :X))
+      (should-not (sut/winning-diagonal? test-board/no-winners-board :X))
+      (should-not (sut/winning-diagonal? test-board/not-full-board :O))
+      (should-not (sut/winning-diagonal? test-board/no-winners-board :O))
+      (should-not (sut/winning-diagonal? test-board/diagonal-win1 :O))
+      (should-not (sut/winning-diagonal? test-board/diagonal-win3 :X)))
+
+    (it "true for same symbol diagonal"
+      (should (sut/winning-diagonal? test-board/diagonal-win1 :X))
+      (should (sut/winning-diagonal? test-board/diagonal-win2 :X))
+      (should (sut/winning-diagonal? test-board/diagonal-win3 :O))
+      (should (sut/winning-diagonal? test-board/diagonal-win4 :O)))
+    )
+
+  (context "win?"
+
+    (it "no row, column or diagonal is filled by X"
+      (should-not (sut/win? test-board/no-winners-board :X)))
+
+    (it "no row, column or diagonal is filled by O"
+      (should-not (sut/win? test-board/no-winners-board :O)))
+
+    (it "a row is filled by same player symbol"
+      (should (sut/win? test-board/winning-row1 :X))
+      (should (sut/win? test-board/winning-row2 :X))
+      (should (sut/win? test-board/winning-row3 :O)))
+
+    (it "a column is filled by same player symbol"
+      (should (sut/win? test-board/winning-col1 :X))
+      (should (sut/win? test-board/winning-col2 :X))
+      (should (sut/win? test-board/winning-col3 :O)))
+
+    (it "a diagonal is filled by same player symbol"
+      (should (sut/win? test-board/diagonal-win1 :X))
+      (should (sut/win? test-board/diagonal-win2 :X))
+      (should (sut/win? test-board/diagonal-win3 :O))
+      (should (sut/win? test-board/diagonal-win4 :O)))
+    )
+
+  (context "switching player"
+
+    (it "switches from player X to player O"
+      (should= :O (sut/switch-player :X)))
+
+    (it "switches from player O to player X"
+      (should= :X (sut/switch-player :O)))
     )
   )

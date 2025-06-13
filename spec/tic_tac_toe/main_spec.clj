@@ -10,11 +10,11 @@
   (redefs-around [output/greeting (stub :output/greeting)
                   game/play-game (stub :game/play-game)])
 
-  #_(it "displays a greeting"
+  (it "displays a greeting"
     (sut/-main)
     (should-have-invoked :output/greeting))
 
-  #_(it "gets user to select game mode"
+  (it "gets user to select game mode"
     (sut/-main)
     (should-have-invoked :game/play-game))
   )
