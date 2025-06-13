@@ -52,13 +52,13 @@
 
 
 (defn choose-best-move [board token]
-  (let [moves        (available-moves board)
-        scored-moves (map (fn [move]
-                            (let [next-board (board/make-move board move token)
-                                  score      (->score-one-move next-board token token 1 minimax)]
-                              {:move move :score score}))
-                          moves)]
-    (:move (apply max-key :score scored-moves))))
+  (->> (available-moves board)
+       (map (fn [move]
+              (let [next-board (board/make-move board move token)
+                    score (->score-one-move next-board token token 1 minimax)]
+                {:move move :score score})))
+       (apply max-key :score)
+       :move))
 
 (defmethod ->player-move :easy-ai [{:keys [board]}]
   (choose-random-move board))
