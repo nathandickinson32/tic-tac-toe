@@ -8,21 +8,6 @@
             [tic-tac-toe.output :as output]
             [tic-tac-toe.test-boards-spec :as test-board]))
 
-(def state-human-v-human
-  {:X :human :O :human :board output/starting-board :current-token :X})
-
-(def state-human-v-easy-ai
-  {:X :human :O :easy-ai :board output/starting-board :current-token :X})
-
-(def state-easy-ai-v-human
-  {:X :easy-ai :O :human :board output/starting-board :current-token :X})
-
-(def state-human-v-expert-ai
-  {:X :human :O :expert-ai :board output/starting-board :current-token :X})
-
-(def state-expert-ai-v-human
-  {:X :expert-ai :O :human :board output/starting-board :current-token :X})
-
 (def take-turn-state-human-v-human
   {:X :human :O :human :board test-board/not-full-board1 :current-token :X})
 
@@ -36,81 +21,16 @@
 
   (around [context] (with-out-str (context)))
 
-  (context "game modes"
+  (context "tokens"
 
-    (it "returns nil for anything outside of game-modes map"
-      (should-be-nil (sut/game-modes "0"))
-      (should-be-nil (sut/game-modes "100"))
-      (should-be-nil (sut/game-modes "*"))
-      (should-be-nil (sut/game-modes ""))
-      (should-be-nil (sut/game-modes " "))
-      (should-be-nil (sut/game-modes "-1")))
-
-    (it "returns human vs human state for 1"
-      (should= state-human-v-human
-               (sut/game-modes "1")))
-
-    (it "returns human vs easy easy-ai state for 2"
-      (should= state-human-v-easy-ai
-               (sut/game-modes "2")))
-
-    (it "returns easy easy-ai vs human state for 3"
-      (should= state-easy-ai-v-human
-               (sut/game-modes "3")))
-
-    (it "returns human vs expert easy-ai state for 4"
-      (should= state-human-v-expert-ai
-               (sut/game-modes "4")))
-
-    (it "returns expert easy-ai vs human state for 5"
-      (should= state-expert-ai-v-human
-               (sut/game-modes "5")))
+    (it "returns a map of available tokens"
+      (should= {"X" :X "O" :O} sut/tokens))
     )
 
-  (context "maybe-valid-input"
+  (context "opponents"
 
-    (it "returns nil for anything outside of game-modes map"
-      (should-be-nil (sut/maybe-valid-game-mode "0"))
-      (should-be-nil (sut/maybe-valid-game-mode "100"))
-      (should-be-nil (sut/maybe-valid-game-mode "*"))
-      (should-be-nil (sut/maybe-valid-game-mode ""))
-      (should-be-nil (sut/maybe-valid-game-mode " "))
-      (should-be-nil (sut/maybe-valid-game-mode "-1")))
-
-    (it "returns human vs human state for 1"
-      (should= state-human-v-human
-               (sut/maybe-valid-game-mode "1")))
-
-    (it "returns human vs easy-ai state for 2"
-      (should= state-human-v-easy-ai
-               (sut/maybe-valid-game-mode "2")))
-
-    (it "returns human vs easy-ai state for 3"
-      (should= state-easy-ai-v-human
-               (sut/maybe-valid-game-mode "3")))
-    )
-
-  (context "when choosing a game mode"
-    (with-stubs)
-
-    (it "displays game-mode-prompt"
-      (with-redefs [output/game-mode-prompt (stub :game-mode-prompt)
-                    sut/take-turns          (stub :take-turns)]
-        (with-in-str "1\n" (sut/play-game))
-        (should-have-invoked :game-mode-prompt)))
-
-    (it "continues to accept user input until valid mode is selected"
-      (with-redefs [output/invalid-response (stub :invalid-response)
-                    sut/take-turns          (stub :take-turns)]
-        (with-in-str ":\nHuman\n*\\n\n21\n1\n" (sut/play-game))
-        (should-have-invoked :invalid-response)
-        (should-have-invoked :take-turns)))
-
-    (it "accepts leading and trailing whitespace whitespace"
-      (with-redefs [output/game-mode-prompt (stub :game-mode-prompt)
-                    sut/take-turns          (stub :take-turns)]
-        (with-in-str " 1 \n" (sut/play-game))
-        (should-have-invoked :take-turns {:with [(get sut/game-modes "1")]})))
+    (it "returns a map of potential opponents"
+      (should= {"human" :human "easy-ai" :easy-ai "expert-ai" :expert-ai} sut/opponents))
     )
 
   (context "game-over?"
@@ -198,5 +118,67 @@
         (sut/take-turns take-turn-state-human-v-expert-ai)
         (should-have-invoked :expert-ai)
         (should-not-have-invoked :user)))
+    )
+
+  (context "when asking to choose a token"
+    (with-stubs)
+
+    (it "asks the user to select a token X/O"
+      (with-redefs [output/choose-token (stub :choose-token)]
+        (with-in-str "X" (sut/ask-for-token))
+        (should-have-invoked :choose-token)))
+
+    (it "returns :X for X"
+      (with-in-str "X\n"
+        (should= :X (sut/ask-for-token))))
+
+    (it "returns :O for O"
+      (with-in-str "O\n"
+        (should= :O (sut/ask-for-token))))
+
+    (it "returns :O for o"
+      (with-in-str "o\n"
+        (should= :O (sut/ask-for-token))))
+
+    (it "returns :O for O with leading and trailing whitespace"
+      (with-in-str "  o  \n"
+        (should= :O (sut/ask-for-token))))
+
+    (it "responds to invalid input"
+      (with-redefs [output/choose-token           (stub :choose-token)
+                    output/invalid-token-response (stub :invalid-token-response)]
+        (with-in-str "bad\n1\n*\n \nXx\nx\n"
+          (should= :X (sut/ask-for-token)))
+        (should-have-invoked :invalid-token-response {:times 5})
+        (should-have-invoked :choose-token {:times 6})))
+    )
+
+  (context "when asking to choose an opponent"
+    (with-stubs)
+
+    (it "asks the user to choose an opponent"
+      (with-redefs [output/choose-opponent (stub :choose-opponent)]
+        (with-in-str "human\n" (sut/ask-for-opponent)
+          (should-have-invoked :choose-opponent))))
+
+    (it "returns :human for Human"
+      (with-in-str "human\n"
+        (should= :human (sut/ask-for-opponent))))
+
+    (it "returns :expert-ai for EXPERT-AI"
+      (with-in-str "EXPERT-AI\n"
+        (should= :expert-ai (sut/ask-for-opponent))))
+
+    (it "returns :human for human with leading and trailing whitespace"
+      (with-in-str "  human  \n"
+        (should= :human (sut/ask-for-opponent))))
+
+    (it "responds to invalid input"
+      (with-redefs [output/choose-opponent           (stub :choose-opponent)
+                    output/invalid-opponent-response (stub :invalid-opponent-response)]
+        (with-in-str "bad\n1\n*\n \nXx\nhuman\n"
+          (should= :human (sut/ask-for-opponent)))
+        (should-have-invoked :invalid-opponent-response {:times 5})
+        (should-have-invoked :choose-opponent {:times 6})))
     )
   )

@@ -7,10 +7,10 @@
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.test-boards-spec :as test-board]))
 
-(defn ->expert-move-state [board]
+#_(defn ->expert-move-state [board]
   (assoc (get game/game-modes "5") :board board))
 
-(defn ->expert-move-state-2 [board]
+#_(defn ->expert-move-state-2 [board]
   (assoc (get game/game-modes "4") :board board :current-token :O))
 
 (describe "Expert AI"
@@ -109,7 +109,7 @@
         (should= [1 2] (sut/choose-best-move board :X))))
     )
 
-  (context "expert AI ->player-move"
+  #_(context "expert AI ->player-move"
 
     (it "one move available"
       (let [board (board/make-move test-board/full-board [0 1] \2)

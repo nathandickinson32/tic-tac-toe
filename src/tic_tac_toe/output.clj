@@ -4,26 +4,29 @@
 (def red "\u001b[31m")
 (def reset "\u001b[0m")
 
-(defn greeting []
-  (print "Welcome to Tic Tac Toe!\n")
-  (flush))
-
-(defn game-mode-prompt []
-  (print (str "Choose Game:\n"
-              "1 Human VS. Human\n"
-              "2 Human VS. Easy AI\n"
-              "3 Easy AI VS. Human\n"
-              "4 Human VS. Expert AI\n"
-              "5 Expert AI VS. Human\n"))
-  (flush))
-
 (def starting-board
   [[\1 \2 \3]
    [\4 \5 \6]
    [\7 \8 \9]])
 
+(defn greeting []
+  (print "Welcome to Tic Tac Toe!\n")
+  (flush))
+
+(defn choose-token []
+  (println "Choose a token: X or O"))
+
+(defn choose-opponent []
+  (println "Choose an opponent: Human\nEasy-AI\nExpert-AI"))
+
 (defn invalid-response []
   (println "Invalid Input. Try again"))
+
+(defn invalid-token-response []
+  (println "Invalid Input. Please enter X or O."))
+
+(defn invalid-opponent-response []
+  (println "Invalid Input. Please enter human\neasy-ai\nor expert-ai."))
 
 (defn player-prompt [token]
   (println "Player" (name token) "Enter your move 1-9"))

@@ -5,4 +5,4 @@
 
 (defn -main []
   (output/greeting)
-  (game/play-game))
+  (game/build-game-state))

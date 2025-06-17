@@ -4,27 +4,44 @@
 
 (describe "console output messages"
 
+  (context "validity"
+
+    (it "prints invalid input message"
+      (let [output (str "Invalid Input. Try again\n")]
+        (should= output (with-out-str (sut/invalid-response)))))
+
+    (it "prints invalid input message when choosing a token"
+      (let [output (str "Invalid Input. Please enter X or O.\n")]
+        (should= output (with-out-str (sut/invalid-token-response)))))
+
+    (it "prints invalid input message when choosing a opponent"
+      (let [output (str "Invalid Input. Please enter human\neasy-ai\nor expert-ai.\n")]
+        (should= output (with-out-str (sut/invalid-opponent-response)))))
+    )
+
   (context "greeting"
 
     (it "returns correct greeting message"
       (let [output (str "Welcome to Tic Tac Toe!\n")]
         (should= output (with-out-str (sut/greeting)))))
+    )
+
+  (context "when building a game state"
+
+    (it "asks the user to choose a token"
+      (let [output (str "Choose a token: X or O\n")]
+        (should= output (with-out-str (sut/choose-token)))))
+
+    (it "asks the user to choose an opponent"
+      (let [output (str "Choose an opponent: Human\nEasy-AI\nExpert-AI\n")]
+        (should= output (with-out-str (sut/choose-opponent)))))
+    )
+
+  (context "when asking a human player for their move"
 
     (it "player prompt test"
       (let [output (str "Player X Enter your move 1-9\n")]
         (should= output (with-out-str (sut/player-prompt :X)))))
-    )
-
-  (context "prompt for choosing a game mode"
-
-    (it "game mode prompt test"
-      (let [output (str "Choose Game:\n"
-                        "1 Human VS. Human\n"
-                        "2 Human VS. Easy AI\n"
-                        "3 Easy AI VS. Human\n"
-                        "4 Human VS. Expert AI\n"
-                        "5 Expert AI VS. Human\n")]
-        (should= output (with-out-str (sut/game-mode-prompt)))))
     )
 
   (context "board output"
@@ -103,13 +120,6 @@
         (should= output (with-out-str (sut/print-board board)))))
     )
 
-  (context "validity"
-
-    (it "prints invalid input message"
-      (let [output (str "Invalid Input. Try again\n")]
-        (should= output (with-out-str (sut/invalid-response)))))
-    )
-
   (context "game-over"
 
     (it "returns winner message for X"
@@ -138,7 +148,7 @@
           (should= output (with-out-str (sut/draw-message board))))))
     )
 
-  (context "when printing the tokens"
+  (context "colors"
 
     (it "colors red"
       (should= "\u001b[31m" sut/red))
@@ -148,6 +158,9 @@
 
     (it "resets the color"
       (should= "\u001B[0m" sut/reset))
+    )
+
+  (context "when printing the tokens"
 
     (it "prints X token in green"
       (should= (str sut/green "X" sut/reset) (sut/colorize-token :X)))

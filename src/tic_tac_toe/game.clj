@@ -4,22 +4,41 @@
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.human]
             [tic-tac-toe.easy-ai]
-            [tic-tac-toe.expert-ai]))
+            [tic-tac-toe.expert-ai]
+            [clojure.string :as str]))
 
-(def game-modes
-  {"1" {:X :human :O :human :board output/starting-board :current-token :X}
-   "2" {:X :human :O :easy-ai :board output/starting-board :current-token :X}
-   "3" {:X :easy-ai :O :human :board output/starting-board :current-token :X}
-   "4" {:X :human :O :expert-ai :board output/starting-board :current-token :X}
-   "5" {:X :expert-ai :O :human :board output/starting-board :current-token :X}})
+(def tokens {"X" :X "O" :O})
 
-(defn maybe-valid-game-mode [input]
-  (get game-modes input))
+(def opponents {"human" :human "easy-ai" :easy-ai "expert-ai" :expert-ai})
 
 (defn switch-player [current-player]
   (if (= :X current-player)
     :O
     :X))
+
+(defn ask-for-token []
+  (output/choose-token)
+  (let [input (-> (read-line)
+                  (str/trim)
+                  (str/upper-case))
+        token (get tokens input)]
+    (if token
+      token
+      (do
+        (output/invalid-token-response)
+        (recur)))))
+
+(defn ask-for-opponent []
+  (output/choose-opponent)
+  (let [input    (-> (read-line)
+                     (str/lower-case)
+                     (str/trim))
+        opponent (get opponents input)]
+    (if opponent
+      opponent
+      (do
+        (output/invalid-opponent-response)
+        (recur)))))
 
 (defn full-board? [board]
   (->> (flatten board) (every? #{:X :O})))
@@ -66,12 +85,5 @@
     (when-not (game-over? new-board current-token)
       (recur (assoc state :current-token next-player :board new-board)))))
 
-(defn play-game []
-  (output/game-mode-prompt)
-  (let [input (clojure.string/trim (read-line))
-        state (maybe-valid-game-mode input)]
-    (if state
-      (take-turns state)
-      (do
-        (output/invalid-response)
-        (recur)))))
+(defn build-game-state []
+  ())
