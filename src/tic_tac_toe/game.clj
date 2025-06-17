@@ -3,7 +3,7 @@
             [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.human]
-            [tic-tac-toe.ai]
+            [tic-tac-toe.easy-ai]
             [tic-tac-toe.expert-ai]))
 
 (def game-modes
@@ -22,10 +22,10 @@
     :X))
 
 (defn full-board? [board]
-  (every? #{:X :O} (flatten board)))
+  (->> (flatten board) (every? #{:X :O})))
 
 (defn three-matches? [row token]
-  (every? #(= % token) row))
+  (->> row (every? #(= % token))))
 
 (defn diagonal-right [board]
   [(get-in board [0 0])
@@ -38,7 +38,7 @@
    (get-in board [2 0])])
 
 (defn winning-row? [board token]
-  (some #(three-matches? % token) board))
+  (->> board (some #(three-matches? % token))))
 
 (defn winning-col? [board token]
   (let [columns-as-rows (apply mapv vector board)]

@@ -17,6 +17,11 @@
               "5 Expert AI VS. Human\n"))
   (flush))
 
+(def starting-board
+  [[\1 \2 \3]
+   [\4 \5 \6]
+   [\7 \8 \9]])
+
 (defn invalid-response []
   (println "Invalid Input. Try again"))
 
@@ -32,11 +37,6 @@
        "| %s | %s | %s |\n"
        "-------------\n"))
 
-(def starting-board
-  [[\1 \2 \3]
-   [\4 \5 \6]
-   [\7 \8 \9]])
-
 (defn colorize-token [token]
   (cond
     (= token :X) (str green (name token) reset)
@@ -44,7 +44,6 @@
     :else token))
 
 (defn colorize-board [board]
-
   (map #(map colorize-token %) board))
 
 (defn print-board [board]

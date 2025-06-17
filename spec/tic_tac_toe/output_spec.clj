@@ -141,7 +141,7 @@
   (context "when printing the tokens"
 
     (it "colors red"
-        (should= "\u001b[31m" sut/red))
+      (should= "\u001b[31m" sut/red))
 
     (it "colors green"
       (should= "\u001B[32m" sut/green))

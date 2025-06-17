@@ -13,8 +13,7 @@
 
 (defn- maybe-valid-move [board input]
   (when-let [move (->grid-coordinates input)]
-    (when (board/space-available? board move)
-      move)))
+    (->> move (when (board/space-available? board move)))))
 
 (defn get-user-move [board token]
   (output/player-prompt token)

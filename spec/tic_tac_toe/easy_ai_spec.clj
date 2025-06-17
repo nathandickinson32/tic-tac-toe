@@ -1,6 +1,6 @@
-(ns tic-tac-toe.ai-spec
+(ns tic-tac-toe.easy-ai-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.ai :as sut]
+            [tic-tac-toe.easy-ai :as sut]
             [tic-tac-toe.test-boards-spec :as test-board]))
 
 (describe "an Easy AI Player"

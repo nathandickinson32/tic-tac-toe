@@ -20,10 +20,10 @@
   (minimax next-board (board/switch-player token) max-token (inc depth)))
 
 (defn ->score-moves [board token max-token depth minimax moves]
-  (map #(let [next-board (board/make-move board % token)
-              score      (->score-one-move next-board token max-token depth minimax)]
-          score)
-       moves))
+  (->> moves
+       (map #(let [next-board (board/make-move board % token)
+                   score      (->score-one-move next-board token max-token depth minimax)]
+               score))))
 
 (defn ->best-score [scores maximizing?]
   (if maximizing?
