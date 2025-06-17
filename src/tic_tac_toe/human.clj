@@ -17,7 +17,7 @@
 
 (defn get-user-move [board token]
   (output/player-prompt token)
-  (let [input (clojure.string/trim (read-line))]
+  (let [input (board/->clean-user-input)]
     (or (maybe-valid-move board input)
         (do
           (output/invalid-response)

@@ -1,4 +1,10 @@
-(ns tic-tac-toe.board)
+(ns tic-tac-toe.board
+  (:require [clojure.string :as str]))
+
+(defn ->clean-user-input []
+  (-> (read-line)
+      (str/trim)
+      (str/upper-case)))
 
 (def all-positions
   (for [row (range 3)

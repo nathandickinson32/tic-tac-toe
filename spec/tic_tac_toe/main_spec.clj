@@ -4,7 +4,7 @@
             [tic-tac-toe.main :as sut]
             [tic-tac-toe.output :as output]))
 
-#_(describe "main"
+(describe "main"
   (with-stubs)
 
   (redefs-around [output/greeting (stub :output/greeting)

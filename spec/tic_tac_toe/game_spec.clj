@@ -30,7 +30,7 @@
   (context "opponents"
 
     (it "returns a map of potential opponents"
-      (should= {"human" :human "easy-ai" :easy-ai "expert-ai" :expert-ai} sut/opponents))
+      (should= {"1" :human "2" :easy-ai "3" :expert-ai} sut/opponents))
     )
 
   (context "game-over?"
@@ -158,27 +158,68 @@
 
     (it "asks the user to choose an opponent"
       (with-redefs [output/choose-opponent (stub :choose-opponent)]
-        (with-in-str "human\n" (sut/ask-for-opponent)
+        (with-in-str "1\n" (sut/ask-for-opponent)
           (should-have-invoked :choose-opponent))))
 
-    (it "returns :human for Human"
-      (with-in-str "human\n"
+    (it "returns :human for 1"
+      (with-in-str "1\n"
         (should= :human (sut/ask-for-opponent))))
 
-    (it "returns :expert-ai for EXPERT-AI"
-      (with-in-str "EXPERT-AI\n"
+    (it "returns :easy-ai for 2"
+      (with-in-str "2\n"
+        (should= :easy-ai (sut/ask-for-opponent))))
+
+    (it "returns :expert-ai for 3"
+      (with-in-str "3\n"
         (should= :expert-ai (sut/ask-for-opponent))))
 
-    (it "returns :human for human with leading and trailing whitespace"
-      (with-in-str "  human  \n"
+    (it "returns :human for 1 with leading and trailing whitespace"
+      (with-in-str "  1  \n"
         (should= :human (sut/ask-for-opponent))))
 
     (it "responds to invalid input"
       (with-redefs [output/choose-opponent           (stub :choose-opponent)
                     output/invalid-opponent-response (stub :invalid-opponent-response)]
-        (with-in-str "bad\n1\n*\n \nXx\nhuman\n"
+        (with-in-str "bad\n*\n \nXx\n1\n"
           (should= :human (sut/ask-for-opponent)))
-        (should-have-invoked :invalid-opponent-response {:times 5})
-        (should-have-invoked :choose-opponent {:times 6})))
+        (should-have-invoked :invalid-opponent-response {:times 4})
+        (should-have-invoked :choose-opponent {:times 5})))
+    )
+
+  (context "when asking for first player"
+    (with-stubs)
+
+    (it "asks the user to choose who goes first"
+      (with-redefs [output/choose-first-player (stub :choose-first-player)]
+        (with-in-str "X\n" (sut/ask-for-first-player)
+          (should-have-invoked :choose-first-player))))
+
+    (it "returns :X for X"
+      (with-in-str "X\n"
+        (should= :X (sut/ask-for-first-player))))
+
+    (it "asks for token"
+      (with-redefs [output/choose-first-player (stub :choose-first-player)
+                    output/choose-token        (stub :choose-token)]
+        (with-in-str "X\n" (sut/ask-for-first-player)
+          (should-have-invoked :choose-first-player)
+          (should-have-invoked :choose-token))))
+    )
+
+  (context "when building a game state"
+    (with-stubs)
+
+    (redefs-around [sut/ask-for-token (stub :ask-for-token {:return :O})
+                    sut/ask-for-opponent (stub :ask-for-opponent {:return :expert-ai})
+                    sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
+                    sut/take-turns (stub :take-turns)])
+
+    (it "calls all input functions and builds correct game state"
+      (sut/build-game-state)
+      (should-have-invoked :take-turns {:with
+                                        [{:X             :expert-ai
+                                          :O             :human
+                                          :board         output/starting-board
+                                          :current-token :X}]}))
     )
   )

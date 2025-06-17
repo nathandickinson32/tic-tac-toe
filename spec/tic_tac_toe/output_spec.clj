@@ -33,8 +33,12 @@
         (should= output (with-out-str (sut/choose-token)))))
 
     (it "asks the user to choose an opponent"
-      (let [output (str "Choose an opponent: Human\nEasy-AI\nExpert-AI\n")]
+      (let [output (str "Choose an opponent:\n1 Human\n2 Easy-AI\n3 Expert-AI\n")]
         (should= output (with-out-str (sut/choose-opponent)))))
+
+    (it "asks the user to choose first player"
+      (let [output "Who will play first?\n"]
+        (should= output (with-out-str (sut/choose-first-player)))))
     )
 
   (context "when asking a human player for their move"

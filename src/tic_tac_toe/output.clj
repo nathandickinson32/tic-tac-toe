@@ -17,7 +17,10 @@
   (println "Choose a token: X or O"))
 
 (defn choose-opponent []
-  (println "Choose an opponent: Human\nEasy-AI\nExpert-AI"))
+  (println "Choose an opponent:\n1 Human\n2 Easy-AI\n3 Expert-AI"))
+
+(defn choose-first-player []
+  (println "Who will play first?"))
 
 (defn invalid-response []
   (println "Invalid Input. Try again"))

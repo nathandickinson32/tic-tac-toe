@@ -7,12 +7,6 @@
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.test-boards-spec :as test-board]))
 
-#_(defn ->expert-move-state [board]
-  (assoc (get game/game-modes "5") :board board))
-
-#_(defn ->expert-move-state-2 [board]
-  (assoc (get game/game-modes "4") :board board :current-token :O))
-
 (describe "Expert AI"
 
   (context "when checking for winner"
@@ -109,26 +103,26 @@
         (should= [1 2] (sut/choose-best-move board :X))))
     )
 
-  #_(context "expert AI ->player-move"
+  (context "expert AI ->player-move"
 
     (it "one move available"
       (let [board (board/make-move test-board/full-board [0 1] \2)
-            state (->expert-move-state board)]
+            state {:X :expert-ai :O :human :board board :current-token :X}]
         (should= [0 1] (->player-move state))))
 
     (it "chooses any corner on an empty board"
-      (let [state   (->expert-move-state output/starting-board)
+      (let [state   {:X :expert-ai :O :human :board output/starting-board :current-token :X}
             corners #{[0 0] [0 2] [2 0] [2 2]}
             move    (->player-move state)]
         (should-contain move corners)))
 
     (it "chooses a winning move"
-      (let [state (->expert-move-state test-board/ai-test-board2)
+      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board2 :current-token :X}
             move  (->player-move state)]
         (should= [1 0] move)))
 
     (it "chooses a blocking move"
-      (let [state (->expert-move-state-2 test-board/ai-test-board1)
+      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board1 :current-token :X}
             move  (->player-move state)]
         (should= [1 2] move)))
     )

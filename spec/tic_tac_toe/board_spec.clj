@@ -168,4 +168,16 @@
     (it "switches from player O to player X"
       (should= :X (sut/switch-player :O)))
     )
+
+  (context "->clean-user-input"
+
+    (it "returns a string with trimmed whitespace"
+      (with-in-str "  1  " (should= "1" (sut/->clean-user-input))))
+
+    (it "returns a string in all uppercase"
+      (with-in-str "testing" (should= "TESTING" (sut/->clean-user-input))))
+
+    (it "returns a string in all uppercase without whitespace"
+      (with-in-str "   testing   " (should= "TESTING" (sut/->clean-user-input))))
+    )
   )
