@@ -50,19 +50,19 @@
       (should= state-human-v-human
                (sut/game-modes "1")))
 
-    (it "returns human vs easy tic-tac-toe.easy-ai state for 2"
+    (it "returns human vs easy easy-ai state for 2"
       (should= state-human-v-easy-ai
                (sut/game-modes "2")))
 
-    (it "returns easy tic-tac-toe.easy-ai vs human state for 3"
+    (it "returns easy easy-ai vs human state for 3"
       (should= state-easy-ai-v-human
                (sut/game-modes "3")))
 
-    (it "returns human vs expert tic-tac-toe.easy-ai state for 4"
+    (it "returns human vs expert easy-ai state for 4"
       (should= state-human-v-expert-ai
                (sut/game-modes "4")))
 
-    (it "returns expert tic-tac-toe.easy-ai vs human state for 5"
+    (it "returns expert easy-ai vs human state for 5"
       (should= state-expert-ai-v-human
                (sut/game-modes "5")))
     )
@@ -81,11 +81,11 @@
       (should= state-human-v-human
                (sut/maybe-valid-game-mode "1")))
 
-    (it "returns human vs tic-tac-toe.easy-ai state for 2"
+    (it "returns human vs easy-ai state for 2"
       (should= state-human-v-easy-ai
                (sut/maybe-valid-game-mode "2")))
 
-    (it "returns human vs tic-tac-toe.easy-ai state for 3"
+    (it "returns human vs easy-ai state for 3"
       (should= state-easy-ai-v-human
                (sut/maybe-valid-game-mode "3")))
     )
@@ -183,7 +183,7 @@
         (should-have-invoked :user)
         (should-not-have-invoked :easy-ai)))
 
-    (it "gets random tic-tac-toe.easy-ai input for easy tic-tac-toe.easy-ai game mode on tic-tac-toe.easy-ai turn"
+    (it "gets random easy-ai input for easy easy-ai game mode on easy-ai turn"
       (with-redefs [human/get-user-move   (stub :user {:return [0 1]})
                     ai/choose-random-move (stub :easy-ai {:return [2 0]})]
 
@@ -191,7 +191,7 @@
         (should-have-invoked :easy-ai)
         (should-not-have-invoked :user)))
 
-    (it "gets expert tic-tac-toe.easy-ai input for expert tic-tac-toe.easy-ai game mode on tic-tac-toe.easy-ai turn"
+    (it "gets expert easy-ai input for expert easy-ai game mode on easy-ai turn"
       (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
                     expert-ai/choose-best-move (stub :expert-ai {:return [1 2]})]
 
