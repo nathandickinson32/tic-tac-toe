@@ -84,6 +84,11 @@
     (when-not (game-over? new-board current-token)
       (recur (assoc state :current-token next-player :board new-board)))))
 
+(defn play-again? [build-game-state]
+  (let [input (board/->clean-user-input)]
+    (when (= input "Y")
+      (build-game-state))))
+
 (defn build-game-state []
   (let [user-token     (ask-for-token)
         opponent       (ask-for-opponent)
@@ -95,4 +100,6 @@
                         :O             (players :O)
                         :board         output/starting-board
                         :current-token first-token}]
-    (take-turns state)))
+    (take-turns state)
+    (output/play-again?)
+    (play-again? build-game-state)))

@@ -1,5 +1,6 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
+            [tic-tac-toe.board :as board]
             [tic-tac-toe.easy-ai :as ai]
             [tic-tac-toe.expert-ai :as expert-ai]
             [tic-tac-toe.human :as human]
@@ -206,13 +207,30 @@
           (should-have-invoked :choose-token))))
     )
 
+  (context "when uer is asked to play again"
+    (with-stubs)
+
+    (it "calls build-game-state when the user inputs Y"
+      (with-redefs [sut/build-game-state (stub :build-game-state)]
+        (with-in-str "Y\n"
+          (sut/play-again? sut/build-game-state)
+          (should-have-invoked :build-game-state))))
+
+    (it "does not call build-game-state when the user inputs N"
+      (with-redefs [sut/build-game-state (stub :build-game-state)]
+        (with-in-str "N\n"
+          (sut/play-again? sut/build-game-state)
+          (should-not-have-invoked :build-game-state))))
+    )
+
   (context "when building a game state"
     (with-stubs)
 
     (redefs-around [sut/ask-for-token (stub :ask-for-token {:return :O})
                     sut/ask-for-opponent (stub :ask-for-opponent {:return :expert-ai})
                     sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
-                    sut/take-turns (stub :take-turns)])
+                    sut/take-turns (stub :take-turns)
+                    sut/play-again? (stub :play-again {:return nil})])
 
     (it "calls all input functions and builds correct game state"
       (sut/build-game-state)
@@ -221,5 +239,20 @@
                                           :O             :human
                                           :board         output/starting-board
                                           :current-token :X}]}))
+
+    (it "asks the user if they want to play again"
+      (with-redefs [output/play-again? (stub :play-again-test)]
+        (with-in-str "N\n" (sut/build-game-state)
+          (should-have-invoked :play-again-test))))
+
+    (it "calls play-again? after a game finishes"
+      (with-redefs [sut/play-again? (stub :sut/play-again {:return nil})
+                    sut/take-turns (stub :take-turns)
+                    sut/ask-for-token (stub :ask-for-token {:return :O})
+                    sut/ask-for-opponent (stub :ask-for-opponent {:return :expert-ai})
+                    sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
+                    output/play-again? (stub :output/play-again {:return nil})]
+        (sut/build-game-state)
+        (should-have-invoked :sut/play-again)))
     )
   )
