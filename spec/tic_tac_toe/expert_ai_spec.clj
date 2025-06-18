@@ -1,7 +1,6 @@
 (ns tic-tac-toe.expert-ai-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.expert-ai :as sut]
-            [tic-tac-toe.game :as game]
             [tic-tac-toe.board :as board]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]
@@ -101,6 +100,20 @@
     (it "chooses a blocking move"
       (let [board test-board/ai-test-board1]
         (should= [1 2] (sut/choose-best-move board :X))))
+
+    (it "chooses the best available move"
+        (let [board [[:X     :O :X]
+                     [\space :O \space]
+                     [\space :X \space]]]
+          (should-contain (sut/choose-best-move board :O) [[1 0] [1 2]])))
+
+
+    (it "chooses the best available move"
+      (let [board [[:X     :O     :X]
+                   [\space \space \space]
+                   [:O     :X     \space]]]
+        ;(should-contain (sut/choose-best-move board :X) [[1 2] [2 2]])
+        (should-contain (sut/choose-best-move board :O) [[1 2] [2 2]])))
     )
 
   (context "expert AI ->player-move"
@@ -122,8 +135,7 @@
         (should= [1 0] move)))
 
     (it "chooses a blocking move"
-      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board1 :current-token :X}
-            move  (->player-move state)]
-        (should= [1 2] move)))
+      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board1 :current-token :X}]
+        (should= [1 2] (->player-move state))))
     )
   )
