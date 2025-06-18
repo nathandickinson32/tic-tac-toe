@@ -26,14 +26,20 @@
        (map #(let [next-board (board/make-move board % token)]
                (->score-one-move next-board token max-token depth)))))
 
+(defn negative-scores? [scores]
+  (if (some neg? scores)
+    (apply max scores)
+    (apply max scores)))
+
+(defn positive-scores? [scores depth]
+  (if (some pos? scores)
+    (apply min scores)
+    (/ (apply + scores) depth)))
+
 (defn ->best-score [scores maximizing? depth]
   (if maximizing?
-    (if (some neg? scores)
-      (apply max scores)
-      (apply max scores))
-    (if (some pos? scores)
-      (apply min scores)
-      (/ (apply + scores) depth))))
+    (negative-scores? scores)
+    (positive-scores? scores depth)))
 
 (defn minimax [board token max-token depth]
   (if (end-game? board)
