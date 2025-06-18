@@ -246,12 +246,12 @@
           (should-have-invoked :play-again-test))))
 
     (it "calls play-again? after a game finishes"
-      (with-redefs [sut/play-again? (stub :sut/play-again {:return nil})
-                    sut/take-turns (stub :take-turns)
-                    sut/ask-for-token (stub :ask-for-token {:return :O})
-                    sut/ask-for-opponent (stub :ask-for-opponent {:return :expert-ai})
+      (with-redefs [sut/play-again?          (stub :sut/play-again {:return nil})
+                    sut/take-turns           (stub :take-turns)
+                    sut/ask-for-token        (stub :ask-for-token {:return :O})
+                    sut/ask-for-opponent     (stub :ask-for-opponent {:return :expert-ai})
                     sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
-                    output/play-again? (stub :output/play-again {:return nil})]
+                    output/play-again?       (stub :output/play-again {:return nil})]
         (sut/build-game-state)
         (should-have-invoked :sut/play-again)))
     )
