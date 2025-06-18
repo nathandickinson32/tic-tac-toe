@@ -23,9 +23,8 @@
 
 (defn ->score-moves [board token max-token depth moves]
   (->> moves
-       (map #(let [next-board (board/make-move board % token)
-                   score      (->score-one-move next-board token max-token depth)]
-               score))))
+       (map #(let [next-board (board/make-move board % token)]
+               (->score-one-move next-board token max-token depth)))))
 
 (defn ->best-score [scores maximizing? depth]
   (if maximizing?
@@ -45,12 +44,14 @@
       (->best-score scores maximizing? depth))))
 
 
+(defn evaluate-move [board token move]
+  (let [next-board (board/make-move board move token)
+        score      (->score-one-move next-board token token 0)]
+    {:move move :score score}))
+
 (defn choose-best-move [board token]
   (->> (board/available-moves board)
-       (map (fn [move]
-              (let [next-board (board/make-move board move token)
-                    score      (->score-one-move next-board token token 0)]
-                {:move move :score score})))
+       (map #(evaluate-move board token %))
        (apply max-key :score)
        :move))
 

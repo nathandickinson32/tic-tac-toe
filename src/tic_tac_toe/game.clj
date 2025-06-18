@@ -17,9 +17,8 @@
 
 (defn ask-for-token []
   (output/choose-token)
-  (let [input (board/->clean-user-input)
-        token (get tokens input)]
-    (if token
+  (let [input (board/->clean-user-input)]
+    (if-let [token (get tokens input)]
       token
       (do
         (output/invalid-token-response)
@@ -27,9 +26,8 @@
 
 (defn ask-for-opponent []
   (output/choose-opponent)
-  (let [input    (board/->clean-user-input)
-        opponent (get opponents input)]
-    (if opponent
+  (let [input (board/->clean-user-input)]
+    (if-let [opponent (get opponents input)]
       opponent
       (do
         (output/invalid-opponent-response)

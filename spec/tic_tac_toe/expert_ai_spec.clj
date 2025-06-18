@@ -112,7 +112,6 @@
       (let [board [[:X     :O     :X]
                    [\space \space \space]
                    [:O     :X     \space]]]
-        ;(should-contain (sut/choose-best-move board :X) [[1 2] [2 2]])
         (should-contain (sut/choose-best-move board :O) [[1 2] [2 2]])))
     )
 
