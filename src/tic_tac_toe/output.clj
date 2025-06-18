@@ -66,3 +66,6 @@
 (defn draw-message [board]
   (println "It's a tie!")
   (print-board board))
+
+(defn play-again? []
+  (println "Would you like to play again? Y/N"))

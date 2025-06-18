@@ -172,4 +172,11 @@
     (it "prints O token in red"
       (should= (str sut/red "O" sut/reset) (sut/colorize-token :O)))
     )
+
+  (context "play again?"
+
+    (it "asks the user if they want to play again"
+      (let [output (str "Would you like to play again? Y/N\n")]
+        (should= output (with-out-str (sut/play-again?)))))
+    )
   )
