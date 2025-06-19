@@ -1,6 +1,7 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.easy-ai :as ai]
+            [tic-tac-toe.easy-ai :as easy-ai]
+            [tic-tac-toe.medium-ai :as medium-ai]
             [tic-tac-toe.expert-ai :as expert-ai]
             [tic-tac-toe.human :as human]
             [tic-tac-toe.human]
@@ -13,6 +14,9 @@
 
 (def take-turn-state-human-v-easy-ai
   {:X :human :O :easy-ai :board test-board/not-full-board1 :current-token :O :depth 0})
+
+(def take-turn-state-human-v-medium-ai
+  {:X :human :O :medium-ai :board test-board/no-winners-board1 :current-token :O :depth 5})
 
 (def take-turn-state-human-v-expert-ai
   {:X :human :O :expert-ai :board test-board/no-winners-board1 :current-token :O :depth 0})
@@ -30,7 +34,7 @@
   (context "opponents"
 
     (it "returns a map of potential opponents"
-      (should= {"1" :human "2" :easy-ai "3" :expert-ai} sut/opponents))
+      (should= {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai} sut/opponents))
     )
 
   (context "game-over?"
@@ -97,21 +101,29 @@
 
     (it "gets user input for game mode"
       (with-redefs [tic-tac-toe.human/get-user-move (stub :user {:return [0 1]})
-                    ai/choose-random-move           (stub :easy-ai {:return [1 0]})]
+                    easy-ai/choose-random-move      (stub :easy-ai {:return [1 0]})]
 
         (sut/take-turns take-turn-state-human-v-human)
         (should-have-invoked :user)
         (should-not-have-invoked :easy-ai)))
 
-    (it "gets random easy-ai input for easy easy-ai game mode on easy-ai turn"
-      (with-redefs [human/get-user-move   (stub :user {:return [0 1]})
-                    ai/choose-random-move (stub :easy-ai {:return [2 0]})]
+    (it "gets random easy-ai input for easy-ai game mode on easy-ai turn"
+      (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
+                    easy-ai/choose-random-move (stub :easy-ai {:return [2 0]})]
 
         (sut/take-turns take-turn-state-human-v-easy-ai)
         (should-have-invoked :easy-ai)
         (should-not-have-invoked :user)))
 
-    (it "gets expert easy-ai input for expert easy-ai game mode on easy-ai turn"
+    (it "gets medium-ai input for medium-ai game mode on medium-ai turn"
+      (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
+                    medium-ai/make-move (stub :medium-ai {:return [1 2]})]
+
+        (sut/take-turns take-turn-state-human-v-medium-ai)
+        (should-have-invoked :medium-ai)
+        (should-not-have-invoked :user)))
+
+    (it "gets expert-ai input for expert-ai game mode on expert-ai turn"
       (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
                     expert-ai/choose-best-move (stub :expert-ai {:return [1 2]})]
 
@@ -169,8 +181,12 @@
       (with-in-str "2\n"
         (should= :easy-ai (sut/ask-for-opponent))))
 
-    (it "returns :expert-ai for 3"
+    (it "returns :medium-ai for 3"
       (with-in-str "3\n"
+        (should= :medium-ai (sut/ask-for-opponent))))
+
+    (it "returns :expert-ai for 4"
+      (with-in-str "4\n"
         (should= :expert-ai (sut/ask-for-opponent))))
 
     (it "returns :human for 1 with leading and trailing whitespace"

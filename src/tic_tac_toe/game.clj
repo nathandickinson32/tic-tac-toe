@@ -4,11 +4,12 @@
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.human]
             [tic-tac-toe.easy-ai]
+            [tic-tac-toe.medium-ai]
             [tic-tac-toe.expert-ai]))
 
 (def tokens {"X" :X "O" :O})
 
-(def opponents {"1" :human "2" :easy-ai "3" :expert-ai})
+(def opponents {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai})
 
 (defn switch-player [current-player]
   (if (= :X current-player)
@@ -80,7 +81,7 @@
         new-board   (board/make-move board move current-token)
         next-player (switch-player current-token)]
     (when-not (game-over? new-board current-token)
-      (recur (assoc state :current-token next-player :board new-board :depth (inc depth))))))
+      (recur (assoc state :current-token next-player :board new-board :depth (inc depth)))))) ;need to test inc depth
 
 (defn play-again? [build-game-state]
   (let [input (board/->clean-user-input)]
