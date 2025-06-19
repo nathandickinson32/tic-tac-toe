@@ -74,13 +74,13 @@
     (win? board token) (do (output/winner-message board token) true)
     (full-board? board) (do (output/draw-message board) true)))
 
-(defn take-turns [{:keys [board current-token] :as state}]
+(defn take-turns [{:keys [board current-token depth] :as state}]
   (output/print-board board)
   (let [move        (->player-move state)
         new-board   (board/make-move board move current-token)
         next-player (switch-player current-token)]
     (when-not (game-over? new-board current-token)
-      (recur (assoc state :current-token next-player :board new-board)))))
+      (recur (assoc state :current-token next-player :board new-board :depth (inc depth))))))
 
 (defn play-again? [build-game-state]
   (let [input (board/->clean-user-input)]
@@ -97,7 +97,8 @@
         state          {:X             (players :X)
                         :O             (players :O)
                         :board         output/starting-board
-                        :current-token first-token}]
+                        :current-token first-token
+                        :depth         0}]
     (take-turns state)
     (output/play-again?)
     (play-again? build-game-state)))

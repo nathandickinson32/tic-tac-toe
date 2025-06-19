@@ -83,58 +83,58 @@
 
     (it "returns the only available move"
       (let [board (board/make-move test-board/full-board [0 1] \2)]
-        (should= [0 1] (sut/choose-best-move board :X))))
+        (should= [0 1] (sut/choose-best-move board :X 8))))
 
 
     (it "chooses any corner on an empty board"
       (let [board   output/starting-board
             corners #{[0 0] [0 2] [2 0] [2 2]}
-            move    (sut/choose-best-move board :X)]
+            move    (sut/choose-best-move board :X 5)]
         (should-contain move corners)))
 
     (it "chooses a winning move"
       (let [board test-board/ai-test-board2]
-        (should= [1 0] (sut/choose-best-move board :X))))
+        (should= [1 0] (sut/choose-best-move board :X 4))))
 
 
     (it "chooses a blocking move"
       (let [board test-board/ai-test-board1]
-        (should= [1 2] (sut/choose-best-move board :X))))
+        (should= [1 2] (sut/choose-best-move board :X 3))))
 
-    (it "chooses the best available move"
-        (let [board [[:X     :O :X]
-                     [\space :O \space]
-                     [\space :X \space]]]
-          (should-contain (sut/choose-best-move board :O) [[1 0] [1 2]])))
+    (it "chooses the best available move for O"
+      (let [board [[:X :O :X]
+                   [\space :O \space]
+                   [\space :X \space]]]
+        (should-contain (sut/choose-best-move board :O 7) [[1 0] [1 2]])))
 
 
-    (it "chooses the best available move"
-      (let [board [[:X     :O     :X]
+    (it "chooses the best available move when values are even for x and o"
+      (let [board [[:X :O :X]
                    [\space \space \space]
-                   [:O     :X     \space]]]
-        (should-contain (sut/choose-best-move board :O) [[1 2] [2 2]])))
+                   [:O :X \space]]]
+        (should-contain (sut/choose-best-move board :O 7) [[1 2] [2 2]])))
     )
 
   (context "expert AI ->player-move"
 
     (it "one move available"
       (let [board (board/make-move test-board/full-board [0 1] \2)
-            state {:X :expert-ai :O :human :board board :current-token :X}]
+            state {:X :expert-ai :O :human :board board :current-token :X :depth 8}]
         (should= [0 1] (->player-move state))))
 
     (it "chooses any corner on an empty board"
-      (let [state   {:X :expert-ai :O :human :board output/starting-board :current-token :X}
+      (let [state   {:X :expert-ai :O :human :board output/starting-board :current-token :X :depth 0}
             corners #{[0 0] [0 2] [2 0] [2 2]}
             move    (->player-move state)]
         (should-contain move corners)))
 
     (it "chooses a winning move"
-      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board2 :current-token :X}
+      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board2 :current-token :X :depth 4}
             move  (->player-move state)]
         (should= [1 0] move)))
 
     (it "chooses a blocking move"
-      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board1 :current-token :X}]
+      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board1 :current-token :X :depth 3}]
         (should= [1 2] (->player-move state))))
     )
   )

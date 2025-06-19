@@ -1,6 +1,5 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.board :as board]
             [tic-tac-toe.easy-ai :as ai]
             [tic-tac-toe.expert-ai :as expert-ai]
             [tic-tac-toe.human :as human]
@@ -10,13 +9,13 @@
             [tic-tac-toe.test-boards-spec :as test-board]))
 
 (def take-turn-state-human-v-human
-  {:X :human :O :human :board test-board/not-full-board1 :current-token :X})
+  {:X :human :O :human :board test-board/not-full-board1 :current-token :X :depth 0})
 
 (def take-turn-state-human-v-easy-ai
-  {:X :human :O :easy-ai :board test-board/not-full-board1 :current-token :O})
+  {:X :human :O :easy-ai :board test-board/not-full-board1 :current-token :O :depth 0})
 
 (def take-turn-state-human-v-expert-ai
-  {:X :human :O :expert-ai :board test-board/no-winners-board1 :current-token :O})
+  {:X :human :O :expert-ai :board test-board/no-winners-board1 :current-token :O :depth 0})
 
 (describe "game conditions"
 
@@ -83,17 +82,17 @@
     (redefs-around [output/print-board (stub :print-board)])
 
     (it "displays board before each turn"
-      (with-in-str "2\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human}))
+      (with-in-str "2\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human :depth 0}))
       (should-have-invoked :print-board {:with [test-board/no-winners-board]}))
 
     (it "ends the game"
       (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "2\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human}))
+        (with-in-str "2\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human :depth 0}))
         (should-have-invoked :winner-message {:with [test-board/winning-row1 :X]})))
 
     (it "repeats until game ends"
       (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "7\n6\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human}))
+        (with-in-str "7\n6\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human :depth 0}))
         (should-have-invoked :winner-message {:with [test-board/winning-row3 :O]})))
 
     (it "gets user input for game mode"
@@ -207,7 +206,7 @@
           (should-have-invoked :choose-token))))
     )
 
-  (context "when uer is asked to play again"
+  (context "when user is asked to play again"
     (with-stubs)
 
     (it "calls build-game-state when the user inputs Y"
@@ -238,7 +237,8 @@
                                         [{:X             :expert-ai
                                           :O             :human
                                           :board         output/starting-board
-                                          :current-token :X}]}))
+                                          :current-token :X
+                                          :depth         0}]}))
 
     (it "asks the user if they want to play again"
       (with-redefs [output/play-again? (stub :play-again-test)]
