@@ -11,10 +11,10 @@
   (context "when checking for winner"
 
     (it "returns true if X wins"
-      (should (sut/end-game? test-board/winning-row1)))
+      (should (sut/end-game? test-board/top-winning-row-X)))
 
     (it "returns true if O wins"
-      (should (sut/end-game? test-board/winning-row3)))
+      (should (sut/end-game? test-board/middle-winning-row-O)))
 
     (it "returns true if board is full"
       (should (sut/end-game? test-board/full-board)))
@@ -26,10 +26,10 @@
   (context "when getting a score"
 
     (it "returns 10 if current token wins"
-      (should= 10 (sut/score test-board/winning-row1 :X)))
+      (should= 10 (sut/score test-board/top-winning-row-X :X)))
 
     (it "returns -10 if opponent token wins"
-      (should= -10 (sut/score test-board/winning-row3 :X)))
+      (should= -10 (sut/score test-board/middle-winning-row-O :X)))
 
     (it "returns 0 if no winner"
       (should= 0 (sut/score test-board/no-winners-board :X)))
@@ -38,9 +38,9 @@
   (context "minimax"
 
     (it "high scoring if next move is a win"
-      (let [best-score  (sut/minimax test-board/winning-col1 nil :X 1)
+      (let [best-score  (sut/minimax test-board/left-winning-col-X nil :X 1)
             tie-score   (sut/minimax test-board/full-board nil :X 1)
-            worst-score (sut/minimax test-board/winning-col3 nil :X 1)]
+            worst-score (sut/minimax test-board/middle-winning-col-O nil :X 1)]
         (should> best-score tie-score)
         (should> tie-score worst-score)))
 
@@ -85,7 +85,6 @@
       (let [board (board/make-move test-board/full-board [0 1] \2)]
         (should= [0 1] (sut/choose-best-move board :X 8))))
 
-
     (it "chooses any corner on an empty board"
       (let [board   output/starting-board
             corners #{[0 0] [0 2] [2 0] [2 2]}
@@ -93,12 +92,11 @@
         (should-contain move corners)))
 
     (it "chooses a winning move"
-      (let [board test-board/ai-test-board2]
+      (let [board test-board/choose-win-over-block]
         (should= [1 0] (sut/choose-best-move board :X 4))))
 
-
     (it "chooses a blocking move"
-      (let [board test-board/ai-test-board1]
+      (let [board test-board/O-should-block]
         (should= [1 2] (sut/choose-best-move board :X 3))))
 
     (it "chooses the best available move for O"
@@ -106,7 +104,6 @@
                    [\space :O \space]
                    [\space :X \space]]]
         (should-contain (sut/choose-best-move board :O 7) [[1 0] [1 2]])))
-
 
     (it "chooses the best available move when values are even for x and o"
       (let [board [[:X :O :X]
@@ -129,12 +126,44 @@
         (should-contain move corners)))
 
     (it "chooses a winning move"
-      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board2 :current-token :X :depth 4}
+      (let [state {:X :expert-ai :O :human :board test-board/choose-win-over-block :current-token :X :depth 4}
             move  (->player-move state)]
         (should= [1 0] move)))
 
     (it "chooses a blocking move"
-      (let [state {:X :expert-ai :O :human :board test-board/ai-test-board1 :current-token :X :depth 3}]
+      (let [state {:X :expert-ai :O :human :board test-board/O-should-block :current-token :X :depth 3}]
         (should= [1 2] (->player-move state))))
+    )
+
+  #_(it "expert-AI is 100% unbeatable"
+      (should= test-board/full-board ()))
+
+  (context "memoized-minimax"
+
+    (it "high scoring if next move is a win"
+      (let [best-score  (sut/memoized-minimax test-board/left-winning-col-X nil :X 1)
+            tie-score   (sut/memoized-minimax test-board/full-board nil :X 1)
+            worst-score (sut/memoized-minimax test-board/middle-winning-col-O nil :X 1)]
+        (should> best-score tie-score)
+        (should> tie-score worst-score)))
+
+    (it "gives higher scores to better moves"
+      (letfn [(example-minimax [board maximizing-token move]
+                (let [next-board (board/make-move board move maximizing-token)]
+                  (sut/memoized-minimax next-board (board/switch-player maximizing-token) maximizing-token 1)))]
+        (let [board          [[:X :X \3]
+                              [:O :O \6]
+                              [\7 \8 \9]]
+              best-move      (example-minimax board :X [0 2])
+              next-best-move (example-minimax board :X [1 2])
+              worst-move     (example-minimax board :X [2 2])]
+          (should> best-move next-best-move)
+          (should> next-best-move worst-move))))
+
+    (it "returns 0 for a tie"
+      (let [board [[:X :X :O]
+                   [:O :O :X]
+                   [:X :X :O]]]
+        (should= -1 (sut/memoized-minimax board :X :X 1))))
     )
   )

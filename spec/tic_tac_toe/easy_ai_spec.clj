@@ -23,6 +23,6 @@
 
     (it "chooses move from available moves"
       (with-redefs [rand-nth (constantly [1 2])]
-        (should= [1 2] (sut/choose-random-move test-board/ai-test-board1))))
+        (should= [1 2] (sut/choose-random-move test-board/O-should-block))))
     )
   )

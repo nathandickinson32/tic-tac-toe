@@ -9,7 +9,7 @@
 
 (def tokens {"X" :X "O" :O})
 
-(def opponents {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai})
+(def players {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai})
 
 (defn switch-player [current-player]
   (if (= :X current-player)
@@ -25,11 +25,11 @@
         (output/invalid-token-response)
         (recur)))))
 
-(defn ask-for-opponent []
-  (output/choose-opponent)
+(defn ask-for-player []
+  (output/choose-player)
   (let [input (board/->clean-user-input)]
-    (if-let [opponent (get opponents input)]
-      opponent
+    (if-let [player (get players input)]
+      player
       (do
         (output/invalid-opponent-response)
         (recur)))))
@@ -79,9 +79,15 @@
   (output/print-board board)
   (let [move        (->player-move state)
         new-board   (board/make-move board move current-token)
-        next-player (switch-player current-token)]
-    (when-not (game-over? new-board current-token)
-      (recur (assoc state :current-token next-player :board new-board :depth (inc depth)))))) ;need to test inc depth
+        next-player (switch-player current-token)
+        new-depth   (inc depth)
+        new-state   (assoc state
+                      :current-token next-player
+                      :board new-board
+                      :depth new-depth)]
+    (if (game-over? new-board current-token)
+      new-state
+      (recur new-state))))                                  ;need to test inc depth
 
 (defn play-again? [build-game-state]
   (let [input (board/->clean-user-input)]
@@ -89,12 +95,13 @@
       (build-game-state))))
 
 (defn build-game-state []
-  (let [user-token     (ask-for-token)
-        opponent       (ask-for-opponent)
+  (let [player-1       (ask-for-player)
+        player-1-token (ask-for-token)
+        player-2       (ask-for-player)
         first-token    (ask-for-first-player)
-        opponent-token (board/switch-player user-token)
-        players        {user-token     :human
-                        opponent-token opponent}
+        player-2-token (board/switch-player player-1-token)
+        players        {player-1-token player-1
+                        player-2-token player-2}
         state          {:X             (players :X)
                         :O             (players :O)
                         :board         output/starting-board

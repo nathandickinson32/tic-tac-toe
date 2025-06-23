@@ -14,10 +14,10 @@
   (flush))
 
 (defn choose-token []
-  (println "Choose a token: X or O"))
+  (println "Choose their token: X or O"))
 
-(defn choose-opponent []
-  (println "Choose an opponent:\n1 Human\n2 Easy-AI\n3 Medium-Difficulty-AI\n4 Expert-AI"))
+(defn choose-player []
+  (println "Choose a player:\n1 Human\n2 Easy-AI\n3 Medium-Difficulty-AI\n4 Expert-AI"))
 
 (defn choose-first-player []
   (println "Who will play first?"))

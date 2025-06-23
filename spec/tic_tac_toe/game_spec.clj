@@ -1,5 +1,6 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
+            [tic-tac-toe.board :as board]
             [tic-tac-toe.easy-ai :as easy-ai]
             [tic-tac-toe.medium-ai :as medium-ai]
             [tic-tac-toe.expert-ai :as expert-ai]
@@ -10,10 +11,10 @@
             [tic-tac-toe.test-boards-spec :as test-board]))
 
 (def take-turn-state-human-v-human
-  {:X :human :O :human :board test-board/not-full-board1 :current-token :X :depth 0})
+  {:X :human :O :human :board test-board/next-move-wins-X :current-token :X :depth 0})
 
 (def take-turn-state-human-v-easy-ai
-  {:X :human :O :easy-ai :board test-board/not-full-board1 :current-token :O :depth 0})
+  {:X :human :O :easy-ai :board test-board/next-move-wins-X :current-token :O :depth 0})
 
 (def take-turn-state-human-v-medium-ai
   {:X :human :O :medium-ai :board test-board/no-winners-board1 :current-token :O :depth 5})
@@ -31,10 +32,10 @@
       (should= {"X" :X "O" :O} sut/tokens))
     )
 
-  (context "opponents"
+  (context "players"
 
-    (it "returns a map of potential opponents"
-      (should= {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai} sut/opponents))
+    (it "returns a map of potential players"
+      (should= {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai} sut/players))
     )
 
   (context "game-over?"
@@ -46,20 +47,20 @@
       (should-not (sut/game-over? test-board/no-winners-board :O)))
 
     (it "returns true if there is a winning row"
-      (should (sut/game-over? test-board/winning-row1 :X))
-      (should (sut/game-over? test-board/winning-row2 :X))
-      (should (sut/game-over? test-board/winning-row3 :O)))
+      (should (sut/game-over? test-board/top-winning-row-X :X))
+      (should (sut/game-over? test-board/bottom-winning-row-X :X))
+      (should (sut/game-over? test-board/middle-winning-row-O :O)))
 
     (it "returns true if there is a winning column"
-      (should (sut/game-over? test-board/winning-col1 :X))
-      (should (sut/game-over? test-board/winning-col2 :X))
-      (should (sut/game-over? test-board/winning-col3 :O)))
+      (should (sut/game-over? test-board/left-winning-col-X :X))
+      (should (sut/game-over? test-board/right-winning-col-X :X))
+      (should (sut/game-over? test-board/middle-winning-col-O :O)))
 
     (it "returns true if there is a winning diagonal"
-      (should (sut/game-over? test-board/diagonal-win1 :X))
-      (should (sut/game-over? test-board/diagonal-win2 :X))
-      (should (sut/game-over? test-board/diagonal-win3 :O))
-      (should (sut/game-over? test-board/diagonal-win4 :O)))
+      (should (sut/game-over? test-board/diagonal-dright-win-X :X))
+      (should (sut/game-over? test-board/diagonal-dleft-win-X :X))
+      (should (sut/game-over? test-board/diagonal-dleft-win-O :O))
+      (should (sut/game-over? test-board/diagonal-dright-win-O :O)))
     )
 
   (context "winner-message"
@@ -69,11 +70,11 @@
                     output/draw-message (stub :output/draw-message)])
 
     (it "responds to output winner message"
-      (sut/game-over? test-board/winning-row1 :X)
-      (should-have-invoked :output/winner-message {:with [test-board/winning-row1 :X]}))
+      (sut/game-over? test-board/top-winning-row-X :X)
+      (should-have-invoked :output/winner-message {:with [test-board/top-winning-row-X :X]}))
 
     (it "does not respond with winner message"
-      (should-not (sut/game-over? test-board/winning-row1 :O)))
+      (should-not (sut/game-over? test-board/top-winning-row-X :O)))
 
     (it "responds to a tie game with draw message"
       (sut/game-over? test-board/full-board :X)
@@ -92,12 +93,12 @@
     (it "ends the game"
       (with-redefs [output/winner-message (stub :winner-message)]
         (with-in-str "2\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human :depth 0}))
-        (should-have-invoked :winner-message {:with [test-board/winning-row1 :X]})))
+        (should-have-invoked :winner-message {:with [test-board/top-winning-row-X :X]})))
 
     (it "repeats until game ends"
       (with-redefs [output/winner-message (stub :winner-message)]
         (with-in-str "7\n6\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human :depth 0}))
-        (should-have-invoked :winner-message {:with [test-board/winning-row3 :O]})))
+        (should-have-invoked :winner-message {:with [test-board/middle-winning-row-O :O]})))
 
     (it "gets user input for game mode"
       (with-redefs [tic-tac-toe.human/get-user-move (stub :user {:return [0 1]})
@@ -116,8 +117,8 @@
         (should-not-have-invoked :user)))
 
     (it "gets medium-ai input for medium-ai game mode on medium-ai turn"
-      (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
-                    medium-ai/make-move (stub :medium-ai {:return [1 2]})]
+      (with-redefs [human/get-user-move         (stub :user {:return [0 1]})
+                    medium-ai/best-or-rand-move (stub :medium-ai {:return [1 2]})]
 
         (sut/take-turns take-turn-state-human-v-medium-ai)
         (should-have-invoked :medium-ai)
@@ -130,6 +131,15 @@
         (sut/take-turns take-turn-state-human-v-expert-ai)
         (should-have-invoked :expert-ai)
         (should-not-have-invoked :user)))
+
+    (it "increases depth after every turn"
+      (with-redefs [human/get-user-move (stub :user-move {:return [0 2]})]
+        (let [state (sut/take-turns {:board         test-board/top-almost-winning-X
+                                     :current-token :X
+                                     :X             :human
+                                     :O             :human
+                                     :depth         2})]
+          (should= 3 (:depth state)))))
     )
 
   (context "when asking to choose a token"
@@ -165,41 +175,41 @@
         (should-have-invoked :choose-token {:times 6})))
     )
 
-  (context "when asking to choose an opponent"
+  (context "when asking to choose a player"
     (with-stubs)
 
-    (it "asks the user to choose an opponent"
-      (with-redefs [output/choose-opponent (stub :choose-opponent)]
-        (with-in-str "1\n" (sut/ask-for-opponent)
-          (should-have-invoked :choose-opponent))))
+    (it "asks the user to choose a player"
+      (with-redefs [output/choose-player (stub :choose-player)]
+        (with-in-str "1\n" (sut/ask-for-player)
+          (should-have-invoked :choose-player))))
 
     (it "returns :human for 1"
       (with-in-str "1\n"
-        (should= :human (sut/ask-for-opponent))))
+        (should= :human (sut/ask-for-player))))
 
     (it "returns :easy-ai for 2"
       (with-in-str "2\n"
-        (should= :easy-ai (sut/ask-for-opponent))))
+        (should= :easy-ai (sut/ask-for-player))))
 
     (it "returns :medium-ai for 3"
       (with-in-str "3\n"
-        (should= :medium-ai (sut/ask-for-opponent))))
+        (should= :medium-ai (sut/ask-for-player))))
 
     (it "returns :expert-ai for 4"
       (with-in-str "4\n"
-        (should= :expert-ai (sut/ask-for-opponent))))
+        (should= :expert-ai (sut/ask-for-player))))
 
     (it "returns :human for 1 with leading and trailing whitespace"
       (with-in-str "  1  \n"
-        (should= :human (sut/ask-for-opponent))))
+        (should= :human (sut/ask-for-player))))
 
     (it "responds to invalid input"
-      (with-redefs [output/choose-opponent           (stub :choose-opponent)
+      (with-redefs [output/choose-player             (stub :choose-player)
                     output/invalid-opponent-response (stub :invalid-opponent-response)]
         (with-in-str "bad\n*\n \nXx\n1\n"
-          (should= :human (sut/ask-for-opponent)))
+          (should= :human (sut/ask-for-player)))
         (should-have-invoked :invalid-opponent-response {:times 4})
-        (should-have-invoked :choose-opponent {:times 5})))
+        (should-have-invoked :choose-player {:times 5})))
     )
 
   (context "when asking for first player"
@@ -242,22 +252,22 @@
     (with-stubs)
 
     (redefs-around [sut/ask-for-token (stub :ask-for-token {:return :O})
-                    sut/ask-for-opponent (stub :ask-for-opponent {:return :expert-ai})
                     sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
                     sut/take-turns (stub :take-turns)
                     sut/play-again? (stub :play-again {:return nil})])
 
     (it "calls all input functions and builds correct game state"
-      (sut/build-game-state)
-      (should-have-invoked :take-turns {:with
-                                        [{:X             :expert-ai
-                                          :O             :human
-                                          :board         output/starting-board
-                                          :current-token :X
-                                          :depth         0}]}))
+      (with-in-str "4\n2\n" (sut/build-game-state)
+        (should-have-invoked :take-turns {:with
+                                          [{:X             :easy-ai
+                                            :O             :expert-ai
+                                            :board         output/starting-board
+                                            :current-token :X
+                                            :depth         0}]})))
 
     (it "asks the user if they want to play again"
-      (with-redefs [output/play-again? (stub :play-again-test)]
+      (with-redefs [output/play-again? (stub :play-again-test)
+                    sut/ask-for-player (stub :expert-ai)]
         (with-in-str "N\n" (sut/build-game-state)
           (should-have-invoked :play-again-test))))
 
@@ -265,7 +275,7 @@
       (with-redefs [sut/play-again?          (stub :sut/play-again {:return nil})
                     sut/take-turns           (stub :take-turns)
                     sut/ask-for-token        (stub :ask-for-token {:return :O})
-                    sut/ask-for-opponent     (stub :ask-for-opponent {:return :expert-ai})
+                    sut/ask-for-player       (stub :ask-for-player {:return :expert-ai})
                     sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
                     output/play-again?       (stub :output/play-again {:return nil})]
         (sut/build-game-state)

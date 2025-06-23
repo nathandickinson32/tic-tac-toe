@@ -16,10 +16,10 @@
 (defn score-end-game [board max-token depth]
   (- (score board max-token) depth))
 
-(declare minimax)
+(declare memoized-minimax)
 
 (defn ->score-one-move [next-board token max-token depth]
-  (minimax next-board (board/switch-player token) max-token (inc depth)))
+  (memoized-minimax next-board (board/switch-player token) max-token (inc depth)))
 
 (defn ->score-moves [board token max-token depth moves]
   (->> moves
@@ -49,6 +49,8 @@
           maximizing? (= token max-token)]
       (->best-score scores maximizing? depth))))
 
+(def memoized-minimax
+  (memoize minimax))
 
 (defn evaluate-move [board token move depth]
   (let [next-board (board/make-move board move token)

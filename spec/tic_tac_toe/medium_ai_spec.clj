@@ -22,11 +22,11 @@
         (should-contain move corners)))
 
     (it "chooses a blocking move when depth < 6"
-      (let [state {:X :medium-ai :O :human :board test-board/ai-test-board1 :current-token :X :depth 3}]
+      (let [state {:X :medium-ai :O :human :board test-board/O-should-block :current-token :X :depth 3}]
         (should= [1 2] (->player-move state))))
 
     (it "chooses random move when depth > 6"
       (with-redefs [rand-nth (constantly [1 2])]
-        (should= [1 2] (sut/make-move test-board/random-after-depth-6 :X 7))))
+        (should= [1 2] (sut/best-or-rand-move test-board/random-after-depth-6 :X 7))))
     )
   )

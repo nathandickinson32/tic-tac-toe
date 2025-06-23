@@ -28,13 +28,13 @@
 
   (context "when building a game state"
 
-    (it "asks the user to choose a token"
-      (let [output (str "Choose a token: X or O\n")]
-        (should= output (with-out-str (sut/choose-token)))))
+    (it "asks the user to choose an player 1"
+      (let [output (str "Choose a player:\n1 Human\n2 Easy-AI\n3 Medium-Difficulty-AI\n4 Expert-AI\n")]
+        (should= output (with-out-str (sut/choose-player)))))
 
-    (it "asks the user to choose an opponent"
-      (let [output (str "Choose an opponent:\n1 Human\n2 Easy-AI\n3 Medium-Difficulty-AI\n4 Expert-AI\n")]
-        (should= output (with-out-str (sut/choose-opponent)))))
+    (it "asks the user to choose a token"
+      (let [output (str "Choose their token: X or O\n")]
+        (should= output (with-out-str (sut/choose-token)))))
 
     (it "asks the user to choose first player"
       (let [output "Who will play first?\n"]
