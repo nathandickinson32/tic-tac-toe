@@ -136,7 +136,7 @@
     )
 
   #_(it "expert-AI is 100% unbeatable"
-      (should= test-board/full-board ()))
+    )
 
   (context "memoized-minimax"
 
