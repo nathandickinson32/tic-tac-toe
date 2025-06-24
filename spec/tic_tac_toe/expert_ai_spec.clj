@@ -110,6 +110,48 @@
                    [\space \space \space]
                    [:O :X \space]]]
         (should-contain (sut/choose-best-move board :O 7) [[1 2] [2 2]])))
+
+    (it "AI never loses as X playing first"
+      (let [all-finished-games (loop [unfinished-games [(board/make-move output/starting-board (sut/choose-best-move output/starting-board :X 0) :X)]
+                                      finished-games   []]
+                                 (if (empty? unfinished-games)
+
+                                   finished-games
+
+                                   (let [opponent-boards (mapcat (fn [board]
+                                                                   (map (fn [move]
+                                                                          (board/make-move board move :O))
+                                                                        (board/available-moves board)))
+                                                                 unfinished-games)
+                                         next-ai-boards  (map #(board/make-move % (sut/choose-best-move % :X 0) :X) opponent-boards)
+                                         {finished true unfinished false} (group-by (comp boolean sut/end-game?) next-ai-boards)]
+                                     (recur unfinished (concat finished-games finished)))))]
+        (should (every? #(cond
+                           (board/win? % :X) true
+                           (and (board/full-board? %)
+                                (not (board/win? % :O))) true
+                           :else false)
+                        all-finished-games))))
+
+    (it "AI never loses as O playing second"
+      (let [all-finished-games (loop [unfinished-games (map #(board/make-move output/starting-board % :X) (board/available-moves output/starting-board))
+                                      finished-games   []]
+                                 (if (empty? unfinished-games)
+                                   finished-games
+                                   (let [next-ai-boards  (map #(board/make-move % (sut/choose-best-move % :O 0) :O) unfinished-games)
+                                         opponent-boards (mapcat (fn [board]
+                                                                   (map (fn [move]
+                                                                          (board/make-move board move :O))
+                                                                        (board/available-moves board)))
+                                                                 next-ai-boards)
+                                         {finished true unfinished false} (group-by (comp boolean sut/end-game?) opponent-boards)]
+                                     (recur unfinished (concat finished-games finished)))))]
+        (should (every? #(cond
+                           (board/win? % :O) true
+                           (and (board/full-board? %)
+                                (not (board/win? % :X))) true
+                           :else false)
+                        all-finished-games))))
     )
 
   (context "expert AI ->player-move"
@@ -133,9 +175,6 @@
     (it "chooses a blocking move"
       (let [state {:X :expert-ai :O :human :board test-board/O-should-block :current-token :X :depth 3}]
         (should= [1 2] (->player-move state))))
-    )
-
-  #_(it "expert-AI is 100% unbeatable"
     )
 
   (context "memoized-minimax"
