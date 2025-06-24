@@ -6,6 +6,39 @@
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.test-boards-spec :as test-board]))
 
+(defn x-win-every-game [all-finished-games]
+  (every? #(cond
+             (board/win? % :X) true
+             (board/full-board? %) true
+             :else false)
+          all-finished-games))
+
+(defn simulate-opponent-moves [unfinished-games]
+  (mapcat (fn [board]
+            (map (fn [move]
+                   (board/make-move board move :O))
+                 (board/available-moves board)))
+          unfinished-games))
+
+(defn ai-make-move [board]
+  (board/make-move board (sut/choose-best-move board :X 0) :X))
+
+(defn simulate-ai-moves [opponent-boards]
+  (map #(ai-make-move %) opponent-boards))
+
+(defn finished? [next-ai-boards]
+  (group-by (comp boolean sut/end-game?) next-ai-boards))
+
+(defn ->all-finished-games-as-X []
+  (loop [unfinished-games [(ai-make-move output/starting-board)]
+         finished-games   []]
+    (if (empty? unfinished-games)
+      finished-games
+      (let [opponent-boards (simulate-opponent-moves unfinished-games)
+            next-ai-boards  (simulate-ai-moves opponent-boards)
+            {finished true unfinished false} (finished? next-ai-boards)]
+        (recur unfinished (concat finished-games finished))))))
+
 (describe "Expert AI"
 
   (context "when checking for winner"
@@ -112,26 +145,8 @@
         (should-contain (sut/choose-best-move board :O 7) [[1 2] [2 2]])))
 
     (it "AI never loses as X playing first"
-      (let [all-finished-games (loop [unfinished-games [(board/make-move output/starting-board (sut/choose-best-move output/starting-board :X 0) :X)]
-                                      finished-games   []]
-                                 (if (empty? unfinished-games)
-
-                                   finished-games
-
-                                   (let [opponent-boards (mapcat (fn [board]
-                                                                   (map (fn [move]
-                                                                          (board/make-move board move :O))
-                                                                        (board/available-moves board)))
-                                                                 unfinished-games)
-                                         next-ai-boards  (map #(board/make-move % (sut/choose-best-move % :X 0) :X) opponent-boards)
-                                         {finished true unfinished false} (group-by (comp boolean sut/end-game?) next-ai-boards)]
-                                     (recur unfinished (concat finished-games finished)))))]
-        (should (every? #(cond
-                           (board/win? % :X) true
-                           (and (board/full-board? %)
-                                (not (board/win? % :O))) true
-                           :else false)
-                        all-finished-games))))
+      (let [all-finished-games (->all-finished-games-as-X)]
+        (should (x-win-every-game all-finished-games))))
 
     (it "AI never loses as O playing second"
       (let [all-finished-games (loop [unfinished-games (map #(board/make-move output/starting-board % :X) (board/available-moves output/starting-board))
