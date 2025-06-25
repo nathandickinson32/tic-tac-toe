@@ -87,7 +87,7 @@
                       :depth new-depth)]
     (if (game-over? new-board current-token)
       new-state
-      (recur new-state))))                                  ;need to test inc depth
+      (recur new-state))))
 
 (defn play-again? [build-game-state]
   (let [input (board/->clean-user-input)]

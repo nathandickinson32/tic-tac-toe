@@ -1,6 +1,11 @@
 (ns tic-tac-toe.test-boards-spec
   (:require [clojure.test :refer :all]))
 
+(def x-one-move
+  [[:X \space \space]
+   [\space \space \space]
+   [\space \space \space]])
+
 (def no-winners-board
   [[:X \space :X]
    [:O :O \space]
