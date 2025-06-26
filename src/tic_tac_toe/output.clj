@@ -14,7 +14,8 @@
   (flush))
 
 (defn choose-board-size []
-  (print "Choose a board size:\n3 (3x3)\n4 (4x4)"))
+  (println "Choose a board size:\n3 (3x3)\n4 (4x4)")
+  (flush))
 
 (defn choose-token []
   (println "Choose their token: X or O"))
@@ -31,8 +32,8 @@
 (defn invalid-token-response []
   (println "Invalid Input. Please enter X or O."))
 
-(defn invalid-opponent-response []
-  (println "Invalid Input. Please enter human\neasy-ai\nor expert-ai."))
+(defn invalid-board-size-response []
+  (println "Invalid Input. Please enter 3 or 4."))
 
 (defn player-prompt [token]
   (println "Player" (name token) "Enter your move 1-9"))

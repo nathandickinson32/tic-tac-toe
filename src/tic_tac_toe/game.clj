@@ -18,6 +18,15 @@
     :O
     :X))
 
+(defn ask-for-board-size []
+  (output/choose-board-size)
+  (let [input (board/->clean-user-input)]
+    (if-let [board-size (get board-sizes input)]
+      board-size
+      (do
+        (output/invalid-board-size-response)
+        (recur)))))
+
 (defn ask-for-token []
   (output/choose-token)
   (let [input (board/->clean-user-input)]
@@ -33,7 +42,7 @@
     (if-let [player (get players input)]
       player
       (do
-        (output/invalid-opponent-response)
+        (output/invalid-response)
         (recur)))))
 
 (defn ask-for-first-player []
@@ -97,7 +106,7 @@
       (build-game-state))))
 
 (defn build-game-state []
-  (let [
+  (let [board-size     (ask-for-board-size)
         player-1       (ask-for-player)
         player-1-token (ask-for-token)
         player-2       (ask-for-player)
@@ -105,11 +114,13 @@
         player-2-token (board/switch-player player-1-token)
         players        {player-1-token player-1
                         player-2-token player-2}
-        state          {:X             (:X players)
+        state          {:board-size    board-size
+                        :X             (:X players)
                         :O             (:O players)
                         :board         output/starting-board
                         :current-token first-token
                         :depth         0}]
-    (take-turns state)
+    (if (= board-size :3x3)
+      (take-turns state))
     (output/play-again?)
     (play-again? build-game-state)))

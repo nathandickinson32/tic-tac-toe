@@ -14,9 +14,9 @@
       (let [output (str "Invalid Input. Please enter X or O.\n")]
         (should= output (with-out-str (sut/invalid-token-response)))))
 
-    (it "prints invalid input message when choosing a opponent"
-      (let [output (str "Invalid Input. Please enter human\neasy-ai\nor expert-ai.\n")]
-        (should= output (with-out-str (sut/invalid-opponent-response)))))
+    (it "prints invalid input message when choosing a board size"
+      (let [output (str "Invalid Input. Please enter 3 or 4.\n")]
+        (should= output (with-out-str (sut/invalid-board-size-response)))))
     )
 
   (context "greeting"
@@ -29,7 +29,7 @@
   (context "when building a game state"
 
     (it "asks the user what board size they want to play on"
-      (let [output (str "Choose a board size:\n3 (3x3)\n4 (4x4)")]
+      (let [output (str "Choose a board size:\n3 (3x3)\n4 (4x4)\n")]
         (should= output (with-out-str (sut/choose-board-size)))))
 
     (it "asks the user to choose a player type"

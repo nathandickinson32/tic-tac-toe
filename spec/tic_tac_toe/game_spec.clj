@@ -179,6 +179,29 @@
         (should-have-invoked :choose-token {:times 6})))
     )
 
+  (context "when asking to choose a board size"
+    (with-stubs)
+
+    (it "asks the user to choose a board size"
+      (with-redefs [output/choose-board-size (stub :choose-board-size)]
+        (with-in-str "3\n" (sut/ask-for-board-size)
+          (should-have-invoked :choose-board-size))))
+
+    (it "returns :3x3 for 3"
+      (with-in-str "3\n" (should= :3x3 (sut/ask-for-board-size))))
+
+    (it "returns :4x4 for 4"
+      (with-in-str "4\n" (should= :4x4 (sut/ask-for-board-size))))
+
+    (it "responds to invalid input"
+      (with-redefs [output/choose-board-size           (stub :choose-board-size)
+                    output/invalid-board-size-response (stub :invalid-board-size-response)]
+        (with-in-str "bad\n*\n \nXx\n3\n"
+          (should= :3x3 (sut/ask-for-board-size)))
+        (should-have-invoked :invalid-board-size-response {:times 4})
+        (should-have-invoked :choose-board-size {:times 5})))
+    )
+
   (context "when asking to choose a player"
     (with-stubs)
 
@@ -208,11 +231,11 @@
         (should= :human (sut/ask-for-player))))
 
     (it "responds to invalid input"
-      (with-redefs [output/choose-player             (stub :choose-player)
-                    output/invalid-opponent-response (stub :invalid-opponent-response)]
+      (with-redefs [output/choose-player    (stub :choose-player)
+                    output/invalid-response (stub :invalid-response)]
         (with-in-str "bad\n*\n \nXx\n1\n"
           (should= :human (sut/ask-for-player)))
-        (should-have-invoked :invalid-opponent-response {:times 4})
+        (should-have-invoked :invalid-response {:times 4})
         (should-have-invoked :choose-player {:times 5})))
     )
 
@@ -255,7 +278,8 @@
   (context "when building a game state"
     (with-stubs)
 
-    (redefs-around [sut/ask-for-token (stub :ask-for-token {:return :O})
+    (redefs-around [sut/ask-for-board-size (stub :ask-for-board-size {:return :3x3})
+                    sut/ask-for-token (stub :ask-for-token {:return :O})
                     sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
                     sut/take-turns (stub :take-turns)
                     sut/play-again? (stub :play-again {:return nil})])
@@ -263,7 +287,8 @@
     (it "calls all input functions and builds correct game state"
       (with-in-str "4\n2\n" (sut/build-game-state)
         (should-have-invoked :take-turns {:with
-                                          [{:X             :easy-ai
+                                          [{:board-size    :3x3
+                                            :X             :easy-ai
                                             :O             :expert-ai
                                             :board         output/starting-board
                                             :current-token :X
