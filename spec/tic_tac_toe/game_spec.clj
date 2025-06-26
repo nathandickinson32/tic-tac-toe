@@ -1,6 +1,5 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.board :as board]
             [tic-tac-toe.easy-ai :as easy-ai]
             [tic-tac-toe.medium-ai :as medium-ai]
             [tic-tac-toe.expert-ai :as expert-ai]

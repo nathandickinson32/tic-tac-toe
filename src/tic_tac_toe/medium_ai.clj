@@ -7,6 +7,6 @@
   (if (< depth 6)
     (choose-best-move board current-token depth)
     (choose-random-move board)))
-
+;change to random move between expert and easy every turn 
 (defmethod ->player-move :medium-ai [{:keys [board current-token depth]}]
   (best-or-rand-move board current-token depth))

@@ -41,7 +41,7 @@
   ([unfinished-games finished-games ai-token opponent-token]
    (if (empty? unfinished-games)
      finished-games
-     (let [{:keys [unfinished finished]}
+     (let [{:keys [unfinished finished] :as result}
            (simulate-next-boards unfinished-games finished-games ai-token opponent-token)]
        (all-finished-games unfinished finished ai-token opponent-token)))))
 
@@ -55,10 +55,11 @@
     (all-finished-games o-response-boards :O :X)))
 
 (defn ai-win-every-game [all-finished-games token]
-  (let [{lost false won true}
+  (let [result
         (group-by #(boolean (or (board/win? (first %) token)
                                 (board/full-board? (first %))))
-                  all-finished-games)]
+                  all-finished-games)
+        {lost false won true} result]
     (not lost)))
 
 (describe "Expert AI"
@@ -168,6 +169,7 @@
 
     (it "AI never loses as X playing first"
       (let [all-finished-games (finished-games-ai-plays-first)]
+        (prn "all-finished-games:" (first all-finished-games))
         (should (ai-win-every-game all-finished-games :X))))
 
     (it "AI never loses as O playing second"

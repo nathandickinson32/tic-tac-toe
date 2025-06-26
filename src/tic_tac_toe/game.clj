@@ -102,8 +102,8 @@
         player-2-token (board/switch-player player-1-token)
         players        {player-1-token player-1
                         player-2-token player-2}
-        state          {:X             (players :X)
-                        :O             (players :O)
+        state          {:X             (:X players)
+                        :O             (:O players)
                         :board         output/starting-board
                         :current-token first-token
                         :depth         0}]
