@@ -1,5 +1,6 @@
 (ns tic-tac-toe.board
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [tic-tac-toe.output :as output]))
 
 (defn ->clean-user-input []
   (-> (read-line)
@@ -29,7 +30,7 @@
 (defn full-board? [board]
   (every? #{:X :O} (flatten board)))
 
-(defn three-matches? [row token]
+(defn all-matching-tokens? [row token]
   (every? #(= % token) row))
 
 (defn diagonal-right [board]
@@ -43,17 +44,22 @@
    (get-in board [2 0])])
 
 (defn winning-row? [board token]
-  (some #(three-matches? % token) board))
+  (some #(all-matching-tokens? % token) board))
 
 (defn winning-col? [board token]
   (let [columns-as-rows (apply mapv vector board)]
     (winning-row? columns-as-rows token)))
 
 (defn winning-diagonal? [board token]
-  (or (three-matches? (diagonal-right board) token)
-      (three-matches? (diagonal-left board) token)))
+  (or (all-matching-tokens? (diagonal-right board) token)
+      (all-matching-tokens? (diagonal-left board) token)))
 
 (defn win? [board token]
   (or (winning-row? board token)
       (winning-col? board token)
       (winning-diagonal? board token)))
+
+(defn game-over? [board token]
+  (cond
+    (win? board token) (do (output/winner-message board token) true)
+    (full-board? board) (do (output/draw-message board) true)))

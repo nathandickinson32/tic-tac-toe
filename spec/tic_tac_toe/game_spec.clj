@@ -1,5 +1,6 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
+            [tic-tac-toe.board :as board]
             [tic-tac-toe.easy-ai :as easy-ai]
             [tic-tac-toe.medium-ai :as medium-ai]
             [tic-tac-toe.expert-ai :as expert-ai]
@@ -42,46 +43,21 @@
       (should= {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai} sut/players))
     )
 
-  (context "game-over?"
-
-    (it "returns false if there is no winners for X"
-      (should-not (sut/game-over? test-board/no-winners-board :X)))
-
-    (it "returns false if there is no winners for O"
-      (should-not (sut/game-over? test-board/no-winners-board :O)))
-
-    (it "returns true if there is a winning row"
-      (should (sut/game-over? test-board/top-winning-row-X :X))
-      (should (sut/game-over? test-board/bottom-winning-row-X :X))
-      (should (sut/game-over? test-board/middle-winning-row-O :O)))
-
-    (it "returns true if there is a winning column"
-      (should (sut/game-over? test-board/left-winning-col-X :X))
-      (should (sut/game-over? test-board/right-winning-col-X :X))
-      (should (sut/game-over? test-board/middle-winning-col-O :O)))
-
-    (it "returns true if there is a winning diagonal"
-      (should (sut/game-over? test-board/diagonal-dright-win-X :X))
-      (should (sut/game-over? test-board/diagonal-dleft-win-X :X))
-      (should (sut/game-over? test-board/diagonal-dleft-win-O :O))
-      (should (sut/game-over? test-board/diagonal-dright-win-O :O)))
-    )
-
-  (context "winner-message"
+  (context "end of game messages"
     (with-stubs)
 
     (redefs-around [output/winner-message (stub :output/winner-message)
                     output/draw-message (stub :output/draw-message)])
 
     (it "responds to output winner message"
-      (sut/game-over? test-board/top-winning-row-X :X)
+      (board/game-over? test-board/top-winning-row-X :X)
       (should-have-invoked :output/winner-message {:with [test-board/top-winning-row-X :X]}))
 
     (it "does not respond with winner message"
-      (should-not (sut/game-over? test-board/top-winning-row-X :O)))
+      (should-not (board/game-over? test-board/top-winning-row-X :O)))
 
     (it "responds to a tie game with draw message"
-      (sut/game-over? test-board/full-board :X)
+      (board/game-over? test-board/full-board :X)
       (should-have-invoked :output/draw-message {:with [test-board/full-board]}))
     )
 
@@ -287,7 +263,8 @@
     (it "calls all input functions and builds correct game state"
       (with-in-str "4\n2\n" (sut/build-game-state)
         (should-have-invoked :take-turns {:with
-                                          [{:X             :easy-ai
+                                          [{:board-size    :3x3
+                                            :X             :easy-ai
                                             :O             :expert-ai
                                             :board         output/starting-board-3x3
                                             :current-token :X

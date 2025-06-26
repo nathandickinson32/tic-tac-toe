@@ -4,7 +4,7 @@
             [tic-tac-toe.output :as output]
             [tic-tac-toe.test-boards-spec :as test-board]))
 
-(describe "core functions"
+(describe "board conditions"
 
   (context "getting all positions"
 
@@ -88,16 +88,16 @@
   (context "rows"
 
     (it "returns false when no rows have all matching symbols"
-      (should-not (sut/three-matches? (first test-board/top-winning-row-X) :O))
-      (should-not (sut/three-matches? (nth test-board/top-winning-row-X 2) :O))
-      (should-not (sut/three-matches? (second test-board/bottom-winning-row-X) :O))
-      (should-not (sut/three-matches? (nth test-board/middle-winning-row-O 1) :X))
-      (should-not (sut/three-matches? (nth test-board/middle-winning-row-O 2) :X)))
+      (should-not (sut/all-matching-tokens? (first test-board/top-winning-row-X) :O))
+      (should-not (sut/all-matching-tokens? (nth test-board/top-winning-row-X 2) :O))
+      (should-not (sut/all-matching-tokens? (second test-board/bottom-winning-row-X) :O))
+      (should-not (sut/all-matching-tokens? (nth test-board/middle-winning-row-O 1) :X))
+      (should-not (sut/all-matching-tokens? (nth test-board/middle-winning-row-O 2) :X)))
 
     (it "returns true for a single row of matching symbols"
-      (should (sut/three-matches? (first test-board/top-winning-row-X) :X))
-      (should (sut/three-matches? (nth test-board/bottom-winning-row-X 2) :X))
-      (should (sut/three-matches? (second test-board/middle-winning-row-O) :O)))
+      (should (sut/all-matching-tokens? (first test-board/top-winning-row-X) :X))
+      (should (sut/all-matching-tokens? (nth test-board/bottom-winning-row-X 2) :X))
+      (should (sut/all-matching-tokens? (second test-board/middle-winning-row-O) :O)))
 
     (it "is a winning row"
       (should (sut/winning-row? test-board/top-winning-row-X :X))
@@ -167,6 +167,31 @@
 
     (it "switches from player O to player X"
       (should= :X (sut/switch-player :O)))
+    )
+
+  (context "game-over?"
+
+    (it "returns false if there is no winners for X"
+      (should-not (sut/game-over? test-board/no-winners-board :X)))
+
+    (it "returns false if there is no winners for O"
+      (should-not (sut/game-over? test-board/no-winners-board :O)))
+
+    (it "returns true if there is a winning row"
+      (should (sut/game-over? test-board/top-winning-row-X :X))
+      (should (sut/game-over? test-board/bottom-winning-row-X :X))
+      (should (sut/game-over? test-board/middle-winning-row-O :O)))
+
+    (it "returns true if there is a winning column"
+      (should (sut/game-over? test-board/left-winning-col-X :X))
+      (should (sut/game-over? test-board/right-winning-col-X :X))
+      (should (sut/game-over? test-board/middle-winning-col-O :O)))
+
+    (it "returns true if there is a winning diagonal"
+      (should (sut/game-over? test-board/diagonal-dright-win-X :X))
+      (should (sut/game-over? test-board/diagonal-dleft-win-X :X))
+      (should (sut/game-over? test-board/diagonal-dleft-win-O :O))
+      (should (sut/game-over? test-board/diagonal-dright-win-O :O)))
     )
 
   (context "->clean-user-input"

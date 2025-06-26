@@ -1,11 +1,6 @@
 (ns tic-tac-toe.test-boards-spec
   (:require [clojure.test :refer :all]))
 
-(def x-one-move
-  [[:X \space \space]
-   [\space \space \space]
-   [\space \space \space]])
-
 (def no-winners-board
   [[:X \space :X]
    [:O :O \space]
@@ -99,9 +94,4 @@
 (def choose-win-over-block
   [[:X :O \3]
    [\4 \5 \6]
-   [:X :O \9]])
-
-(def random-after-depth-6
-  [[:X :O \3]
-   [:O :X \6]
    [:X :O \9]])

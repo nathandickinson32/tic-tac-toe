@@ -183,5 +183,4 @@
       (let [output (str "Would you like to play again? Y/N\n")]
         (should= output (with-out-str (sut/play-again?)))))
     )
-
   )

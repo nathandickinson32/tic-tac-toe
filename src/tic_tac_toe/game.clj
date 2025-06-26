@@ -32,9 +32,6 @@
   output/starting-board-3x3
   output/starting-board-3x3)                                ;need to make 4x4 starting-board
 
-(defn ->starting-board []
-  (determine-starting-board (ask-for-board-size)))
-
 (defn ask-for-token []
   (output/choose-token)
   (let [input (board/->clean-user-input)]
@@ -57,42 +54,10 @@
   (output/choose-first-player)
   (ask-for-token))
 
-(defn full-board? [board]
-  (->> (flatten board) (every? #{:X :O})))
-
-(defn three-matches? [row token]
-  (->> row (every? #(= % token))))
-
-(defn diagonal-right [board]
-  [(get-in board [0 0])
-   (get-in board [1 1])
-   (get-in board [2 2])])
-
-(defn diagonal-left [board]
-  [(get-in board [0 2])
-   (get-in board [1 1])
-   (get-in board [2 0])])
-
-(defn winning-row? [board token]
-  (->> board (some #(three-matches? % token))))
-
-(defn winning-col? [board token]
-  (let [columns-as-rows (apply mapv vector board)]
-    (winning-row? columns-as-rows token)))
-
-(defn winning-diagonal? [board token]
-  (or (three-matches? (diagonal-right board) token)
-      (three-matches? (diagonal-left board) token)))
-
-(defn win? [board token]
-  (or (winning-row? board token)
-      (winning-col? board token)
-      (winning-diagonal? board token)))
-
-(defn game-over? [board token]
-  (cond
-    (win? board token) (do (output/winner-message board token) true)
-    (full-board? board) (do (output/draw-message board) true)))
+(defn play-again? [build-game-state]
+  (let [input (board/->clean-user-input)]
+    (when (= input "Y")
+      (build-game-state))))
 
 (defn take-turns [{:keys [board current-token depth] :as state}]
   (output/print-board board)
@@ -104,17 +69,13 @@
                       :current-token next-player
                       :board new-board
                       :depth new-depth)]
-    (if (game-over? new-board current-token)
+    (if (board/game-over? new-board current-token)
       new-state
       (recur new-state))))
 
-(defn play-again? [build-game-state]
-  (let [input (board/->clean-user-input)]
-    (when (= input "Y")
-      (build-game-state))))
-
 (defn build-game-state []
-  (let [board          (->starting-board)
+  (let [board-size     (ask-for-board-size)
+        board          (determine-starting-board board-size)
         player-1       (ask-for-player)
         player-1-token (ask-for-token)
         player-2       (ask-for-player)
@@ -122,7 +83,8 @@
         player-2-token (board/switch-player player-1-token)
         players        {player-1-token player-1
                         player-2-token player-2}
-        state          {:X             (:X players)
+        state          {:board-size    board-size
+                        :X             (:X players)
                         :O             (:O players)
                         :board         board
                         :current-token first-token
