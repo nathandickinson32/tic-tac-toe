@@ -287,10 +287,9 @@
     (it "calls all input functions and builds correct game state"
       (with-in-str "4\n2\n" (sut/build-game-state)
         (should-have-invoked :take-turns {:with
-                                          [{:board-size    :3x3
-                                            :X             :easy-ai
+                                          [{:X             :easy-ai
                                             :O             :expert-ai
-                                            :board         output/starting-board
+                                            :board         output/starting-board-3x3
                                             :current-token :X
                                             :depth         0}]})))
 
@@ -309,5 +308,8 @@
                     output/play-again?       (stub :output/play-again {:return nil})]
         (sut/build-game-state)
         (should-have-invoked :sut/play-again)))
+
+    (it "determines starting board"
+      (should= output/starting-board-3x3 (sut/determine-starting-board :3x3)))
     )
   )

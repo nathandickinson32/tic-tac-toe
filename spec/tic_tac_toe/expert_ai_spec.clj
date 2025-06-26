@@ -46,11 +46,11 @@
        (all-finished-games unfinished finished ai-token opponent-token)))))
 
 (defn finished-games-ai-plays-first []
-  (let [ai-first-move (ai-make-move [output/starting-board 0] :X)]
+  (let [ai-first-move (ai-make-move [output/starting-board-3x3 0] :X)]
     (all-finished-games [ai-first-move] :X :O)))
 
 (defn finished-games-ai-plays-second []
-  (let [x-starting-boards (simulate-opponent-moves [[output/starting-board 0]] :X)
+  (let [x-starting-boards (simulate-opponent-moves [[output/starting-board-3x3 0]] :X)
         o-response-boards (simulate-ai-moves x-starting-boards :O)]
     (all-finished-games o-response-boards :O :X)))
 
@@ -142,7 +142,7 @@
         (should= [0 1] (sut/choose-best-move board :X 8))))
 
     (it "chooses any corner on an empty board"
-      (let [board   output/starting-board
+      (let [board   output/starting-board-3x3
             corners #{[0 0] [0 2] [2 0] [2 2]}
             move    (sut/choose-best-move board :X 5)]
         (should-contain move corners)))
@@ -185,7 +185,7 @@
         (should= [0 1] (->player-move state))))
 
     (it "chooses any corner on an empty board"
-      (let [state   {:X :expert-ai :O :human :board output/starting-board :current-token :X :depth 0}
+      (let [state   {:X :expert-ai :O :human :board output/starting-board-3x3 :current-token :X :depth 0}
             corners #{[0 0] [0 2] [2 0] [2 2]}
             move    (->player-move state)]
         (should-contain move corners)))

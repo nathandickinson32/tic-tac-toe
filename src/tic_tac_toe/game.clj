@@ -27,6 +27,14 @@
         (output/invalid-board-size-response)
         (recur)))))
 
+(defn determine-starting-board [board-size]
+  (= :3x3 board-size)
+  output/starting-board-3x3
+  output/starting-board-3x3)                                ;need to make 4x4 starting-board
+
+(defn ->starting-board []
+  (determine-starting-board (ask-for-board-size)))
+
 (defn ask-for-token []
   (output/choose-token)
   (let [input (board/->clean-user-input)]
@@ -106,7 +114,7 @@
       (build-game-state))))
 
 (defn build-game-state []
-  (let [board-size     (ask-for-board-size)
+  (let [board          (->starting-board)
         player-1       (ask-for-player)
         player-1-token (ask-for-token)
         player-2       (ask-for-player)
@@ -114,13 +122,11 @@
         player-2-token (board/switch-player player-1-token)
         players        {player-1-token player-1
                         player-2-token player-2}
-        state          {:board-size    board-size
-                        :X             (:X players)
+        state          {:X             (:X players)
                         :O             (:O players)
-                        :board         output/starting-board
+                        :board         board
                         :current-token first-token
                         :depth         0}]
-    (if (= board-size :3x3)
-      (take-turns state))
+    (take-turns state)
     (output/play-again?)
     (play-again? build-game-state)))

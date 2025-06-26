@@ -51,26 +51,26 @@
                         [\4 :X \6]
                         [\7 \8 \9]]
             move       [1 1]]
-        (should= test-board (sut/make-move output/starting-board move :X)))
+        (should= test-board (sut/make-move output/starting-board-3x3 move :X)))
 
       (let [test-board [[:X \2 \3]
                         [\4 \5 \6]
                         [\7 \8 \9]]
             move       [0 0]]
-        (should= test-board (sut/make-move output/starting-board move :X))))
+        (should= test-board (sut/make-move output/starting-board-3x3 move :X))))
 
     (it "marks grid with O"
       (let [test-board [[:O \2 \3]
                         [\4 \5 \6]
                         [\7 \8 \9]]
             move       [0 0]]
-        (should= test-board (sut/make-move output/starting-board move :O)))
+        (should= test-board (sut/make-move output/starting-board-3x3 move :O)))
 
       (let [test-board [[\1 \2 \3]
                         [\4 \5 \6]
                         [\7 \8 :O]]
             move       [2 2]]
-        (should= test-board (sut/make-move output/starting-board move :O))))
+        (should= test-board (sut/make-move output/starting-board-3x3 move :O))))
     )
 
   (context "draw/tie game"

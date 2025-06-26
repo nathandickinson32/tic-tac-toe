@@ -62,11 +62,11 @@
                         "-------------\n"
                         "| 7 | 8 | 9 |\n"
                         "-------------\n")]
-        (should= output (with-out-str (sut/print-board sut/starting-board)))))
+        (should= output (with-out-str (sut/print-board sut/starting-board-3x3)))))
 
     (it "prints a board after one move"
       (with-redefs [sut/colorize-token identity]
-        (let [board  (assoc-in sut/starting-board [0 0] \X)
+        (let [board  (assoc-in sut/starting-board-3x3 [0 0] \X)
               output (str "-------------\n"
                           "| X | 2 | 3 |\n"
                           "-------------\n"
@@ -77,7 +77,7 @@
           (should= output (with-out-str (sut/print-board board))))))
 
     (it "prints board when token is in first row"
-      (let [board  (assoc-in sut/starting-board [0 2] \X)
+      (let [board  (assoc-in sut/starting-board-3x3 [0 2] \X)
             output (str "-------------\n"
                         "| 1 | 2 | X |\n"
                         "-------------\n"
@@ -88,7 +88,7 @@
         (should= output (with-out-str (sut/print-board board)))))
 
     (it "prints three in a row, down the middle"
-      (let [board  (-> sut/starting-board (assoc-in [0 1] \O)
+      (let [board  (-> sut/starting-board-3x3 (assoc-in [0 1] \O)
                        (assoc-in [1 1] \O)
                        (assoc-in [2 1] \O))
             output (str "-------------\n"
@@ -101,7 +101,7 @@
         (should= output (with-out-str (sut/print-board board)))))
 
     (it "prints three in a row, across the middle row"
-      (let [board  (-> sut/starting-board
+      (let [board  (-> sut/starting-board-3x3
                        (assoc-in [1 0] \O)
                        (assoc-in [1 1] \O)
                        (assoc-in [1 2] \O))

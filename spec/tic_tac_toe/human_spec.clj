@@ -45,28 +45,28 @@
 
     (it "displays player prompt"
       (with-in-str "1\n"
-        (sut/get-user-move output/starting-board :X))
+        (sut/get-user-move output/starting-board-3x3 :X))
       (should-have-invoked :output/player-prompt {:with [:X]}))
 
     (it "returns [0 0] for 1"
-      (let [test-board output/starting-board]
+      (let [test-board output/starting-board-3x3]
         (with-in-str "1\n"
           (should= [0 0] (sut/get-user-move test-board :X)))))
 
     (it "returns [0 1] for 2"
-      (let [test-board output/starting-board]
+      (let [test-board output/starting-board-3x3]
         (with-in-str "2\n"
           (should= [0 1] (sut/get-user-move test-board :X)))
         (should-not-have-invoked :output/invalid-response)))
 
     (it "responds to invalid move"
       (with-in-str "a\n2\n"
-        (sut/get-user-move output/starting-board :X))
+        (sut/get-user-move output/starting-board-3x3 :X))
       (should-have-invoked :output/invalid-response)
       (should-have-invoked :output/player-prompt {:times 2}))
 
     (it "accepts leading and trailing whitespace"
-      (let [test-board output/starting-board]
+      (let [test-board output/starting-board-3x3]
         (with-in-str " 1\n"
           (should= [0 0] (sut/get-user-move test-board :X)))))
     )

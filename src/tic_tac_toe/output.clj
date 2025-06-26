@@ -4,7 +4,7 @@
 (def red "\u001b[31m")
 (def reset "\u001b[0m")
 
-(def starting-board
+(def starting-board-3x3
   [[\1 \2 \3]
    [\4 \5 \6]
    [\7 \8 \9]])
