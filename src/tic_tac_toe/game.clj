@@ -7,6 +7,8 @@
             [tic-tac-toe.medium-ai]
             [tic-tac-toe.expert-ai]))
 
+(def board-sizes {"3" :3x3 "4" :4x4})
+
 (def tokens {"X" :X "O" :O})
 
 (def players {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai})
@@ -95,7 +97,8 @@
       (build-game-state))))
 
 (defn build-game-state []
-  (let [player-1       (ask-for-player)
+  (let [
+        player-1       (ask-for-player)
         player-1-token (ask-for-token)
         player-2       (ask-for-player)
         first-token    (ask-for-first-player)

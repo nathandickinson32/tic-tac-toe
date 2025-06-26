@@ -28,7 +28,11 @@
 
   (context "when building a game state"
 
-    (it "asks the user to choose an player 1"
+    (it "asks the user what board size they want to play on"
+      (let [output (str "Choose a board size:\n3 (3x3)\n4 (4x4)")]
+        (should= output (with-out-str (sut/choose-board-size)))))
+
+    (it "asks the user to choose a player type"
       (let [output (str "Choose a player:\n1 Human\n2 Easy-AI\n3 Medium-Difficulty-AI\n4 Expert-AI\n")]
         (should= output (with-out-str (sut/choose-player)))))
 
@@ -179,4 +183,5 @@
       (let [output (str "Would you like to play again? Y/N\n")]
         (should= output (with-out-str (sut/play-again?)))))
     )
+
   )

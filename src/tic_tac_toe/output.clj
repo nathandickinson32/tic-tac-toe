@@ -13,6 +13,9 @@
   (print "Welcome to Tic Tac Toe!\n")
   (flush))
 
+(defn choose-board-size []
+  (print "Choose a board size:\n3 (3x3)\n4 (4x4)"))
+
 (defn choose-token []
   (println "Choose their token: X or O"))
 

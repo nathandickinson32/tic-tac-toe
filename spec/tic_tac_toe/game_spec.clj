@@ -31,6 +31,11 @@
       (should= {"X" :X "O" :O} sut/tokens))
     )
 
+  (context "board sizes"
+
+    (it "returns a map of potential board sizes"
+      (should= {"3" :3x3 "4" :4x4} sut/board-sizes)))
+
   (context "players"
 
     (it "returns a map of potential players"
