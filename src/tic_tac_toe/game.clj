@@ -30,8 +30,7 @@
 (defn determine-starting-board [board-size]
   (cond
     (= :3x3 board-size) output/starting-board-3x3
-    (= :4x4 board-size) output/starting-board-4x4
-    :else (output/invalid-response)))                       ;need to make 4x4 starting-board
+    (= :4x4 board-size) output/starting-board-4x4))
 
 (defn ask-for-token []
   (output/choose-token)

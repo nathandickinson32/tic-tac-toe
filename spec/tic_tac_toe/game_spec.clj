@@ -254,8 +254,7 @@
   (context "when building a game state"
     (with-stubs)
 
-    (redefs-around [sut/determine-starting-board (stub :determine-starting-board {:return output/starting-board-3x3})
-                    sut/ask-for-token (stub :ask-for-token {:return :O})
+    (redefs-around [sut/ask-for-token (stub :ask-for-token {:return :O})
                     sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
                     sut/take-turns (stub :take-turns)
                     sut/play-again? (stub :play-again {:return nil})])
@@ -272,13 +271,13 @@
 
     (it "asks the user if they want to play again"
       (with-redefs [sut/ask-for-board-size (stub :ask-for-board-size {:return :3x3})
-                    output/play-again? (stub :play-again-test)
-                    sut/ask-for-player (stub :expert-ai)]
+                    output/play-again?     (stub :play-again-test)
+                    sut/ask-for-player     (stub :expert-ai)]
         (with-in-str "N\n" (sut/build-game-state)
           (should-have-invoked :play-again-test))))
 
     (it "calls play-again? after a game finishes"
-      (with-redefs [sut/ask-for-board-size (stub :ask-for-board-size {:return :3x3})
+      (with-redefs [sut/ask-for-board-size   (stub :ask-for-board-size {:return :3x3})
                     sut/play-again?          (stub :sut/play-again {:return nil})
                     sut/take-turns           (stub :take-turns)
                     sut/ask-for-token        (stub :ask-for-token {:return :O})
@@ -291,7 +290,7 @@
     (it "determines starting board 3x3"
       (should= output/starting-board-3x3 (sut/determine-starting-board :3x3)))
 
-    #_(it "determines starting board 4x4"
+    (it "determines starting board 4x4"
       (should= output/starting-board-4x4 (sut/determine-starting-board :4x4)))
     )
   )
