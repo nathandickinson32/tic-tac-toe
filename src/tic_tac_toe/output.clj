@@ -76,7 +76,7 @@
 (defn color-board [board]
   (map #(map colorize-token %) board))
 
-(defn print-board [board]
+(defn print-board-3x3 [board]
   (let [colorized-board (color-board board)]
     (->> colorized-board
          flatten
@@ -95,11 +95,11 @@
 
 (defn winner-message [board token]
   (println (colorize-token token) "wins!")
-  (print-board board))
+  (print-board-3x3 board))
 
 (defn draw-message [board]
   (println "It's a tie!")
-  (print-board board))
+  (print-board-3x3 board))
 
 (defn play-again? []
   (println "Would you like to play again? Y/N"))

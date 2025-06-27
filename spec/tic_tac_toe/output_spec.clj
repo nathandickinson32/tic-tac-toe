@@ -71,7 +71,7 @@
                         "-------------\n"
                         "| 7 | 8 | 9 |\n"
                         "-------------\n")]
-        (should= output (with-out-str (sut/print-board sut/starting-board-3x3)))))
+        (should= output (with-out-str (sut/print-board-3x3 sut/starting-board-3x3)))))
 
     (it "prints a 3x3 board after one move"
       (with-redefs [sut/colorize-token identity]
@@ -83,7 +83,7 @@
                           "-------------\n"
                           "| 7 | 8 | 9 |\n"
                           "-------------\n")]
-          (should= output (with-out-str (sut/print-board board))))))
+          (should= output (with-out-str (sut/print-board-3x3 board))))))
 
     (it "prints a 3x3 board when token is in first row"
       (let [board  (assoc-in sut/starting-board-3x3 [0 2] \X)
@@ -94,7 +94,7 @@
                         "-------------\n"
                         "| 7 | 8 | 9 |\n"
                         "-------------\n")]
-        (should= output (with-out-str (sut/print-board board)))))
+        (should= output (with-out-str (sut/print-board-3x3 board)))))
 
     (it "prints a 3x3 board with three in a row, down the middle"
       (let [board  (-> sut/starting-board-3x3 (assoc-in [0 1] \O)
@@ -107,7 +107,7 @@
                         "-------------\n"
                         "| 7 | O | 9 |\n"
                         "-------------\n")]
-        (should= output (with-out-str (sut/print-board board)))))
+        (should= output (with-out-str (sut/print-board-3x3 board)))))
 
     (it "prints a 3x3 board with three in a row, across the middle row"
       (let [board  (-> sut/starting-board-3x3
@@ -121,7 +121,7 @@
                         "-------------\n"
                         "| 7 | 8 | 9 |\n"
                         "-------------\n")]
-        (should= output (with-out-str (sut/print-board board)))))
+        (should= output (with-out-str (sut/print-board-3x3 board)))))
 
     (it "prints a full 3x3 board"
       (let [board  [[\X \O \X]
@@ -134,7 +134,7 @@
                         "-------------\n"
                         "| O | X | X |\n"
                         "-------------\n")]
-        (should= output (with-out-str (sut/print-board board)))))
+        (should= output (with-out-str (sut/print-board-3x3 board)))))
     )
 
   (context "printing 4x4 formatted boards"
@@ -232,12 +232,12 @@
 
     (it "returns winner message for X"
       (let [output (str sut/green "X" sut/reset " wins!\n")]
-        (with-redefs [sut/print-board (fn [_] nil)]
+        (with-redefs [sut/print-board-3x3 (fn [_] nil)]
           (should= output (with-out-str (sut/winner-message nil :X))))))
 
     (it "returns winner message for O"
       (let [output (str sut/red "O" sut/reset " wins!\n")]
-        (with-redefs [sut/print-board (fn [_] nil)]
+        (with-redefs [sut/print-board-3x3 (fn [_] nil)]
           (should= output (with-out-str (sut/winner-message nil :O))))))
 
     (it "returns draw message"
