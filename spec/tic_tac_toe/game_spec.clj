@@ -8,7 +8,7 @@
             [tic-tac-toe.human]
             [tic-tac-toe.game :as sut]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.test-boards-spec :as test-board]))
+            [tic-tac-toe.test-boards-3x3-spec :as test-board]))
 
 (def take-turn-state-human-v-human
   {:X :human :O :human :board test-board/next-move-wins-X :current-token :X :depth 0})
@@ -254,14 +254,14 @@
   (context "when building a game state"
     (with-stubs)
 
-    (redefs-around [sut/ask-for-board-size (stub :ask-for-board-size {:return :3x3})
+    (redefs-around [sut/determine-starting-board (stub :determine-starting-board {:return output/starting-board-3x3})
                     sut/ask-for-token (stub :ask-for-token {:return :O})
                     sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
                     sut/take-turns (stub :take-turns)
                     sut/play-again? (stub :play-again {:return nil})])
 
     (it "calls all input functions and builds correct game state"
-      (with-in-str "4\n2\n" (sut/build-game-state)
+      (with-in-str "3\n4\n2\n" (sut/build-game-state)
         (should-have-invoked :take-turns {:with
                                           [{:board-size    :3x3
                                             :X             :easy-ai
@@ -271,13 +271,15 @@
                                             :depth         0}]})))
 
     (it "asks the user if they want to play again"
-      (with-redefs [output/play-again? (stub :play-again-test)
+      (with-redefs [sut/ask-for-board-size (stub :ask-for-board-size {:return :3x3})
+                    output/play-again? (stub :play-again-test)
                     sut/ask-for-player (stub :expert-ai)]
         (with-in-str "N\n" (sut/build-game-state)
           (should-have-invoked :play-again-test))))
 
     (it "calls play-again? after a game finishes"
-      (with-redefs [sut/play-again?          (stub :sut/play-again {:return nil})
+      (with-redefs [sut/ask-for-board-size (stub :ask-for-board-size {:return :3x3})
+                    sut/play-again?          (stub :sut/play-again {:return nil})
                     sut/take-turns           (stub :take-turns)
                     sut/ask-for-token        (stub :ask-for-token {:return :O})
                     sut/ask-for-player       (stub :ask-for-player {:return :expert-ai})
@@ -286,7 +288,10 @@
         (sut/build-game-state)
         (should-have-invoked :sut/play-again)))
 
-    (it "determines starting board"
+    (it "determines starting board 3x3"
       (should= output/starting-board-3x3 (sut/determine-starting-board :3x3)))
+
+    #_(it "determines starting board 4x4"
+      (should= output/starting-board-4x4 (sut/determine-starting-board :4x4)))
     )
   )

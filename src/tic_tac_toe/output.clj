@@ -9,6 +9,12 @@
    [\4 \5 \6]
    [\7 \8 \9]])
 
+(def starting-board-4x4
+  [["1" "2" "3" "4"]
+   ["5" "6" "7" "8"]
+   ["9" "10" "11" "12"]
+   ["13" "14" "15" "16"]])
+
 (defn greeting []
   (print "Welcome to Tic Tac Toe!\n")
   (flush))
@@ -35,10 +41,13 @@
 (defn invalid-board-size-response []
   (println "Invalid Input. Please enter 3 or 4."))
 
-(defn player-prompt [token]
+(defn player-prompt-3x3 [token]
   (println "Player" (name token) "Enter your move 1-9"))
 
-(def board-format
+(defn player-prompt-4x4 [token]
+  (println "Player" (name token) "Enter your move 1-12"))
+
+(def board-format-3x3
   (str "-------------\n"
        "| %s | %s | %s |\n"
        "-------------\n"
@@ -47,21 +56,42 @@
        "| %s | %s | %s |\n"
        "-------------\n"))
 
+(def board-format-4x4
+  (str "-----------------------------\n"
+       "| %3s  | %3s  | %3s  | %3s  |\n"
+       "-----------------------------\n"
+       "| %3s  | %3s  | %3s  | %3s  |\n"
+       "-----------------------------\n"
+       "| %3s  | %3s  | %3s  | %3s  |\n"
+       "-----------------------------\n"
+       "| %3s  | %3s  | %3s  | %3s  |\n"
+       "-----------------------------\n"))
+
 (defn colorize-token [token]
   (cond
     (= token :X) (str green (name token) reset)
     (= token :O) (str red (name token) reset)
     :else token))
 
-(defn colorize-board [board]
+(defn color-board [board]
   (map #(map colorize-token %) board))
 
 (defn print-board [board]
-  (let [colorized-board (colorize-board board)]
+  (let [colorized-board (color-board board)]
     (->> colorized-board
          flatten
-         (apply format board-format)
+         (apply format board-format-3x3)
          print)))
+
+(defn format-board-space [board-space]
+  (format "%3s" board-space))
+
+(defn print-board-4x4 [board]
+  (->> board
+       flatten
+       (map #(format-board-space %))
+       (apply format board-format-4x4)
+       print))
 
 (defn winner-message [board token]
   (println (colorize-token token) "wins!")

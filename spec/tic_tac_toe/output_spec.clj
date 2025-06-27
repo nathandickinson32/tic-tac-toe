@@ -1,6 +1,8 @@
 (ns tic-tac-toe.output-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.output :as sut]))
+            [tic-tac-toe.output :as sut]
+            [tic-tac-toe.test-boards-3x3-spec :as test-boards-3x3]
+            [tic-tac-toe.test-boards-4x4-spec :as test-boards-4x4]))
 
 (describe "console output messages"
 
@@ -47,12 +49,19 @@
 
   (context "when asking a human player for their move"
 
-    (it "player prompt test"
+    (it "returns 3x3 player prompt"
       (let [output (str "Player X Enter your move 1-9\n")]
-        (should= output (with-out-str (sut/player-prompt :X)))))
+        (should= output (with-out-str (sut/player-prompt-3x3 :X)))))
+
+    (it "returns 4x4 player prompt"
+      (let [output (str "Player X Enter your move 1-12\n")]
+        (should= output (with-out-str (sut/player-prompt-4x4 :X)))))
     )
 
-  (context "board output"
+  (context "printing 3x3 formatted boards"
+
+    (it "returns correct starting board for 3x3"
+      (should= test-boards-3x3/test-starting-board-3x3 sut/starting-board-3x3))
 
     (it "prints an empty board"
       (let [output (str "-------------\n"
@@ -64,7 +73,7 @@
                         "-------------\n")]
         (should= output (with-out-str (sut/print-board sut/starting-board-3x3)))))
 
-    (it "prints a board after one move"
+    (it "prints a 3x3 board after one move"
       (with-redefs [sut/colorize-token identity]
         (let [board  (assoc-in sut/starting-board-3x3 [0 0] \X)
               output (str "-------------\n"
@@ -76,7 +85,7 @@
                           "-------------\n")]
           (should= output (with-out-str (sut/print-board board))))))
 
-    (it "prints board when token is in first row"
+    (it "prints a 3x3 board when token is in first row"
       (let [board  (assoc-in sut/starting-board-3x3 [0 2] \X)
             output (str "-------------\n"
                         "| 1 | 2 | X |\n"
@@ -87,7 +96,7 @@
                         "-------------\n")]
         (should= output (with-out-str (sut/print-board board)))))
 
-    (it "prints three in a row, down the middle"
+    (it "prints a 3x3 board with three in a row, down the middle"
       (let [board  (-> sut/starting-board-3x3 (assoc-in [0 1] \O)
                        (assoc-in [1 1] \O)
                        (assoc-in [2 1] \O))
@@ -100,7 +109,7 @@
                         "-------------\n")]
         (should= output (with-out-str (sut/print-board board)))))
 
-    (it "prints three in a row, across the middle row"
+    (it "prints a 3x3 board with three in a row, across the middle row"
       (let [board  (-> sut/starting-board-3x3
                        (assoc-in [1 0] \O)
                        (assoc-in [1 1] \O)
@@ -114,18 +123,109 @@
                         "-------------\n")]
         (should= output (with-out-str (sut/print-board board)))))
 
-    (it "prints a full board"
-      (let [board  [[\1 \2 \3]
-                    [\4 \5 \6]
-                    [\7 \8 \9]]
+    (it "prints a full 3x3 board"
+      (let [board  [[\X \O \X]
+                    [\X \O \O]
+                    [\O \X \X]]
             output (str "-------------\n"
-                        "| 1 | 2 | 3 |\n"
+                        "| X | O | X |\n"
                         "-------------\n"
-                        "| 4 | 5 | 6 |\n"
+                        "| X | O | O |\n"
                         "-------------\n"
-                        "| 7 | 8 | 9 |\n"
+                        "| O | X | X |\n"
                         "-------------\n")]
         (should= output (with-out-str (sut/print-board board)))))
+    )
+
+  (context "printing 4x4 formatted boards"
+
+    (it "returns correct starting board for 4x4"
+      (should= test-boards-4x4/test-starting-board-4x4 sut/starting-board-4x4))
+
+    (it "prints an empty board"
+      (let [output (str "-----------------------------\n"
+                        "|   1  |   2  |   3  |   4  |\n"
+                        "-----------------------------\n"
+                        "|   5  |   6  |   7  |   8  |\n"
+                        "-----------------------------\n"
+                        "|   9  |  10  |  11  |  12  |\n"
+                        "-----------------------------\n"
+                        "|  13  |  14  |  15  |  16  |\n"
+                        "-----------------------------\n")]
+        (should= output (with-out-str (sut/print-board-4x4 sut/starting-board-4x4)))))
+
+    (it "prints a 4x4 board after one move"
+      (with-redefs [sut/colorize-token identity]
+        (let [board  test-boards-4x4/first-space-taken
+              output (str "-----------------------------\n"
+                          "|   X  |   2  |   3  |   4  |\n"
+                          "-----------------------------\n"
+                          "|   5  |   6  |   7  |   8  |\n"
+                          "-----------------------------\n"
+                          "|   9  |  10  |  11  |  12  |\n"
+                          "-----------------------------\n"
+                          "|  13  |  14  |  15  |  16  |\n"
+                          "-----------------------------\n")]
+          (should= output (with-out-str (sut/print-board-4x4 board))))))
+
+    (it "prints a 4x4 board when token is in first row"
+      (let [board  (assoc-in sut/starting-board-4x4 [0 3] \X)
+            output (str "-----------------------------\n"
+                        "|   1  |   2  |   3  |   X  |\n"
+                        "-----------------------------\n"
+                        "|   5  |   6  |   7  |   8  |\n"
+                        "-----------------------------\n"
+                        "|   9  |  10  |  11  |  12  |\n"
+                        "-----------------------------\n"
+                        "|  13  |  14  |  15  |  16  |\n"
+                        "-----------------------------\n")]
+        (should= output (with-out-str (sut/print-board-4x4 board)))))
+
+    (it "prints a 4x4 board with three in a row, down left middle row"
+      (let [board  (-> sut/starting-board-4x4 (assoc-in [0 1] \O)
+                       (assoc-in [1 1] \O)
+                       (assoc-in [2 1] \O)
+                       (assoc-in [3 1] \O))
+            output (str "-----------------------------\n"
+                        "|   1  |   O  |   3  |   4  |\n"
+                        "-----------------------------\n"
+                        "|   5  |   O  |   7  |   8  |\n"
+                        "-----------------------------\n"
+                        "|   9  |   O  |  11  |  12  |\n"
+                        "-----------------------------\n"
+                        "|  13  |   O  |  15  |  16  |\n"
+                        "-----------------------------\n")]
+        (should= output (with-out-str (sut/print-board-4x4 board)))))
+
+    (it "prints a 4x4 board with three in a row, across the upper middle row"
+      (let [board  (-> sut/starting-board-4x4
+                       (assoc-in [1 0] \O)
+                       (assoc-in [1 1] \O)
+                       (assoc-in [1 2] \O)
+                       (assoc-in [1 3] \O))
+            output (str "-----------------------------\n"
+                        "|   1  |   2  |   3  |   4  |\n"
+                        "-----------------------------\n"
+                        "|   O  |   O  |   O  |   O  |\n"
+                        "-----------------------------\n"
+                        "|   9  |  10  |  11  |  12  |\n"
+                        "-----------------------------\n"
+                        "|  13  |  14  |  15  |  16  |\n"
+                        "-----------------------------\n")]
+        (should= output (with-out-str (sut/print-board-4x4 board)))))
+
+    (it "prints a full 4x4 board"
+      (let [board  test-boards-4x4/full-board
+            output (str "-----------------------------\n"
+                        "|   X  |   X  |   X  |   O  |\n"
+                        "-----------------------------\n"
+                        "|   O  |   O  |   X  |   O  |\n"
+                        "-----------------------------\n"
+                        "|   X  |   X  |   O  |   O  |\n"
+                        "-----------------------------\n"
+                        "|   X  |   O  |   O  |   X  |\n"
+                        "-----------------------------\n")]
+        (should= output (with-out-str (sut/print-board-4x4 board)))))
     )
 
   (context "game-over"

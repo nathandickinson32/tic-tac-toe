@@ -28,9 +28,10 @@
         (recur)))))
 
 (defn determine-starting-board [board-size]
-  (= :3x3 board-size)
-  output/starting-board-3x3
-  output/starting-board-3x3)                                ;need to make 4x4 starting-board
+  (cond
+    (= :3x3 board-size) output/starting-board-3x3
+    (= :4x4 board-size) output/starting-board-4x4
+    :else (output/invalid-response)))                       ;need to make 4x4 starting-board
 
 (defn ask-for-token []
   (output/choose-token)
@@ -89,6 +90,7 @@
                         :board         board
                         :current-token first-token
                         :depth         0}]
+    (println (:board-size state))
     (take-turns state)
     (output/play-again?)
     (play-again? build-game-state)))

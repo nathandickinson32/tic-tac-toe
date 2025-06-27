@@ -2,7 +2,7 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.board :as board]
             [tic-tac-toe.player-types :refer [->player-move]]
-            [tic-tac-toe.test-boards-spec :as test-board]
+            [tic-tac-toe.test-boards-3x3-spec :as test-board]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.medium-ai :as sut]))
 

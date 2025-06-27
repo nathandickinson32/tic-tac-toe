@@ -16,7 +16,7 @@
     (->> move (when (board/space-available? board move)))))
 
 (defn get-user-move [board token]
-  (output/player-prompt token)
+  (output/player-prompt-3x3 token)
   (let [input (board/->clean-user-input)]
     (or (maybe-valid-move board input)
         (do

@@ -2,7 +2,7 @@
   (:require [tic-tac-toe.board :as sut]
             [speclj.core :refer :all]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.test-boards-spec :as test-board]))
+            [tic-tac-toe.test-boards-3x3-spec :as test-board]))
 
 (describe "board conditions"
 

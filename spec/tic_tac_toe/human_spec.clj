@@ -40,7 +40,7 @@
   (context "get-user-move"
     (with-stubs)
 
-    (redefs-around [output/player-prompt (stub :output/player-prompt)
+    (redefs-around [output/player-prompt-3x3 (stub :output/player-prompt)
                     output/invalid-response (stub :output/invalid-response)])
 
     (it "displays player prompt"

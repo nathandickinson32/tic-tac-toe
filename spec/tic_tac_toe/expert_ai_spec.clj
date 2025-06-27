@@ -4,7 +4,7 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]
-            [tic-tac-toe.test-boards-spec :as test-board]))
+            [tic-tac-toe.test-boards-3x3-spec :as test-board]))
 
 (defn opponent-moves [[board depth] token]
   (let [available-moves (board/available-moves board)]
