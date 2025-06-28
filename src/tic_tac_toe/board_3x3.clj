@@ -1,4 +1,4 @@
-(ns tic-tac-toe.board
+(ns tic-tac-toe.board-3x3
   (:require [clojure.string :as str]
             [tic-tac-toe.output :as output]))
 

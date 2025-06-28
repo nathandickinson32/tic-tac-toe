@@ -1,5 +1,5 @@
 (ns tic-tac-toe.game
-  (:require [tic-tac-toe.board :as board]
+  (:require [tic-tac-toe.board-3x3 :as board3x3]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.human]
@@ -20,7 +20,7 @@
 
 (defn ask-for-board-size []
   (output/choose-board-size)
-  (let [input (board/->clean-user-input)]
+  (let [input (board3x3/->clean-user-input)]
     (if-let [board-size (get board-sizes input)]
       board-size
       (do
@@ -34,7 +34,7 @@
 
 (defn ask-for-token []
   (output/choose-token)
-  (let [input (board/->clean-user-input)]
+  (let [input (board3x3/->clean-user-input)]
     (if-let [token (get tokens input)]
       token
       (do
@@ -43,7 +43,7 @@
 
 (defn ask-for-player []
   (output/choose-player)
-  (let [input (board/->clean-user-input)]
+  (let [input (board3x3/->clean-user-input)]
     (if-let [player (get players input)]
       player
       (do
@@ -55,7 +55,7 @@
   (ask-for-token))
 
 (defn play-again? [build-game-state]
-  (let [input (board/->clean-user-input)]
+  (let [input (board3x3/->clean-user-input)]
     (when (= input "Y")
       (build-game-state))))
 
@@ -67,14 +67,14 @@
 (defn take-turns [{:keys [board current-token depth board-size] :as state}]
   (determine-board-to-print board-size board)
   (let [move        (->player-move state)
-        new-board   (board/make-move board move current-token)
+        new-board   (board3x3/make-move board move current-token)
         next-player (switch-player current-token)
         new-depth   (inc depth)
         new-state   (assoc state
                       :current-token next-player
                       :board new-board
                       :depth new-depth)]
-    (if (board/game-over? new-board current-token)
+    (if (board3x3/game-over? new-board current-token)
       new-state
       (recur new-state))))
 
@@ -85,7 +85,7 @@
         player-1-token (ask-for-token)
         player-2       (ask-for-player)
         first-token    (ask-for-first-player)
-        player-2-token (board/switch-player player-1-token)
+        player-2-token (board3x3/switch-player player-1-token)
         players        {player-1-token player-1
                         player-2-token player-2}
         state          {:board-size    board-size

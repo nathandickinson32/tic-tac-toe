@@ -1,5 +1,5 @@
 (ns tic-tac-toe.human
-  (:require [tic-tac-toe.board :as board]
+  (:require [tic-tac-toe.board-3x3 :as board-3x3]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]))
 
@@ -13,11 +13,11 @@
 
 (defn- maybe-valid-move [board input]
   (when-let [move (->grid-coordinates input)]
-    (->> move (when (board/space-available? board move)))))
+    (->> move (when (board-3x3/space-available? board move)))))
 
 (defn get-user-move [board token]
   (output/player-prompt-3x3 token)
-  (let [input (board/->clean-user-input)]
+  (let [input (board-3x3/->clean-user-input)]
     (or (maybe-valid-move board input)
         (do
           (output/invalid-response)

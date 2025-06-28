@@ -1,6 +1,6 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.board :as board]
+            [tic-tac-toe.board-3x3 :as board-3x3]
             [tic-tac-toe.easy-ai :as easy-ai]
             [tic-tac-toe.medium-ai :as medium-ai]
             [tic-tac-toe.expert-ai :as expert-ai]
@@ -50,14 +50,14 @@
                     output/draw-message (stub :output/draw-message)])
 
     (it "responds to output winner message"
-      (board/game-over? test-board/top-winning-row-X :X)
+      (board-3x3/game-over? test-board/top-winning-row-X :X)
       (should-have-invoked :output/winner-message {:with [test-board/top-winning-row-X :X]}))
 
     (it "does not respond with winner message"
-      (should-not (board/game-over? test-board/top-winning-row-X :O)))
+      (should-not (board-3x3/game-over? test-board/top-winning-row-X :O)))
 
     (it "responds to a tie game with draw message"
-      (board/game-over? test-board/full-board :X)
+      (board-3x3/game-over? test-board/full-board :X)
       (should-have-invoked :output/draw-message {:with [test-board/full-board]}))
     )
 

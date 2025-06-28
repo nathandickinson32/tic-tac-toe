@@ -156,7 +156,10 @@
 
     (it "prints a 4x4 board after one move"
       (with-redefs [sut/colorize-token identity]
-        (let [board  test-boards-4x4/first-space-taken
+        (let [board   [[\X "2" "3" "4"]
+                       ["5" "6" "7" "8"]
+                       ["9" "10" "11" "12"]
+                       ["13" "14" "15" "16"]]
               output (str "-----------------------------\n"
                           "|   X  |   2  |   3  |   4  |\n"
                           "-----------------------------\n"
@@ -215,7 +218,10 @@
         (should= output (with-out-str (sut/print-board-4x4 board)))))
 
     (it "prints a full 4x4 board"
-      (let [board  test-boards-4x4/full-board
+      (let [board  [[\X \X \X \O]
+                    [\O \O \X \O]
+                    [\X \X \O \O]
+                    [\X \O \O \X]]
             output (str "-----------------------------\n"
                         "|   X  |   X  |   X  |   O  |\n"
                         "-----------------------------\n"

@@ -1,14 +1,14 @@
 (ns tic-tac-toe.expert-ai-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.expert-ai :as sut]
-            [tic-tac-toe.board :as board]
+            [tic-tac-toe.board-3x3 :as board-3x3]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.test-boards-3x3-spec :as test-board]))
 
 (defn opponent-moves [[board depth] token]
-  (let [available-moves (board/available-moves board :3x3)]
-    (map #(vector (board/make-move board % token)
+  (let [available-moves (board-3x3/available-moves board :3x3)]
+    (map #(vector (board-3x3/make-move board % token)
                   (inc depth))
          available-moves)))
 
@@ -16,7 +16,7 @@
   (mapcat #(opponent-moves % opponent-token) unfinished-games))
 
 (defn ai-make-move [[board depth] ai-token board-size]
-  [(board/make-move board (sut/choose-best-move board ai-token depth board-size) ai-token)
+  [(board-3x3/make-move board (sut/choose-best-move board ai-token depth board-size) ai-token)
    (inc depth)])
 
 (defn simulate-ai-moves [opponent-boards ai-token board-size]
@@ -56,8 +56,8 @@
 
 (defn ai-win-every-game [all-finished-games token]
   (let [result
-        (group-by #(boolean (or (board/win? (first %) token)
-                                (board/full-board? (first %))))
+        (group-by #(boolean (or (board-3x3/win? (first %) token)
+                                (board-3x3/full-board? (first %))))
                   all-finished-games)
         {lost false won true} result]
     (not lost)))
@@ -102,8 +102,8 @@
 
     (it "gives higher scores to better moves"
       (letfn [(example-minimax [board maximizing-token move]
-                (let [next-board (board/make-move board move maximizing-token)]
-                  (sut/minimax next-board (board/switch-player maximizing-token) maximizing-token 1 :3x3)))]
+                (let [next-board (board-3x3/make-move board move maximizing-token)]
+                  (sut/minimax next-board (board-3x3/switch-player maximizing-token) maximizing-token 1 :3x3)))]
         (let [board          [[:X :X \3]
                               [:O :O \6]
                               [\7 \8 \9]]
@@ -138,7 +138,7 @@
   (context "when choosing the best move"
 
     (it "returns the only available move"
-      (let [board (board/make-move test-board/full-board [0 1] \2)]
+      (let [board (board-3x3/make-move test-board/full-board [0 1] \2)]
         (should= [0 1] (sut/choose-best-move board :X 8 :3x3))))
 
     (it "chooses any corner on an empty board"
@@ -179,7 +179,7 @@
   (context "expert AI ->player-move"
 
     (it "one move available"
-      (let [board (board/make-move test-board/full-board [0 1] \2)
+      (let [board (board-3x3/make-move test-board/full-board [0 1] \2)
             state {:X :expert-ai :O :human :board board :current-token :X :depth 8 :board-size :3x3}]
         (should= [0 1] (->player-move state))))
 
@@ -210,8 +210,8 @@
 
     (it "gives higher scores to better moves"
       (letfn [(example-minimax [board maximizing-token move board-size]
-                (let [next-board (board/make-move board move maximizing-token)]
-                  (sut/memoized-minimax next-board (board/switch-player maximizing-token) maximizing-token 1 board-size)))]
+                (let [next-board (board-3x3/make-move board move maximizing-token)]
+                  (sut/memoized-minimax next-board (board-3x3/switch-player maximizing-token) maximizing-token 1 board-size)))]
         (let [board          [[:X :X \3]
                               [:O :O \6]
                               [\7 \8 \9]]

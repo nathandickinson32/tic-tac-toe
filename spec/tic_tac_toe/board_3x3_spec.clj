@@ -1,8 +1,9 @@
-(ns tic-tac-toe.board-spec
-  (:require [tic-tac-toe.board :as sut]
+(ns tic-tac-toe.board-3x3-spec
+  (:require [tic-tac-toe.board-3x3 :as sut]
             [speclj.core :refer :all]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]))
+            [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
+            [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]))
 
 (describe "board conditions"
 
@@ -90,43 +91,54 @@
 
   (context "make-move"
 
-    (it "marks grid with X"
+    (it "marks 3x3 grid with X"
       (let [test-board [[\1 \2 \3]
                         [\4 :X \6]
                         [\7 \8 \9]]
             move       [1 1]]
-        (should= test-board (sut/make-move output/starting-board-3x3 move :X)))
-
-      (let [test-board [[:X \2 \3]
-                        [\4 \5 \6]
-                        [\7 \8 \9]]
-            move       [0 0]]
         (should= test-board (sut/make-move output/starting-board-3x3 move :X))))
 
-    (it "marks grid with O"
+    (it "marks 3x3 grid with O"
       (let [test-board [[:O \2 \3]
                         [\4 \5 \6]
                         [\7 \8 \9]]
             move       [0 0]]
-        (should= test-board (sut/make-move output/starting-board-3x3 move :O)))
-
-      (let [test-board [[\1 \2 \3]
-                        [\4 \5 \6]
-                        [\7 \8 :O]]
-            move       [2 2]]
         (should= test-board (sut/make-move output/starting-board-3x3 move :O))))
+
+    (it "marks 4x4 grid with X"
+      (let [test-board  [["1" "2" "3" "4"]
+                         ["5" "6" "7" "8"]
+                         ["9" "10" "11" "12"]
+                         ["13" "14" "15" :X]]
+            move       [3 3]]
+        (should= test-board (sut/make-move output/starting-board-4x4 move :X))))
+
+    (it "marks 4x4 grid with O"
+      (let [test-board [[:O "2" "3" "4"]
+                        ["5" "6" "7" "8"]
+                        ["9" "10" "11" "12"]
+                        ["13" "14" "15" "16"]]
+            move       [0 0]]
+        (should= test-board (sut/make-move output/starting-board-4x4 move :O)))
+      )
     )
 
   (context "draw/tie game"
 
-    (it "returns false when the board has available spaces"
+    (it "returns false when the 3x3 board has available spaces"
       (should-not (sut/full-board? test-board-3x3/next-move-wins-X-O))
       (should-not (sut/full-board? test-board-3x3/left-winning-col-X))
       (should-not (sut/full-board? test-board-3x3/top-winning-row-X)))
 
-    (it "returns true when the board is full with no winner"
+    (it "returns true when the 3x3 board is full with no winner"
       (should (sut/full-board? test-board-3x3/full-board))
       (should (sut/full-board? test-board-3x3/full-board2)))
+
+    (it "returns false when the 4x4 board has available spaces"
+      (should-not (sut/full-board? test-board-4x4/test-starting-board-4x4)))
+
+    (it "returns true when the 4x4 board is full with no winner"
+      (should (sut/full-board? test-board-4x4/full-board)))
     )
 
   (context "rows"
@@ -164,7 +176,7 @@
 
   (context "diagonals"
 
-    (it "false for same symbol diagonal"
+    (it "false for not same symbol diagonal"
       (should-not (sut/winning-diagonal? test-board-3x3/next-move-wins-X-O :X))
       (should-not (sut/winning-diagonal? test-board-3x3/no-winners-board :X))
       (should-not (sut/winning-diagonal? test-board-3x3/next-move-wins-X-O :O))
