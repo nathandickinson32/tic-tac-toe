@@ -73,11 +73,11 @@
     (= token :O) (str red (name token) reset)
     :else token))
 
-(defn color-board [board]
+(defn colorize-board [board]
   (map #(map colorize-token %) board))
 
 (defn print-board-3x3 [board]
-  (let [colorized-board (color-board board)]
+  (let [colorized-board (colorize-board board)]
     (->> colorized-board
          flatten
          (apply format board-format-3x3)
