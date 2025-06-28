@@ -1,5 +1,5 @@
-(ns tic-tac-toe.board-3x3-spec
-  (:require [tic-tac-toe.board-3x3 :as sut]
+(ns tic-tac-toe.board-spec
+  (:require [tic-tac-toe.board :as sut]
             [speclj.core :refer :all]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
@@ -106,10 +106,10 @@
         (should= test-board (sut/make-move output/starting-board-3x3 move :O))))
 
     (it "marks 4x4 grid with X"
-      (let [test-board  [["1" "2" "3" "4"]
-                         ["5" "6" "7" "8"]
-                         ["9" "10" "11" "12"]
-                         ["13" "14" "15" :X]]
+      (let [test-board [["1" "2" "3" "4"]
+                        ["5" "6" "7" "8"]
+                        ["9" "10" "11" "12"]
+                        ["13" "14" "15" :X]]
             move       [3 3]]
         (should= test-board (sut/make-move output/starting-board-4x4 move :X))))
 
