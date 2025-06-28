@@ -3,7 +3,6 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.test-boards-3x3-spec :as test-board]
-            [tic-tac-toe.output :as output]
             [tic-tac-toe.medium-ai :as sut]))
 
 (describe "medium level AI"
@@ -15,7 +14,7 @@
 
     (it "one move available"
       (let [board (board/make-move test-board/full-board [0 1] \2)
-            state {:X :medium-ai :O :human :board board :current-token :X :depth 8}]
+            state {:X :medium-ai :O :human :board board :current-token :X :depth 8 :board-size :3x3}]
         (should= [0 1] (->player-move state))))
     )
   )

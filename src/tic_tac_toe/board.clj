@@ -7,10 +7,20 @@
       (str/trim)
       (str/upper-case)))
 
-(def all-positions
+(def all-positions-3x3
   (for [row (range 3)
         col (range 3)]
     [row col]))
+
+(def all-positions-4x4
+  (for [row (range 4)
+        col (range 4)]
+    [row col]))
+
+(defn ->positions-by-board-size [board-size]
+  (cond
+    (= :3x3 board-size) all-positions-3x3
+    (= :4x4 board-size) all-positions-4x4))
 
 (defn switch-player [current-player]
   (if (= :X current-player)
@@ -21,8 +31,9 @@
   (let [symbol (get-in board move)]
     (not (or (= symbol :X) (= symbol :O)))))
 
-(defn available-moves [board]
-  (filter (partial space-available? board) all-positions))
+(defn available-moves [board board-size]
+  (let [all-positions (->positions-by-board-size board-size)]
+    (filter (partial space-available? board) all-positions)))
 
 (defn make-move [board move token]
   (assoc-in board move token))

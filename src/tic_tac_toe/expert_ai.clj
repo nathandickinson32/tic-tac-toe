@@ -18,13 +18,13 @@
 
 (declare memoized-minimax)
 
-(defn ->score-one-move [next-board token max-token depth]
-  (memoized-minimax next-board (board/switch-player token) max-token (inc depth)))
+(defn ->score-one-move [next-board token max-token depth board-size]
+  (memoized-minimax next-board (board/switch-player token) max-token (inc depth) board-size))
 
-(defn ->score-moves [board token max-token depth moves]
+(defn ->score-moves [board token max-token depth moves board-size]
   (->> moves
        (map #(let [next-board (board/make-move board % token)]
-               (->score-one-move next-board token max-token depth)))))
+               (->score-one-move next-board token max-token depth board-size)))))
 
 (defn negative-scores? [scores]
   (if (some neg? scores)
@@ -41,27 +41,27 @@
     (negative-scores? scores)
     (positive-scores? scores depth)))
 
-(defn minimax [board token max-token depth]
+(defn minimax [board token max-token depth board-size]
   (if (end-game? board)
     (score-end-game board max-token depth)
-    (let [moves       (board/available-moves board)
-          scores      (->score-moves board token max-token depth moves)
+    (let [moves       (board/available-moves board board-size)
+          scores      (->score-moves board token max-token depth moves board-size)
           maximizing? (= token max-token)]
       (->best-score scores maximizing? depth))))
 
 (def memoized-minimax
   (memoize minimax))
 
-(defn evaluate-move [board token move depth]
+(defn evaluate-move [board token move depth board-size]
   (let [next-board (board/make-move board move token)
-        score      (->score-one-move next-board token token depth)]
+        score      (->score-one-move next-board token token depth board-size)]
     {:move move :score score}))
 
-(defn choose-best-move [board token depth]
-  (->> (board/available-moves board)
-       (map #(evaluate-move board token % depth))
+(defn choose-best-move [board token depth board-size]
+  (->> (board/available-moves board board-size)
+       (map #(evaluate-move board token % depth board-size))
        (apply max-key :score)
        :move))
 
-(defmethod ->player-move :expert-ai [{:keys [board current-token depth]}]
-  (choose-best-move board current-token depth))
+(defmethod ->player-move :expert-ai [{:keys [board current-token depth board-size]}]
+  (choose-best-move board current-token depth board-size))

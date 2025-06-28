@@ -2,10 +2,10 @@
   (:require [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.board :as board]))
 
-(defn choose-random-move [board]
+(defn choose-random-move [board board-size]
   (-> board
-      (board/available-moves)
+      (board/available-moves board-size)
       (rand-nth)))
 
-(defmethod ->player-move :easy-ai [{:keys [board]}]
-  (choose-random-move board))
+(defmethod ->player-move :easy-ai [{:keys [board board-size]}]
+  (choose-random-move board board-size))
