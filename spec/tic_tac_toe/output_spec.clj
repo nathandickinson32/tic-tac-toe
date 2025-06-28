@@ -54,7 +54,7 @@
         (should= output (with-out-str (sut/player-prompt-3x3 :X)))))
 
     (it "returns 4x4 player prompt"
-      (let [output (str "Player X Enter your move 1-12\n")]
+      (let [output (str "Player X Enter your move 1-16\n")]
         (should= output (with-out-str (sut/player-prompt-4x4 :X)))))
     )
 
@@ -74,7 +74,7 @@
         (should= output (with-out-str (sut/print-board-3x3 sut/starting-board-3x3)))))
 
     (it "prints a 3x3 board after one move"
-      (with-redefs [sut/colorize-token identity]
+      (with-redefs [sut/colorize-3x3-token identity]
         (let [board  (assoc-in sut/starting-board-3x3 [0 0] \X)
               output (str "-------------\n"
                           "| X | 2 | 3 |\n"
@@ -139,6 +139,8 @@
 
   (context "printing 4x4 formatted boards"
 
+    (redefs-around [sut/format-4x4-board-space identity])
+
     (it "returns correct starting board for 4x4"
       (should= test-boards-4x4/test-starting-board-4x4 sut/starting-board-4x4))
 
@@ -155,21 +157,20 @@
         (should= output (with-out-str (sut/print-board-4x4 sut/starting-board-4x4)))))
 
     (it "prints a 4x4 board after one move"
-      (with-redefs [sut/colorize-token identity]
-        (let [board  [[\X "2" "3" "4"]
-                      ["5" "6" "7" "8"]
-                      ["9" "10" "11" "12"]
-                      ["13" "14" "15" "16"]]
-              output (str "-----------------------------\n"
-                          "|   X  |   2  |   3  |   4  |\n"
-                          "-----------------------------\n"
-                          "|   5  |   6  |   7  |   8  |\n"
-                          "-----------------------------\n"
-                          "|   9  |  10  |  11  |  12  |\n"
-                          "-----------------------------\n"
-                          "|  13  |  14  |  15  |  16  |\n"
-                          "-----------------------------\n")]
-          (should= output (with-out-str (sut/print-board-4x4 board))))))
+      (let [board  [[\X "2" "3" "4"]
+                    ["5" "6" "7" "8"]
+                    ["9" "10" "11" "12"]
+                    ["13" "14" "15" "16"]]
+            output (str "-----------------------------\n"
+                        "|   X  |   2  |   3  |   4  |\n"
+                        "-----------------------------\n"
+                        "|   5  |   6  |   7  |   8  |\n"
+                        "-----------------------------\n"
+                        "|   9  |  10  |  11  |  12  |\n"
+                        "-----------------------------\n"
+                        "|  13  |  14  |  15  |  16  |\n"
+                        "-----------------------------\n")]
+        (should= output (with-out-str (sut/print-board-4x4 board)))))
 
     (it "prints a 4x4 board when token is in first row"
       (let [board  (assoc-in sut/starting-board-4x4 [0 3] \X)
@@ -247,7 +248,7 @@
           (should= output (with-out-str (sut/winner-message nil :O))))))
 
     (it "returns draw message"
-      (with-redefs [sut/colorize-token identity]
+      (with-redefs [sut/colorize-3x3-token identity]
         (let [board  [[\X \X \O]
                       [\O \O \X]
                       [\X \O \X]]
@@ -274,13 +275,22 @@
       (should= "\u001B[0m" sut/reset))
     )
 
-  (context "when printing the tokens"
+  (context "when printing the tokens on 3x3 board"
 
     (it "prints X token in green"
-      (should= (str sut/green "X" sut/reset) (sut/colorize-token :X)))
+      (should= (str sut/green "X" sut/reset) (sut/colorize-3x3-token :X)))
 
     (it "prints O token in red"
-      (should= (str sut/red "O" sut/reset) (sut/colorize-token :O)))
+      (should= (str sut/red "O" sut/reset) (sut/colorize-3x3-token :O)))
+    )
+
+  (context "when printing the tokens on 4x4 board"
+
+    (it "prints padded X token in green"
+      (should= (str sut/green "  X" sut/reset) (sut/format-4x4-board-space :X)))
+
+    (it "prints padded X token in green"
+      (should= (str sut/red "  O" sut/reset) (sut/format-4x4-board-space :O)))
     )
 
   (context "play again?"

@@ -45,7 +45,7 @@
   (println "Player" (name token) "Enter your move 1-9"))
 
 (defn player-prompt-4x4 [token]
-  (println "Player" (name token) "Enter your move 1-12"))
+  (println "Player" (name token) "Enter your move 1-16"))
 
 (def board-format-3x3
   (str "-------------\n"
@@ -67,34 +67,45 @@
        "| %3s  | %3s  | %3s  | %3s  |\n"
        "-----------------------------\n"))
 
-(defn colorize-token [token]
+(defn colorize-3x3-token [token]
   (cond
     (= token :X) (str green (name token) reset)
     (= token :O) (str red (name token) reset)
     :else token))
 
-(defn colorize-board [board]
-  (map #(map colorize-token %) board))
+(defn colorize-3x3-board [board]
+  (map #(map colorize-3x3-token %) board))
 
 (defn print-board-3x3 [board]
-  (let [colorized-board (colorize-board board)]
+  (let [colorized-board (colorize-3x3-board board)]
     (->> colorized-board
          flatten
          (apply format board-format-3x3)
          print)))
 
-(defn format-board-space [board-space]
-  (format "%3s" board-space))
+(defn colorize-4x4-token [token padded-token]
+  (cond
+    (= token :X) (str green padded-token reset)
+    (= token :O) (str red padded-token reset)
+    :else padded-token))
+
+(defn format-4x4-board-space [token]
+  (let [token-str    (name token)
+        padded-token (format "%3s" token-str)]
+    (colorize-4x4-token token padded-token)))
+
+(defn colorize-4x4-board [board]
+  (map #(format-4x4-board-space %) board))
 
 (defn print-board-4x4 [board]
   (->> board
        flatten
-       (map #(format-board-space %))
+       colorize-4x4-board
        (apply format board-format-4x4)
        print))
 
 (defn winner-message [board token]
-  (println (colorize-token token) "wins!")
+  (println (colorize-3x3-token token) "wins!")
   (print-board-3x3 board))
 
 (defn draw-message [board]

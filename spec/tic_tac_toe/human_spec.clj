@@ -39,31 +39,31 @@
 
   (context "parse-user-input 4x4 board"
 
-    ;(it "returns nil for 0"
-    ;  (should-be-nil (sut/->grid-coordinates "0" :4x4)))
-    ;
-    ;(it "returns nil for numbers greater than 16"
-    ;  (should-be-nil (sut/->grid-coordinates "17" :4x4)))
-    ;
-    ;(it "returns nil for strings"
-    ;  (should-be-nil (sut/->grid-coordinates "a" :4x4))
-    ;  (should-be-nil (sut/->grid-coordinates "asd" :4x4))
-    ;  (should-be-nil (sut/->grid-coordinates "a a" :4x4))
-    ;  (should-be-nil (sut/->grid-coordinates " " :4x4)))
-    ;
-    ;(it "returns nil for empty input"
-    ;  (should-be-nil (sut/->grid-coordinates "" :4x4)))
-    ;
-    ;(it "parses input string 1-9 into grid coordinates"
-    ;  (should= [0 0] (sut/->grid-coordinates "1" :4x4))
-    ;  (should= [0 1] (sut/->grid-coordinates "2" :4x4))
-    ;  (should= [0 2] (sut/->grid-coordinates "3" :4x4))
-    ;  (should= [1 0] (sut/->grid-coordinates "4" :4x4))
-    ;  (should= [1 1] (sut/->grid-coordinates "5" :4x4))
-    ;  (should= [1 2] (sut/->grid-coordinates "6" :4x4))
-    ;  (should= [2 0] (sut/->grid-coordinates "7" :4x4))
-    ;  (should= [2 1] (sut/->grid-coordinates "8" :4x4))
-    ;  (should= [2 2] (sut/->grid-coordinates "9" :4x4)))
+    (it "returns nil for 0"
+      (should-be-nil (sut/->grid-coordinates "0" :4x4)))
+
+    (it "returns nil for numbers greater than 16"
+      (should-be-nil (sut/->grid-coordinates "17" :4x4)))
+
+    (it "returns nil for strings"
+      (should-be-nil (sut/->grid-coordinates "a" :4x4))
+      (should-be-nil (sut/->grid-coordinates "asd" :4x4))
+      (should-be-nil (sut/->grid-coordinates "a a" :4x4))
+      (should-be-nil (sut/->grid-coordinates " " :4x4)))
+
+    (it "returns nil for empty input"
+      (should-be-nil (sut/->grid-coordinates "" :4x4)))
+
+    (it "parses input string 1-9 into grid coordinates"
+      (should= [0 0] (sut/->grid-coordinates "1" :4x4))
+      (should= [0 1] (sut/->grid-coordinates "2" :4x4))
+      (should= [0 2] (sut/->grid-coordinates "3" :4x4))
+      (should= [1 0] (sut/->grid-coordinates "4" :4x4))
+      (should= [1 1] (sut/->grid-coordinates "5" :4x4))
+      (should= [1 2] (sut/->grid-coordinates "6" :4x4))
+      (should= [2 0] (sut/->grid-coordinates "7" :4x4))
+      (should= [2 1] (sut/->grid-coordinates "8" :4x4))
+      (should= [2 2] (sut/->grid-coordinates "9" :4x4)))
     )
 
   (context "get-user-move"
@@ -80,24 +80,24 @@
     (it "returns [0 0] for 1"
       (let [test-board output/starting-board-3x3]
         (with-in-str "1\n"
-          (should= [0 0] (sut/get-user-move test-board :X  :3x3)))))
+          (should= [0 0] (sut/get-user-move test-board :X :3x3)))))
 
     (it "returns [0 1] for 2"
       (let [test-board output/starting-board-3x3]
         (with-in-str "2\n"
-          (should= [0 1] (sut/get-user-move test-board :X  :3x3)))
+          (should= [0 1] (sut/get-user-move test-board :X :3x3)))
         (should-not-have-invoked :output/invalid-response)))
 
     (it "responds to invalid move"
       (with-in-str "a\n2\n"
-        (sut/get-user-move output/starting-board-3x3 :X  :3x3))
+        (sut/get-user-move output/starting-board-3x3 :X :3x3))
       (should-have-invoked :output/invalid-response)
       (should-have-invoked :output/player-prompt {:times 2}))
 
     (it "accepts leading and trailing whitespace"
       (let [test-board output/starting-board-3x3]
         (with-in-str " 1\n"
-          (should= [0 0] (sut/get-user-move test-board :X  :3x3)))))
+          (should= [0 0] (sut/get-user-move test-board :X :3x3)))))
     )
 
   (context "valid input"
