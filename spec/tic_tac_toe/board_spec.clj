@@ -148,17 +148,20 @@
       (should-not (sut/all-matching-tokens? (nth test-board-3x3/top-winning-row-X 2) :O))
       (should-not (sut/all-matching-tokens? (second test-board-3x3/bottom-winning-row-X) :O))
       (should-not (sut/all-matching-tokens? (nth test-board-3x3/middle-winning-row-O 1) :X))
-      (should-not (sut/all-matching-tokens? (nth test-board-3x3/middle-winning-row-O 2) :X)))
+      (should-not (sut/all-matching-tokens? (nth test-board-3x3/middle-winning-row-O 2) :X))
+      (should-not (sut/all-matching-tokens? (nth test-board-4x4/x-wins-with-1 2) :X)))
 
     (it "returns true for a single row of matching symbols"
       (should (sut/all-matching-tokens? (first test-board-3x3/top-winning-row-X) :X))
       (should (sut/all-matching-tokens? (nth test-board-3x3/bottom-winning-row-X 2) :X))
-      (should (sut/all-matching-tokens? (second test-board-3x3/middle-winning-row-O) :O)))
+      (should (sut/all-matching-tokens? (second test-board-3x3/middle-winning-row-O) :O))
+      (should (sut/all-matching-tokens? (first test-board-4x4/x-wins-top-row) :X)))
 
     (it "is a winning row"
       (should (sut/winning-row? test-board-3x3/top-winning-row-X :X))
       (should (sut/winning-row? test-board-3x3/bottom-winning-row-X :X))
-      (should (sut/winning-row? test-board-3x3/middle-winning-row-O :O)))
+      (should (sut/winning-row? test-board-3x3/middle-winning-row-O :O))
+      (should (sut/winning-row? test-board-4x4/x-wins-top-row :X)))
     )
 
   (context "columns"
@@ -166,54 +169,79 @@
     (it "returns false when no cols have all matching symbols"
       (should-not (sut/winning-col? test-board-3x3/left-winning-col-X :O))
       (should-not (sut/winning-col? test-board-3x3/right-winning-col-X :O))
-      (should-not (sut/winning-col? test-board-3x3/left-winning-col-X :O)))
+      (should-not (sut/winning-col? test-board-3x3/left-winning-col-X :O))
+      (should-not (sut/winning-col? test-board-4x4/x-wins-with-1 :O)))
 
     (it "is a winning column"
       (should (sut/winning-col? test-board-3x3/left-winning-col-X :X))
       (should (sut/winning-col? test-board-3x3/right-winning-col-X :X))
-      (should (sut/winning-col? test-board-3x3/middle-winning-col-O :O)))
+      (should (sut/winning-col? test-board-3x3/middle-winning-col-O :O))
+      (should (sut/winning-col? test-board-4x4/x-wins-left-col :X)))
     )
 
   (context "diagonals"
 
-    (it "false for not same symbol diagonal"
-      (should-not (sut/winning-diagonal? test-board-3x3/next-move-wins-X-O :X))
-      (should-not (sut/winning-diagonal? test-board-3x3/no-winners-board :X))
-      (should-not (sut/winning-diagonal? test-board-3x3/next-move-wins-X-O :O))
-      (should-not (sut/winning-diagonal? test-board-3x3/no-winners-board :O))
-      (should-not (sut/winning-diagonal? test-board-3x3/diagonal-dright-win-X :O))
-      (should-not (sut/winning-diagonal? test-board-3x3/diagonal-dleft-win-O :X)))
+    (it "gets diagonal left for 3x3 board"
+      (should= [:X :X :X] (sut/diagonal-right-3x3 test-board-3x3/diagonal-dright-win-X)))
 
-    (it "true for same symbol diagonal"
-      (should (sut/winning-diagonal? test-board-3x3/diagonal-dright-win-X :X))
-      (should (sut/winning-diagonal? test-board-3x3/diagonal-dleft-win-X :X))
-      (should (sut/winning-diagonal? test-board-3x3/diagonal-dleft-win-O :O))
-      (should (sut/winning-diagonal? test-board-3x3/diagonal-dright-win-O :O)))
+    (it "gets diagonal left for 3x3 board"
+      (should= [:O :O :O] (sut/diagonal-left-3x3 test-board-3x3/diagonal-dleft-win-O)))
+
+    (it "gets diagonal left for 4x4 board"
+      (should= [:X :X :X :X] (sut/diagonal-right-4x4 test-board-4x4/diagonal-dright-win-X-4x4)))
+
+    (it "gets diagonal left for 4x4 board"
+      (should= [:O :O :O :O] (sut/diagonal-left-4x4 test-board-4x4/diagonal-dleft-win-O-4x4)))
+
+    (it "false for not same symbol diagonal 3x3"
+      (should-not (sut/winning-diagonal? test-board-3x3/next-move-wins-X-O :X :3x3))
+      (should-not (sut/winning-diagonal? test-board-3x3/no-winners-board :X :3x3))
+      (should-not (sut/winning-diagonal? test-board-3x3/next-move-wins-X-O :O :3x3))
+      (should-not (sut/winning-diagonal? test-board-3x3/no-winners-board :O :3x3))
+      (should-not (sut/winning-diagonal? test-board-3x3/diagonal-dright-win-X :O :3x3))
+      (should-not (sut/winning-diagonal? test-board-3x3/diagonal-dleft-win-O :X :3x3)))
+
+    (it "true for same symbol diagonal 3x3"
+      (should (sut/winning-diagonal? test-board-3x3/diagonal-dright-win-X :X :3x3))
+      (should (sut/winning-diagonal? test-board-3x3/diagonal-dleft-win-X :X :3x3))
+      (should (sut/winning-diagonal? test-board-3x3/diagonal-dleft-win-O :O :3x3))
+      (should (sut/winning-diagonal? test-board-3x3/diagonal-dright-win-O :O :3x3)))
+
+    (it "determines winning diagonal by board size"
+      (should (sut/winning-diagonal? test-board-4x4/diagonal-dright-win-X-4x4 :X :4x4)))
+
+    (it "true for same symbol diagonal 4x4"
+      (should (sut/winning-diagonal? test-board-4x4/diagonal-dleft-win-O-4x4 :O :4x4)))
     )
 
   (context "win?"
 
     (it "no row, column or diagonal is filled by X"
-      (should-not (sut/win? test-board-3x3/no-winners-board :X)))
+      (should-not (sut/win? test-board-3x3/no-winners-board :X :3x3))
+      (should-not (sut/win? test-board-4x4/x-wins-with-1 :X :4x4)))
 
     (it "no row, column or diagonal is filled by O"
-      (should-not (sut/win? test-board-3x3/no-winners-board :O)))
+      (should-not (sut/win? test-board-3x3/no-winners-board :O :3x3))
+      (should-not (sut/win? test-board-4x4/x-wins-with-1 :O :4x4)))
 
     (it "a row is filled by same player symbol"
-      (should (sut/win? test-board-3x3/top-winning-row-X :X))
-      (should (sut/win? test-board-3x3/bottom-winning-row-X :X))
-      (should (sut/win? test-board-3x3/middle-winning-row-O :O)))
+      (should (sut/win? test-board-3x3/top-winning-row-X :X :3x3))
+      (should (sut/win? test-board-3x3/bottom-winning-row-X :X :3x3))
+      (should (sut/win? test-board-3x3/middle-winning-row-O :O :3x3))
+      (should (sut/win? test-board-4x4/x-wins-top-row :X :4x4)))
 
     (it "a column is filled by same player symbol"
-      (should (sut/win? test-board-3x3/left-winning-col-X :X))
-      (should (sut/win? test-board-3x3/right-winning-col-X :X))
-      (should (sut/win? test-board-3x3/middle-winning-col-O :O)))
+      (should (sut/win? test-board-3x3/left-winning-col-X :X :3x3))
+      (should (sut/win? test-board-3x3/right-winning-col-X :X :3x3))
+      (should (sut/win? test-board-3x3/middle-winning-col-O :O :3x3))
+      (should (sut/win? test-board-4x4/x-wins-left-col :X :4x4)))
 
     (it "a diagonal is filled by same player symbol"
-      (should (sut/win? test-board-3x3/diagonal-dright-win-X :X))
-      (should (sut/win? test-board-3x3/diagonal-dleft-win-X :X))
-      (should (sut/win? test-board-3x3/diagonal-dleft-win-O :O))
-      (should (sut/win? test-board-3x3/diagonal-dright-win-O :O)))
+      (should (sut/win? test-board-3x3/diagonal-dright-win-X :X :3x3))
+      (should (sut/win? test-board-3x3/diagonal-dleft-win-X :X :3x3))
+      (should (sut/win? test-board-3x3/diagonal-dleft-win-O :O :3x3))
+      (should (sut/win? test-board-3x3/diagonal-dright-win-O :O :3x3))
+      (should (sut/win? test-board-4x4/diagonal-dright-win-X-4x4 :X :4x4)))
     )
 
   (context "switching player"
@@ -228,27 +256,31 @@
   (context "game-over?"
 
     (it "returns false if there is no winners for X"
-      (should-not (sut/game-over? test-board-3x3/no-winners-board :X)))
+      (should-not (sut/game-over? test-board-3x3/no-winners-board :X :3x3))
+      (should-not (sut/game-over? test-board-4x4/x-wins-with-1 :X :4x4)))
 
     (it "returns false if there is no winners for O"
-      (should-not (sut/game-over? test-board-3x3/no-winners-board :O)))
+      (should-not (sut/game-over? test-board-3x3/no-winners-board :O :3x3))
+      (should-not (sut/game-over? test-board-4x4/x-wins-with-1 :O :4x4)))
 
     (it "returns true if there is a winning row"
-      (should (sut/game-over? test-board-3x3/top-winning-row-X :X))
-      (should (sut/game-over? test-board-3x3/bottom-winning-row-X :X))
-      (should (sut/game-over? test-board-3x3/middle-winning-row-O :O)))
+      (should (sut/game-over? test-board-3x3/top-winning-row-X :X :3x3))
+      (should (sut/game-over? test-board-3x3/bottom-winning-row-X :X :3x3))
+      (should (sut/game-over? test-board-3x3/middle-winning-row-O :O :3x3))
+      (should (sut/game-over? test-board-4x4/x-wins-top-row :X :4x4)))
 
     (it "returns true if there is a winning column"
-      (should (sut/game-over? test-board-3x3/left-winning-col-X :X))
-      (should (sut/game-over? test-board-3x3/right-winning-col-X :X))
-      (should (sut/game-over? test-board-3x3/middle-winning-col-O :O)))
+      (should (sut/game-over? test-board-3x3/left-winning-col-X :X :3x3))
+      (should (sut/game-over? test-board-3x3/right-winning-col-X :X :3x3))
+      (should (sut/game-over? test-board-3x3/middle-winning-col-O :O :3x3))
+      (should (sut/game-over? test-board-4x4/x-wins-left-col :X :4x4)))
 
     (it "returns true if there is a winning diagonal"
-      (should (sut/game-over? test-board-3x3/diagonal-dright-win-X :X))
-      (should (sut/game-over? test-board-3x3/diagonal-dleft-win-X :X))
-      (should (sut/game-over? test-board-3x3/diagonal-dleft-win-O :O))
-      (should (sut/game-over? test-board-3x3/diagonal-dright-win-O :O)))
-    )
+      (should (sut/game-over? test-board-3x3/diagonal-dright-win-X :X :3x3))
+      (should (sut/game-over? test-board-3x3/diagonal-dleft-win-X :X :3x3))
+      (should (sut/game-over? test-board-3x3/diagonal-dleft-win-O :O :3x3))
+      (should (sut/game-over? test-board-3x3/diagonal-dright-win-O :O :3x3))
+      (should (sut/game-over? test-board-4x4/diagonal-dleft-win-O-4x4 :O :4x4))))
 
   (context "->clean-user-input"
 

@@ -44,15 +44,27 @@
 (defn all-matching-tokens? [row token]
   (every? #(= % token) row))
 
-(defn diagonal-right [board]
+(defn diagonal-right-3x3 [board]
   [(get-in board [0 0])
    (get-in board [1 1])
    (get-in board [2 2])])
 
-(defn diagonal-left [board]
+(defn diagonal-left-3x3 [board]
   [(get-in board [0 2])
    (get-in board [1 1])
    (get-in board [2 0])])
+
+(defn diagonal-right-4x4 [board]
+  [(get-in board [0 0])
+   (get-in board [1 1])
+   (get-in board [2 2])
+   (get-in board [3 3])])
+
+(defn diagonal-left-4x4 [board]
+  [(get-in board [0 3])
+   (get-in board [1 2])
+   (get-in board [2 1])
+   (get-in board [3 0])])
 
 (defn winning-row? [board token]
   (some #(all-matching-tokens? % token) board))
@@ -61,16 +73,19 @@
   (let [columns-as-rows (apply mapv vector board)]
     (winning-row? columns-as-rows token)))
 
-(defn winning-diagonal? [board token]
-  (or (all-matching-tokens? (diagonal-right board) token)
-      (all-matching-tokens? (diagonal-left board) token)))
+(defn winning-diagonal? [board token board-size]
+  (if (= board-size :3x3)
+    (or (all-matching-tokens? (diagonal-right-3x3 board) token)
+        (all-matching-tokens? (diagonal-left-3x3 board) token))
+    (or (all-matching-tokens? (diagonal-right-4x4 board) token)
+        (all-matching-tokens? (diagonal-left-4x4 board) token))))
 
-(defn win? [board token]
+(defn win? [board token board-size]
   (or (winning-row? board token)
       (winning-col? board token)
-      (winning-diagonal? board token)))
+      (winning-diagonal? board token board-size)))
 
-(defn game-over? [board token]
+(defn game-over? [board token board-size]
   (cond
-    (win? board token) (do (output/winner-message board token) true)
+    (win? board token board-size) (do (output/winner-message board token) true)
     (full-board? board) (do (output/draw-message board) true)))

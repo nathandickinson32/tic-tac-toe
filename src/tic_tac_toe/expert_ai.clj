@@ -2,19 +2,19 @@
   (:require [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.board :as board]))
 
-(defn end-game? [board]
-  (or (board/win? board :X)
-      (board/win? board :O)
+(defn end-game? [board board-size]
+  (or (board/win? board :X board-size)
+      (board/win? board :O board-size)
       (board/full-board? board)))
 
-(defn score [board token]
+(defn score [board token board-size]
   (cond
-    (board/win? board token) 10
-    (board/win? board (board/switch-player token)) -10
+    (board/win? board token board-size) 10
+    (board/win? board (board/switch-player token) board-size) -10
     :else 0))
 
-(defn score-end-game [board max-token depth]
-  (- (score board max-token) depth))
+(defn score-end-game [board max-token depth board-size]
+  (- (score board max-token board-size) depth))
 
 (declare memoized-minimax)
 
@@ -42,8 +42,8 @@
     (positive-scores? scores depth)))
 
 (defn minimax [board token max-token depth board-size]
-  (if (end-game? board)
-    (score-end-game board max-token depth)
+  (if (end-game? board board-size)
+    (score-end-game board max-token depth board-size)
     (let [moves       (board/available-moves board board-size)
           scores      (->score-moves board token max-token depth moves board-size)
           maximizing? (= token max-token)]

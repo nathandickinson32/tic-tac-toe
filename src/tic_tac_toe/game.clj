@@ -59,13 +59,8 @@
     (when (= input "Y")
       (build-game-state))))
 
-(defn determine-board-to-print [board-size board]
-  (if (= :3x3 board-size)
-    (output/print-board-3x3 board)
-    (output/print-board-4x4 board)))
-
 (defn take-turns [{:keys [board current-token depth board-size] :as state}]
-  (determine-board-to-print board-size board)
+  (output/determine-board-to-print board-size board)
   (let [move        (->player-move state)
         new-board   (board/make-move board move current-token)
         next-player (switch-player current-token)
@@ -74,8 +69,9 @@
                       :current-token next-player
                       :board new-board
                       :depth new-depth)]
-    (if (board/game-over? new-board current-token)
-      new-state
+    (if (board/game-over? new-board current-token board-size)
+      (do (output/determine-board-to-print board-size new-board)
+          new-state)
       (recur new-state))))
 
 (defn build-game-state []

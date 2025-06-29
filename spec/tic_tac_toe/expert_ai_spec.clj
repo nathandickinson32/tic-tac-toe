@@ -6,14 +6,14 @@
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.test-boards-3x3-spec :as test-board]))
 
-(defn opponent-moves [[board depth] token]
-  (let [available-moves (board/available-moves board :3x3)]
+(defn opponent-moves [[board depth] token board-size]
+  (let [available-moves (board/available-moves board board-size)]
     (map #(vector (board/make-move board % token)
                   (inc depth))
          available-moves)))
 
-(defn simulate-opponent-moves [unfinished-games opponent-token]
-  (mapcat #(opponent-moves % opponent-token) unfinished-games))
+(defn simulate-opponent-moves [unfinished-games opponent-token board-size]
+  (mapcat #(opponent-moves % opponent-token board-size) unfinished-games))
 
 (defn ai-make-move [[board depth] ai-token board-size]
   [(board/make-move board (sut/choose-best-move board ai-token depth board-size) ai-token)
@@ -22,16 +22,16 @@
 (defn simulate-ai-moves [opponent-boards ai-token board-size]
   (map #(ai-make-move % ai-token board-size) opponent-boards))
 
-(defn ->finished-unfinished-map [board-depth-pairs]
-  (group-by #(sut/end-game? (first %)) board-depth-pairs))
+(defn ->finished-unfinished-map [board-depth-pairs board-size]
+  (group-by #(sut/end-game? (first %) board-size) board-depth-pairs))
 
 (defn simulate-next-boards [unfinished-games finished-games ai-token opponent-token board-size]
-  (let [opponent-boards (simulate-opponent-moves unfinished-games opponent-token)
+  (let [opponent-boards (simulate-opponent-moves unfinished-games opponent-token board-size)
         {opponent-finished true
-         unfinished        false} (->finished-unfinished-map opponent-boards)
+         unfinished        false} (->finished-unfinished-map opponent-boards board-size)
         next-ai-boards  (simulate-ai-moves unfinished ai-token board-size)
         {ai-finished true
-         unfinished  false} (->finished-unfinished-map next-ai-boards)]
+         unfinished  false} (->finished-unfinished-map next-ai-boards board-size)]
     {:unfinished unfinished
      :finished   (concat finished-games ai-finished opponent-finished)}))
 
@@ -50,13 +50,13 @@
     (all-finished-games [ai-first-move] :X :O board-size)))
 
 (defn finished-games-ai-plays-second [board-size]
-  (let [x-starting-boards (simulate-opponent-moves [[output/starting-board-3x3 0]] :X)
+  (let [x-starting-boards (simulate-opponent-moves [[output/starting-board-3x3 0]] :X board-size)
         o-response-boards (simulate-ai-moves x-starting-boards :O board-size)]
     (all-finished-games o-response-boards :O :X board-size)))
 
-(defn ai-win-every-game [all-finished-games token]
+(defn ai-win-every-game [all-finished-games token board-size]
   (let [result
-        (group-by #(boolean (or (board/win? (first %) token)
+        (group-by #(boolean (or (board/win? (first %) token board-size)
                                 (board/full-board? (first %))))
                   all-finished-games)
         {lost false won true} result]
@@ -67,28 +67,28 @@
   (context "when checking for winner"
 
     (it "returns true if X wins"
-      (should (sut/end-game? test-board/top-winning-row-X)))
+      (should (sut/end-game? test-board/top-winning-row-X :3x3)))
 
     (it "returns true if O wins"
-      (should (sut/end-game? test-board/middle-winning-row-O)))
+      (should (sut/end-game? test-board/middle-winning-row-O :3x3)))
 
     (it "returns true if board is full"
-      (should (sut/end-game? test-board/full-board)))
+      (should (sut/end-game? test-board/full-board :3x3)))
 
     (it "returns false if board is full"
-      (should-not (sut/end-game? test-board/no-winners-board)))
+      (should-not (sut/end-game? test-board/no-winners-board :3x3)))
     )
 
   (context "when getting a score"
 
     (it "returns 10 if current token wins"
-      (should= 10 (sut/score test-board/top-winning-row-X :X)))
+      (should= 10 (sut/score test-board/top-winning-row-X :X :3x3)))
 
     (it "returns -10 if opponent token wins"
-      (should= -10 (sut/score test-board/middle-winning-row-O :X)))
+      (should= -10 (sut/score test-board/middle-winning-row-O :X :3x3)))
 
     (it "returns 0 if no winner"
-      (should= 0 (sut/score test-board/no-winners-board :X)))
+      (should= 0 (sut/score test-board/no-winners-board :X :3x3)))
     )
 
   (context "minimax"
@@ -169,11 +169,11 @@
 
     (it "AI never loses as X playing first"
       (let [all-finished-games (finished-games-ai-plays-first :3x3)]
-        (should (ai-win-every-game all-finished-games :X))))
+        (should (ai-win-every-game all-finished-games :X :3x3))))
 
     (it "AI never loses as O playing second"
       (let [all-finished-games (finished-games-ai-plays-second :3x3)]
-        (should (ai-win-every-game all-finished-games :O))))
+        (should (ai-win-every-game all-finished-games :O :3x3))))
     )
 
   (context "expert AI ->player-move"

@@ -104,6 +104,11 @@
        (apply format board-format-4x4)
        print))
 
+(defn determine-board-to-print [board-size board]
+  (if (= :3x3 board-size)
+    (print-board-3x3 board)
+    (print-board-4x4 board)))
+
 (defn winner-message [board token]
   (println (colorize-3x3-token token) "wins!")
   (print-board-3x3 board))

@@ -293,6 +293,21 @@
       (should= (str sut/red "  O" sut/reset) (sut/format-4x4-board-space :O)))
     )
 
+  (context "when determining what board to print"
+    (with-stubs)
+
+    (redefs-around [sut/print-board-3x3 (stub :print-board-3x3)
+                    sut/print-board-4x4 (stub :print-board-4x4)])
+
+    (it "calls print-board-3x3 when board-size is 3x3"
+      (sut/determine-board-to-print :3x3 sut/starting-board-3x3)
+      (should-have-invoked :print-board-3x3 {:with [sut/starting-board-3x3]}))
+
+    (it "calls print-board-4x4 when board-size is 4x4"
+      (sut/determine-board-to-print :4x4 sut/starting-board-4x4)
+      (should-have-invoked :print-board-4x4 {:with [sut/starting-board-4x4]}))
+    )
+
   (context "play again?"
 
     (it "asks the user if they want to play again"

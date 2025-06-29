@@ -8,19 +8,20 @@
             [tic-tac-toe.human]
             [tic-tac-toe.game :as sut]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.test-boards-3x3-spec :as test-board]))
+            [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
+            [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]))
 
 (def take-turn-state-human-v-human
-  {:X :human :O :human :board test-board/next-move-wins-X :current-token :X :depth 0 :board-size :3x3})
+  {:X :human :O :human :board test-board-3x3/next-move-wins-X :current-token :X :depth 0 :board-size :3x3})
 
 (def take-turn-state-human-v-easy-ai
-  {:X :human :O :easy-ai :board test-board/next-move-wins-X :current-token :O :depth 0 :board-size :3x3})
+  {:X :human :O :easy-ai :board test-board-3x3/next-move-wins-X :current-token :O :depth 0 :board-size :3x3})
 
 (def take-turn-state-human-v-medium-ai
-  {:X :human :O :medium-ai :board test-board/no-winners-board1 :current-token :O :depth 5 :board-size :3x3})
+  {:X :human :O :medium-ai :board test-board-3x3/no-winners-board1 :current-token :O :depth 5 :board-size :3x3})
 
 (def take-turn-state-human-v-expert-ai
-  {:X :human :O :expert-ai :board test-board/no-winners-board1 :current-token :O :depth 0 :board-size :3x3})
+  {:X :human :O :expert-ai :board test-board-3x3/no-winners-board1 :current-token :O :depth 0 :board-size :3x3})
 
 (describe "game conditions"
 
@@ -50,44 +51,39 @@
                     output/draw-message (stub :output/draw-message)])
 
     (it "responds to output winner message"
-      (board/game-over? test-board/top-winning-row-X :X)
-      (should-have-invoked :output/winner-message {:with [test-board/top-winning-row-X :X]}))
+      (board/game-over? test-board-3x3/top-winning-row-X :X :3x3)
+      (should-have-invoked :output/winner-message {:with [test-board-3x3/top-winning-row-X :X]}))
 
     (it "does not respond with winner message"
-      (should-not (board/game-over? test-board/top-winning-row-X :O)))
+      (should-not (board/game-over? test-board-3x3/top-winning-row-X :O :3x3)))
 
     (it "responds to a tie game with draw message"
-      (board/game-over? test-board/full-board :X)
-      (should-have-invoked :output/draw-message {:with [test-board/full-board]}))
+      (board/game-over? test-board-3x3/full-board :X :3x3)
+      (should-have-invoked :output/draw-message {:with [test-board-3x3/full-board]}))
     )
 
   (context "take-turns"
     (with-stubs)
 
-    (redefs-around [output/print-board-3x3 (stub :print-board-3x3)
-                    output/print-board-4x4 (stub :print-board-4x4)])
+    (redefs-around [output/print-board-3x3 (stub :print-board-3x3)])
 
-    (it "calls print-board-3x3 when board-size is 3x3"
-      (sut/determine-board-to-print :3x3 output/starting-board-3x3)
-      (should-have-invoked :print-board-3x3 {:with [output/starting-board-3x3]}))
+    (it "displays 3x3 board before each turn"
+      (with-in-str "2\n" (sut/take-turns {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
+      (should-have-invoked :print-board-3x3 {:with [test-board-3x3/no-winners-board]}))
 
-    (it "calls print-board-4x4 when board-size is 4x4"
-      (sut/determine-board-to-print :4x4 output/starting-board-4x4)
-      (should-have-invoked :print-board-4x4 {:with [output/starting-board-4x4]}))
-
-    (it "displays board before each turn"
-      (with-in-str "2\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
-      (should-have-invoked :print-board-3x3 {:with [test-board/no-winners-board]}))
+    #_(it "displays 4x4 board before each turn"
+        (with-in-str "1\n" (sut/take-turns {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :depth 0 :board-size :4x4}))
+        (should-have-invoked :print-board-4x4 {:with [test-board-4x4/x-wins-with-1]}))
 
     (it "ends the game"
       (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "2\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
-        (should-have-invoked :winner-message {:with [test-board/top-winning-row-X :X]})))
+        (with-in-str "2\n" (sut/take-turns {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
+        (should-have-invoked :winner-message {:with [test-board-3x3/top-winning-row-X :X]})))
 
     (it "repeats until game ends"
       (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "7\n6\n" (sut/take-turns {:board test-board/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
-        (should-have-invoked :winner-message {:with [test-board/middle-winning-row-O :O]})))
+        (with-in-str "7\n6\n" (sut/take-turns {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
+        (should-have-invoked :winner-message {:with [test-board-3x3/middle-winning-row-O :O]})))
 
     (it "gets user input for game mode"
       (with-redefs [tic-tac-toe.human/get-user-move (stub :user {:return [0 1]})
@@ -123,7 +119,7 @@
 
     (it "increases depth after every turn"
       (with-redefs [human/get-user-move (stub :user-move {:return [0 2]})]
-        (let [state (sut/take-turns {:board         test-board/top-almost-winning-X
+        (let [state (sut/take-turns {:board         test-board-3x3/top-almost-winning-X
                                      :current-token :X
                                      :X             :human
                                      :O             :human
