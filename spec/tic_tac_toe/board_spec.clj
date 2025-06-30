@@ -85,8 +85,7 @@
         (should-not-contain [0 0] (sut/available-moves test-board :4x4))
         (should-not-contain [0 3] (sut/available-moves test-board :4x4))
         (should-not-contain [3 0] (sut/available-moves test-board :4x4))
-        (should-not-contain [3 3] (sut/available-moves test-board :4x4)))
-      )
+        (should-not-contain [3 3] (sut/available-moves test-board :4x4))))
     )
 
   (context "make-move"
@@ -119,8 +118,7 @@
                         ["9" "10" "11" "12"]
                         ["13" "14" "15" "16"]]
             move       [0 0]]
-        (should= test-board (sut/make-move output/starting-board-4x4 move :O)))
-      )
+        (should= test-board (sut/make-move output/starting-board-4x4 move :O))))
     )
 
   (context "draw/tie game"
@@ -280,7 +278,8 @@
       (should (sut/game-over? test-board-3x3/diagonal-dleft-win-X :X :3x3))
       (should (sut/game-over? test-board-3x3/diagonal-dleft-win-O :O :3x3))
       (should (sut/game-over? test-board-3x3/diagonal-dright-win-O :O :3x3))
-      (should (sut/game-over? test-board-4x4/diagonal-dleft-win-O-4x4 :O :4x4))))
+      (should (sut/game-over? test-board-4x4/diagonal-dleft-win-O-4x4 :O :4x4)))
+    )
 
   (context "->clean-user-input"
 

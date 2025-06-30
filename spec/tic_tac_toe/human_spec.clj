@@ -62,8 +62,7 @@
       (should= [1 0] (sut/->grid-coordinates "5" :4x4))
       (should= [1 1] (sut/->grid-coordinates "6" :4x4))
       (should= [2 2] (sut/->grid-coordinates "11" :4x4))
-      (should= [3 3] (sut/->grid-coordinates "16" :4x4))
-      )
+      (should= [3 3] (sut/->grid-coordinates "16" :4x4)))
     )
 
   (context "get-user-move"
