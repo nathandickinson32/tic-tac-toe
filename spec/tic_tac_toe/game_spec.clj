@@ -266,13 +266,23 @@
                     sut/take-turns (stub :take-turns)
                     sut/play-again? (stub :play-again {:return nil})])
 
-    (it "calls all input functions and builds correct game state"
+    (it "calls all input functions and builds correct 3x3 game state"
       (with-in-str "3\n4\n2\n" (sut/build-game-state)
         (should-have-invoked :take-turns {:with
                                           [{:board-size    :3x3
                                             :X             :easy-ai
                                             :O             :expert-ai
                                             :board         output/starting-board-3x3
+                                            :current-token :X
+                                            :depth         0}]})))
+
+    (it "calls all input functions and builds correct 4x4 game state"
+      (with-in-str "4\n4\n2\n" (sut/build-game-state)
+        (should-have-invoked :take-turns {:with
+                                          [{:board-size    :4x4
+                                            :X             :easy-ai
+                                            :O             :expert-ai
+                                            :board         output/starting-board-4x4
                                             :current-token :X
                                             :depth         0}]})))
 
@@ -283,8 +293,19 @@
         (with-in-str "N\n" (sut/build-game-state)
           (should-have-invoked :play-again-test))))
 
-    (it "calls play-again? after a game finishes"
+    (it "calls play-again? after a 3x3 game finishes"
       (with-redefs [sut/ask-for-board-size   (stub :ask-for-board-size {:return :3x3})
+                    sut/play-again?          (stub :sut/play-again {:return nil})
+                    sut/take-turns           (stub :take-turns)
+                    sut/ask-for-token        (stub :ask-for-token {:return :O})
+                    sut/ask-for-player       (stub :ask-for-player {:return :expert-ai})
+                    sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
+                    output/play-again?       (stub :output/play-again {:return nil})]
+        (sut/build-game-state)
+        (should-have-invoked :sut/play-again)))
+
+    (it "calls play-again? after a 4x4 game finishes"
+      (with-redefs [sut/ask-for-board-size   (stub :ask-for-board-size {:return :4x4})
                     sut/play-again?          (stub :sut/play-again {:return nil})
                     sut/take-turns           (stub :take-turns)
                     sut/ask-for-token        (stub :ask-for-token {:return :O})
