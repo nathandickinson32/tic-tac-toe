@@ -65,15 +65,16 @@
   (context "take-turns"
     (with-stubs)
 
-    (redefs-around [output/print-board-3x3 (stub :print-board-3x3)])
+    (redefs-around [output/print-board-3x3 (stub :print-board-3x3)
+                    output/print-board-4x4 (stub :print-board-4x4)])
 
     (it "displays 3x3 board before each turn"
       (with-in-str "2\n" (sut/take-turns {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
       (should-have-invoked :print-board-3x3 {:with [test-board-3x3/no-winners-board]}))
 
-    #_(it "displays 4x4 board before each turn"
-        (with-in-str "1\n" (sut/take-turns {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :depth 0 :board-size :4x4}))
-        (should-have-invoked :print-board-4x4 {:with [test-board-4x4/x-wins-with-1]}))
+    (it "displays 4x4 board before each turn"
+      (with-in-str "1\n" (sut/take-turns {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :depth 0 :board-size :4x4}))
+      (should-have-invoked :print-board-4x4 {:with [test-board-4x4/x-wins-with-1]}))
 
     (it "ends the game"
       (with-redefs [output/winner-message (stub :winner-message)]
