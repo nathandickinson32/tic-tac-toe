@@ -87,5 +87,5 @@
 
 (defn game-over? [board token board-size]
   (cond
-    (win? board token board-size) (do (output/winner-message board token) true)
-    (full-board? board) (do (output/draw-message board) true)))
+    (win? board token board-size) (do (output/winner-message token) true)
+    (full-board? board) (do (output/draw-message) true)))

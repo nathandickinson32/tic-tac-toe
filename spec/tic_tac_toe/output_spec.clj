@@ -240,27 +240,17 @@
     (it "returns winner message for X"
       (let [output (str sut/green "X" sut/reset " wins!\n")]
         (with-redefs [sut/print-board-3x3 (fn [_] nil)]
-          (should= output (with-out-str (sut/winner-message nil :X))))))
+          (should= output (with-out-str (sut/winner-message :X))))))
 
     (it "returns winner message for O"
       (let [output (str sut/red "O" sut/reset " wins!\n")]
         (with-redefs [sut/print-board-3x3 (fn [_] nil)]
-          (should= output (with-out-str (sut/winner-message nil :O))))))
+          (should= output (with-out-str (sut/winner-message :O))))))
 
     (it "returns draw message"
       (with-redefs [sut/colorize-3x3-token identity]
-        (let [board  [[\X \X \O]
-                      [\O \O \X]
-                      [\X \O \X]]
-              output (str "It's a tie!\n"
-                          "-------------\n"
-                          "| X | X | O |\n"
-                          "-------------\n"
-                          "| O | O | X |\n"
-                          "-------------\n"
-                          "| X | O | X |\n"
-                          "-------------\n")]
-          (should= output (with-out-str (sut/draw-message board))))))
+        (let [output (str "It's a tie!\n")]
+          (should= output (with-out-str (sut/draw-message))))))
     )
 
   (context "colors"

@@ -52,14 +52,14 @@
 
     (it "responds to output winner message"
       (board/game-over? test-board-3x3/top-winning-row-X :X :3x3)
-      (should-have-invoked :output/winner-message {:with [test-board-3x3/top-winning-row-X :X]}))
+      (should-have-invoked :output/winner-message {:with [:X]}))
 
     (it "does not respond with winner message"
       (should-not (board/game-over? test-board-3x3/top-winning-row-X :O :3x3)))
 
     (it "responds to a tie game with draw message"
       (board/game-over? test-board-3x3/full-board :X :3x3)
-      (should-have-invoked :output/draw-message {:with [test-board-3x3/full-board]}))
+      (should-have-invoked :output/draw-message))
     )
 
   (context "take-turns"
@@ -78,12 +78,12 @@
     (it "ends the game"
       (with-redefs [output/winner-message (stub :winner-message)]
         (with-in-str "2\n" (sut/take-turns {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
-        (should-have-invoked :winner-message {:with [test-board-3x3/top-winning-row-X :X]})))
+        (should-have-invoked :winner-message {:with [:X]})))
 
     (it "repeats until game ends"
       (with-redefs [output/winner-message (stub :winner-message)]
         (with-in-str "7\n6\n" (sut/take-turns {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
-        (should-have-invoked :winner-message {:with [test-board-3x3/middle-winning-row-O :O]})))
+        (should-have-invoked :winner-message {:with [:O]})))
 
     (it "gets user input for game mode"
       (with-redefs [tic-tac-toe.human/get-user-move (stub :user {:return [0 1]})

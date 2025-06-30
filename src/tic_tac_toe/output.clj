@@ -109,13 +109,11 @@
     (print-board-3x3 board)
     (print-board-4x4 board)))
 
-(defn winner-message [board token]
-  (println (colorize-3x3-token token) "wins!")
-  (print-board-3x3 board))
+(defn winner-message [token]
+  (println (colorize-3x3-token token) "wins!"))
 
-(defn draw-message [board]
-  (println "It's a tie!")
-  (print-board-3x3 board))
+(defn draw-message []
+  (println "It's a tie!"))
 
 (defn play-again? []
   (println "Would you like to play again? Y/N"))
