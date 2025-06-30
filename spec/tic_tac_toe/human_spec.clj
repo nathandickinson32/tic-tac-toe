@@ -69,13 +69,19 @@
   (context "get-user-move"
     (with-stubs)
 
-    (redefs-around [output/player-prompt-3x3 (stub :output/player-prompt)
+    (redefs-around [output/player-prompt-3x3 (stub :output/player-prompt-3x3)
+                    output/player-prompt-4x4 (stub :output/player-prompt-4x4)
                     output/invalid-response (stub :output/invalid-response)])
 
-    (it "displays player prompt"
+    (it "displays player prompt 3x3"
       (with-in-str "1\n"
         (sut/get-user-move output/starting-board-3x3 :X :3x3))
-      (should-have-invoked :output/player-prompt {:with [:X]}))
+      (should-have-invoked :output/player-prompt-3x3 {:with [:X]}))
+
+    #_(it "displays player prompt 4x4"
+      (with-in-str "1\n"
+        (sut/get-user-move output/starting-board-4x4 :X :4x4))
+      (should-have-invoked :output/player-prompt-4x4 {:with [:X]}))
 
     (it "returns [0 0] for 1"
       (let [test-board output/starting-board-3x3]
@@ -92,7 +98,7 @@
       (with-in-str "a\n2\n"
         (sut/get-user-move output/starting-board-3x3 :X :3x3))
       (should-have-invoked :output/invalid-response)
-      (should-have-invoked :output/player-prompt {:times 2}))
+      (should-have-invoked :output/player-prompt-3x3 {:times 2}))
 
     (it "accepts leading and trailing whitespace"
       (let [test-board output/starting-board-3x3]

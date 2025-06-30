@@ -298,6 +298,21 @@
       (should-have-invoked :print-board-4x4 {:with [sut/starting-board-4x4]}))
     )
 
+  (context "when determining what player prompt to print"
+    (with-stubs)
+
+    (redefs-around [sut/player-prompt-3x3 (stub :player-prompt-3x3)
+                    sut/player-prompt-4x4 (stub :player-prompt-4x4)])
+
+    (it "calls player-prompt-3x3 when board-size is 3x3"
+      (sut/determine-player-prompt-to-print :3x3 :X)
+      (should-have-invoked :player-prompt-3x3 {:with [:X]}))
+
+    (it "calls player-prompt-4x4 when board-size is 4x4"
+      (sut/determine-player-prompt-to-print :4x4 :X)
+      (should-have-invoked :player-prompt-4x4 {:with [:X]}))
+    )
+
   (context "play again?"
 
     (it "asks the user if they want to play again"

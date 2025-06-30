@@ -47,6 +47,11 @@
 (defn player-prompt-4x4 [token]
   (println "Player" (name token) "Enter your move 1-16"))
 
+(defn determine-player-prompt-to-print [board-size token]
+  (if (= board-size :3x3)
+    (player-prompt-3x3 token)
+    (player-prompt-4x4 token)))
+
 (def board-format-3x3
   (str "-------------\n"
        "| %s | %s | %s |\n"
