@@ -54,16 +54,16 @@
     (it "returns nil for empty input"
       (should-be-nil (sut/->grid-coordinates "" :4x4)))
 
-    (it "parses input string 1-9 into grid coordinates"
+    (it "parses input string 1-16 into grid coordinates"
       (should= [0 0] (sut/->grid-coordinates "1" :4x4))
       (should= [0 1] (sut/->grid-coordinates "2" :4x4))
       (should= [0 2] (sut/->grid-coordinates "3" :4x4))
-      (should= [1 0] (sut/->grid-coordinates "4" :4x4))
-      (should= [1 1] (sut/->grid-coordinates "5" :4x4))
-      (should= [1 2] (sut/->grid-coordinates "6" :4x4))
-      (should= [2 0] (sut/->grid-coordinates "7" :4x4))
-      (should= [2 1] (sut/->grid-coordinates "8" :4x4))
-      (should= [2 2] (sut/->grid-coordinates "9" :4x4)))
+      (should= [0 3] (sut/->grid-coordinates "4" :4x4))
+      (should= [1 0] (sut/->grid-coordinates "5" :4x4))
+      (should= [1 1] (sut/->grid-coordinates "6" :4x4))
+      (should= [2 2] (sut/->grid-coordinates "11" :4x4))
+      (should= [3 3] (sut/->grid-coordinates "16" :4x4))
+      )
     )
 
   (context "get-user-move"
@@ -78,7 +78,7 @@
         (sut/get-user-move output/starting-board-3x3 :X :3x3))
       (should-have-invoked :output/player-prompt-3x3 {:with [:X]}))
 
-    #_(it "displays player prompt 4x4"
+    (it "displays player prompt 4x4"
       (with-in-str "1\n"
         (sut/get-user-move output/starting-board-4x4 :X :4x4))
       (should-have-invoked :output/player-prompt-4x4 {:with [:X]}))
@@ -93,6 +93,16 @@
         (with-in-str "2\n"
           (should= [0 1] (sut/get-user-move test-board :X :3x3)))
         (should-not-have-invoked :output/invalid-response)))
+
+    (it "4x4 board returns [0 0] for 1"
+      (let [test-board output/starting-board-4x4]
+        (with-in-str "1\n"
+          (should= [0 0] (sut/get-user-move test-board :X :4x4)))))
+
+    (it "4x4 board returns [3 3] for 16"
+      (let [test-board output/starting-board-4x4]
+        (with-in-str "16\n"
+          (should= [3 3] (sut/get-user-move test-board :X :4x4)))))
 
     (it "responds to invalid move"
       (with-in-str "a\n2\n"
@@ -126,5 +136,14 @@
         (should= false (board/space-available? test-board [1 0]))
         (should= false (board/space-available? test-board [2 0]))
         (should= false (board/space-available? test-board [2 1]))))
+    )
+
+  (context "when determining what grid positions to get"
+
+    (it "returns 3x3 positions for 3x3 board size"
+      (should= sut/single-digit-positions-3x3 (sut/determine-grid-coordinate-size :3x3)))
+
+    (it "returns 4x4 positions for 4x4 board size"
+      (should= sut/single-digit-positions-4x4 (sut/determine-grid-coordinate-size :4x4)))
     )
   )

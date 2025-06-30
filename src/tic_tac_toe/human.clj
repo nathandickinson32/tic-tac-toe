@@ -14,15 +14,21 @@
    "9"  [2 0] "10" [2 1] "11" [2 2] "12" [2 3]
    "13" [3 0] "14" [3 1] "15" [3 2] "16" [3 3]})
 
+(defn determine-grid-coordinate-size [board-size]
+  (cond
+    (= board-size :3x3) single-digit-positions-3x3
+    (= board-size :4x4) single-digit-positions-4x4))
+
 (defn ->grid-coordinates [input board-size]
-  (get single-digit-positions-3x3 input))
+  (let [single-digit-positions (determine-grid-coordinate-size board-size)]
+    (get single-digit-positions input)))
 
 (defn- maybe-valid-move [board input board-size]
   (when-let [move (->grid-coordinates input board-size)]
     (->> move (when (board/space-available? board move)))))
 
 (defn get-user-move [board token board-size]
-  (output/player-prompt-3x3 token)
+  (output/determine-player-prompt-to-print board-size token)
   (let [input (board/->clean-user-input)]
     (or (maybe-valid-move board input board-size)
         (do
