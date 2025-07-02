@@ -252,6 +252,9 @@
     )
 
   (context "game-over?"
+    (with-stubs)
+
+    (redefs-around [output/winner-message (stub :winner-message)])
 
     (it "returns false if there is no winners for X"
       (should-not (sut/game-over? test-board-3x3/no-winners-board :X :3x3))

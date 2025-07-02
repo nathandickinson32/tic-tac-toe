@@ -8,7 +8,6 @@
 
 (defn best-or-rand-move [board current-token depth board-size]
   (let [move (rand-nth medium-ai-moves)]
-    (prn "(println move):" (println move))
     (if (= move :easy-ai)
       (choose-random-move board board-size)
       (choose-best-move board current-token depth board-size))))
