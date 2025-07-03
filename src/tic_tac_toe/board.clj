@@ -4,8 +4,8 @@
 
 (defn ->clean-user-input []
   (-> (read-line)
-      (str/trim)
-      (str/upper-case)))
+      str/trim
+      str/upper-case))
 
 (def all-positions-3x3
   (for [row (range 3)
@@ -73,12 +73,18 @@
   (let [columns-as-rows (apply mapv vector board)]
     (winning-row? columns-as-rows token)))
 
+(defn winning-diagonal-3x3? [board token]
+  (or (all-matching-tokens? (diagonal-right-3x3 board) token)
+      (all-matching-tokens? (diagonal-left-3x3 board) token)))
+
+(defn winning-diagonal-4x4? [board token]
+  (or (all-matching-tokens? (diagonal-right-4x4 board) token)
+      (all-matching-tokens? (diagonal-left-4x4 board) token)))
+
 (defn winning-diagonal? [board token board-size]
   (if (= board-size :3x3)
-    (or (all-matching-tokens? (diagonal-right-3x3 board) token)
-        (all-matching-tokens? (diagonal-left-3x3 board) token))
-    (or (all-matching-tokens? (diagonal-right-4x4 board) token)
-        (all-matching-tokens? (diagonal-left-4x4 board) token))))
+    (winning-diagonal-3x3? board token)
+    (winning-diagonal-4x4? board token)))
 
 (defn win? [board token board-size]
   (or (winning-row? board token)

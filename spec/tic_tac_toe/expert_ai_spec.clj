@@ -56,12 +56,9 @@
     (all-finished-games o-response-boards :O :X board-size)))
 
 (defn ai-win-every-game [all-finished-games token board-size]
-  (let [result
-        (group-by #(boolean (or (board/win? (first %) token board-size)
-                                (board/full-board? (first %))))
-                  all-finished-games)
-        {lost false won true} result]
-    (not lost)))
+  (every? #(or (board/win? (first %) token board-size)
+               (board/full-board? (first %)))
+          all-finished-games))
 
 (describe "Expert AI"
 
@@ -80,10 +77,10 @@
       (should-not (sut/end-game? test-board-3x3/no-winners-board :3x3)))
 
     (it "returns false if depth is 3 with 4x4 board"
-      (should-not (sut/end-minimax? test-board-4x4/x-wins-with-1 :4x4 3)))
+      (should-not (sut/game-over? test-board-4x4/x-wins-with-1 :4x4 3)))
 
     (it "returns true if depth is 4 with 4x4 board"
-      (should (sut/end-minimax? test-board-4x4/x-wins-with-1 :4x4 4)))
+      (should (sut/game-over? test-board-4x4/x-wins-with-1 :4x4 4)))
     )
 
   (context "when getting a score"

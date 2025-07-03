@@ -25,7 +25,8 @@
 
 (defn- maybe-valid-move [board input board-size]
   (when-let [move (->grid-coordinates input board-size)]
-    (->> move (when (board/space-available? board move)))))
+    (when (board/space-available? board move)
+      move)))
 
 (defn get-user-move [board token board-size]
   (output/determine-player-prompt-to-print board-size token)

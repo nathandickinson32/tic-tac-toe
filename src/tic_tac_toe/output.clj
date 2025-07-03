@@ -5,18 +5,19 @@
 (def reset "\u001b[0m")
 
 (def starting-board-3x3
-  [[\1 \2 \3]
-   [\4 \5 \6]
-   [\7 \8 \9]])
+  [["1" "2" "3"]
+   ["4" "5" "6"]
+   ["7" "8" "9"]])
 
 (def starting-board-4x4
   [["1" "2" "3" "4"]
    ["5" "6" "7" "8"]
    ["9" "10" "11" "12"]
-   ["13" "14" "15" "16"]])
+   ["13" "14" "15" "16"]]
+  )
 
 (defn greeting []
-  (print "Welcome to Tic Tac Toe!\n")
+  (print "-----------------------------\nWelcome to Tic Tac Toe!\n")
   (flush))
 
 (defn choose-board-size []
@@ -24,13 +25,13 @@
   (flush))
 
 (defn choose-token []
-  (println "Choose their token: X or O"))
+  (println "-----------------------------\nChoose their token: X or O"))
 
 (defn choose-player []
-  (println "Choose a player:\n1 Human\n2 Easy-AI\n3 Medium-Difficulty-AI\n4 Expert-AI"))
+  (println "-----------------------------\nChoose a player:\n1 Human\n2 Easy-AI\n3 Medium-Difficulty-AI\n4 Expert-AI"))
 
 (defn choose-first-player []
-  (println "Who will play first?"))
+  (println "-----------------------------\nWho will play first, X or O?"))
 
 (defn invalid-response []
   (println "Invalid Input. Try again"))
@@ -72,23 +73,7 @@
        "| %3s  | %3s  | %3s  | %3s  |\n"
        "-----------------------------\n"))
 
-(defn colorize-3x3-token [token]
-  (cond
-    (= token :X) (str green (name token) reset)
-    (= token :O) (str red (name token) reset)
-    :else token))
-
-(defn colorize-3x3-board [board]
-  (map #(map colorize-3x3-token %) board))
-
-(defn print-board-3x3 [board]
-  (let [colorized-board (colorize-3x3-board board)]
-    (->> colorized-board
-         flatten
-         (apply format board-format-3x3)
-         print)))
-
-(defn colorize-4x4-token [token padded-token]
+(defn colorize-token [token padded-token]
   (cond
     (= token :X) (str green padded-token reset)
     (= token :O) (str red padded-token reset)
@@ -97,7 +82,7 @@
 (defn format-4x4-board-space [token]
   (let [token-str    (name token)
         padded-token (format "%3s" token-str)]
-    (colorize-4x4-token token padded-token)))
+    (colorize-token token padded-token)))
 
 (defn colorize-4x4-board [board]
   (map #(format-4x4-board-space %) board))
@@ -108,6 +93,19 @@
        colorize-4x4-board
        (apply format board-format-4x4)
        print))
+
+(defn colorize-3x3-token [token]
+  (colorize-token token (name token)))
+
+(defn colorize-3x3-board [board]
+  (map #(map colorize-3x3-token %) board))
+
+(defn print-board-3x3 [board]
+  (let [colorized-board (colorize-3x3-board board)]
+    (->> colorized-board
+         flatten
+         (apply format board-format-3x3)
+         print)))
 
 (defn determine-board-to-print [board-size board]
   (if (= :3x3 board-size)

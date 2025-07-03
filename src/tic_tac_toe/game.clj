@@ -52,7 +52,12 @@
 
 (defn ask-for-first-player []
   (output/choose-first-player)
-  (ask-for-token))
+  (let [input (board/->clean-user-input)]
+    (if-let [token (get tokens input)]
+      token
+      (do
+        (output/invalid-response)
+        (recur)))))
 
 (defn play-again? [build-game-state]
   (let [input (board/->clean-user-input)]
@@ -90,7 +95,6 @@
                         :board         board
                         :current-token first-token
                         :depth         0}]
-    (println (:board-size state))
     (take-turns state)
     (output/play-again?)
     (play-again? build-game-state)))

@@ -36,7 +36,8 @@
   (context "board sizes"
 
     (it "returns a map of potential board sizes"
-      (should= {"3" :3x3 "4" :4x4} sut/board-sizes)))
+      (should= {"3" :3x3 "4" :4x4} sut/board-sizes))
+    )
 
   (context "players"
 
@@ -235,11 +236,17 @@
         (should= :X (sut/ask-for-first-player))))
 
     (it "asks for token"
-      (with-redefs [output/choose-first-player (stub :choose-first-player)
-                    output/choose-token        (stub :choose-token)]
+      (with-redefs [output/choose-first-player (stub :choose-first-player)]
         (with-in-str "X\n" (sut/ask-for-first-player)
-          (should-have-invoked :choose-first-player)
-          (should-have-invoked :choose-token))))
+          (should-have-invoked :choose-first-player))))
+
+    (it "responds to invalid input"
+      (with-redefs [output/choose-first-player (stub :choose-first-player)
+                    output/invalid-response    (stub :invalid-response)]
+        (with-in-str "bad\n*\n \nBb\nx\n"
+          (should= :X (sut/ask-for-first-player)))
+        (should-have-invoked :invalid-response {:times 4})
+        (should-have-invoked :choose-first-player {:times 5})))
     )
 
   (context "when user is asked to play again"

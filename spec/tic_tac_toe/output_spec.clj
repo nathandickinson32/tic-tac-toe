@@ -9,52 +9,52 @@
   (context "validity"
 
     (it "prints invalid input message"
-      (let [output (str "Invalid Input. Try again\n")]
+      (let [output "Invalid Input. Try again\n"]
         (should= output (with-out-str (sut/invalid-response)))))
 
     (it "prints invalid input message when choosing a token"
-      (let [output (str "Invalid Input. Please enter X or O.\n")]
+      (let [output "Invalid Input. Please enter X or O.\n"]
         (should= output (with-out-str (sut/invalid-token-response)))))
 
     (it "prints invalid input message when choosing a board size"
-      (let [output (str "Invalid Input. Please enter 3 or 4.\n")]
+      (let [output "Invalid Input. Please enter 3 or 4.\n"]
         (should= output (with-out-str (sut/invalid-board-size-response)))))
     )
 
   (context "greeting"
 
     (it "returns correct greeting message"
-      (let [output (str "Welcome to Tic Tac Toe!\n")]
+      (let [output "-----------------------------\nWelcome to Tic Tac Toe!\n"]
         (should= output (with-out-str (sut/greeting)))))
     )
 
   (context "when building a game state"
 
     (it "asks the user what board size they want to play on"
-      (let [output (str "Choose a board size:\n3 (3x3)\n4 (4x4)\n")]
+      (let [output "Choose a board size:\n3 (3x3)\n4 (4x4)\n"]
         (should= output (with-out-str (sut/choose-board-size)))))
 
     (it "asks the user to choose a player type"
-      (let [output (str "Choose a player:\n1 Human\n2 Easy-AI\n3 Medium-Difficulty-AI\n4 Expert-AI\n")]
+      (let [output "-----------------------------\nChoose a player:\n1 Human\n2 Easy-AI\n3 Medium-Difficulty-AI\n4 Expert-AI\n"]
         (should= output (with-out-str (sut/choose-player)))))
 
     (it "asks the user to choose a token"
-      (let [output (str "Choose their token: X or O\n")]
+      (let [output "-----------------------------\nChoose their token: X or O\n"]
         (should= output (with-out-str (sut/choose-token)))))
 
     (it "asks the user to choose first player"
-      (let [output "Who will play first?\n"]
+      (let [output "-----------------------------\nWho will play first, X or O?\n"]
         (should= output (with-out-str (sut/choose-first-player)))))
     )
 
   (context "when asking a human player for their move"
 
     (it "returns 3x3 player prompt"
-      (let [output (str "Player X Enter your move 1-9\n")]
+      (let [output "Player X Enter your move 1-9\n"]
         (should= output (with-out-str (sut/player-prompt-3x3 :X)))))
 
     (it "returns 4x4 player prompt"
-      (let [output (str "Player X Enter your move 1-16\n")]
+      (let [output "Player X Enter your move 1-16\n"]
         (should= output (with-out-str (sut/player-prompt-4x4 :X)))))
     )
 
@@ -74,8 +74,8 @@
         (should= output (with-out-str (sut/print-board-3x3 sut/starting-board-3x3)))))
 
     (it "prints a 3x3 board after one move"
-      (with-redefs [sut/colorize-3x3-token identity]
-        (let [board  (assoc-in sut/starting-board-3x3 [0 0] \X)
+      (with-redefs [sut/colorize-token :X :X]
+        (let [board  (assoc-in sut/starting-board-3x3 [0 0] "X")
               output (str "-------------\n"
                           "| X | 2 | 3 |\n"
                           "-------------\n"
@@ -86,7 +86,7 @@
           (should= output (with-out-str (sut/print-board-3x3 board))))))
 
     (it "prints a 3x3 board when token is in first row"
-      (let [board  (assoc-in sut/starting-board-3x3 [0 2] \X)
+      (let [board  (assoc-in sut/starting-board-3x3 [0 2] "X")
             output (str "-------------\n"
                         "| 1 | 2 | X |\n"
                         "-------------\n"
@@ -97,9 +97,9 @@
         (should= output (with-out-str (sut/print-board-3x3 board)))))
 
     (it "prints a 3x3 board with three in a row, down the middle"
-      (let [board  (-> sut/starting-board-3x3 (assoc-in [0 1] \O)
-                       (assoc-in [1 1] \O)
-                       (assoc-in [2 1] \O))
+      (let [board  (-> sut/starting-board-3x3 (assoc-in [0 1] "O")
+                       (assoc-in [1 1] "O")
+                       (assoc-in [2 1] "O"))
             output (str "-------------\n"
                         "| 1 | O | 3 |\n"
                         "-------------\n"
@@ -111,9 +111,9 @@
 
     (it "prints a 3x3 board with three in a row, across the middle row"
       (let [board  (-> sut/starting-board-3x3
-                       (assoc-in [1 0] \O)
-                       (assoc-in [1 1] \O)
-                       (assoc-in [1 2] \O))
+                       (assoc-in [1 0] "O")
+                       (assoc-in [1 1] "O")
+                       (assoc-in [1 2] "O"))
             output (str "-------------\n"
                         "| 1 | 2 | 3 |\n"
                         "-------------\n"
@@ -124,9 +124,9 @@
         (should= output (with-out-str (sut/print-board-3x3 board)))))
 
     (it "prints a full 3x3 board"
-      (let [board  [[\X \O \X]
-                    [\X \O \O]
-                    [\O \X \X]]
+      (let [board  [["X" "O" "X"]
+                    ["X" "O" "O"]
+                    ["O" "X" "X"]]
             output (str "-------------\n"
                         "| X | O | X |\n"
                         "-------------\n"
@@ -248,8 +248,8 @@
           (should= output (with-out-str (sut/winner-message :O))))))
 
     (it "returns draw message"
-      (with-redefs [sut/colorize-3x3-token identity]
-        (let [output (str "It's a tie!\n")]
+      (with-redefs [sut/colorize-token identity]
+        (let [output "It's a tie!\n"]
           (should= output (with-out-str (sut/draw-message))))))
     )
 
@@ -263,15 +263,6 @@
 
     (it "resets the color"
       (should= "\u001B[0m" sut/reset))
-    )
-
-  (context "when printing the tokens on 3x3 board"
-
-    (it "prints X token in green"
-      (should= (str sut/green "X" sut/reset) (sut/colorize-3x3-token :X)))
-
-    (it "prints O token in red"
-      (should= (str sut/red "O" sut/reset) (sut/colorize-3x3-token :O)))
     )
 
   (context "when printing the tokens on 4x4 board"
@@ -299,18 +290,14 @@
     )
 
   (context "when determining what player prompt to print"
-    (with-stubs)
 
-    (redefs-around [sut/player-prompt-3x3 (stub :player-prompt-3x3)
-                    sut/player-prompt-4x4 (stub :player-prompt-4x4)])
+    (it "returns 3x3 player prompt"
+      (let [output "Player X Enter your move 1-9\n"]
+        (should= output (with-out-str (sut/determine-player-prompt-to-print :3x3 :X)))))
 
-    (it "calls player-prompt-3x3 when board-size is 3x3"
-      (sut/determine-player-prompt-to-print :3x3 :X)
-      (should-have-invoked :player-prompt-3x3 {:with [:X]}))
-
-    (it "calls player-prompt-4x4 when board-size is 4x4"
-      (sut/determine-player-prompt-to-print :4x4 :X)
-      (should-have-invoked :player-prompt-4x4 {:with [:X]}))
+    (it "returns 4x4 player prompt"
+      (let [output "Player O Enter your move 1-16\n"]
+        (should= output (with-out-str (sut/determine-player-prompt-to-print :4x4 :O)))))
     )
 
   (context "play again?"

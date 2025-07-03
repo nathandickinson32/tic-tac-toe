@@ -2,9 +2,9 @@
   (:require [clojure.test :refer :all]))
 
 (def test-starting-board-3x3
-  [[\1 \2 \3]
-   [\4 \5 \6]
-   [\7 \8 \9]])
+  [["1" "2" "3"]
+   ["4" "5" "6"]
+   ["7" "8" "9"]])
 
 (def no-winners-board
   [[:X \space :X]

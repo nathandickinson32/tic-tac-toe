@@ -7,7 +7,7 @@
       (board/win? board :O board-size)
       (board/full-board? board)))
 
-(defn end-minimax? [board board-size depth]
+(defn game-over? [board board-size depth]
   (cond
     (= board-size :3x3) (end-game? board board-size)
     (= board-size :4x4) (or (end-game? board board-size)
@@ -33,9 +33,7 @@
                (->score-one-move next-board token max-token depth board-size)))))
 
 (defn negative-scores? [scores]
-  (if (some neg? scores)
-    (apply max scores)
-    (apply max scores)))
+  (apply max scores))
 
 (defn positive-scores? [scores depth]
   (if (some pos? scores)
@@ -47,13 +45,16 @@
     (negative-scores? scores)
     (positive-scores? scores depth)))
 
+(defn evaluate-branch [board token max-token depth board-size]
+  (let [moves       (board/available-moves board board-size)
+        scores      (->score-moves board token max-token depth moves board-size)
+        maximizing? (= token max-token)]
+    (->best-score scores maximizing? depth)))
+
 (defn minimax [board token max-token depth board-size]
-  (if (end-minimax? board board-size depth)
+  (if (game-over? board board-size depth)
     (score-end-game board max-token depth board-size)
-    (let [moves       (board/available-moves board board-size)
-          scores      (->score-moves board token max-token depth moves board-size)
-          maximizing? (= token max-token)]
-      (->best-score scores maximizing? depth))))
+    (evaluate-branch board token max-token depth board-size)))
 
 (def memoized-minimax
   (memoize minimax))
