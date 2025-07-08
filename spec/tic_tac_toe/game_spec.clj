@@ -8,6 +8,7 @@
             [tic-tac-toe.human]
             [tic-tac-toe.game :as sut]
             [tic-tac-toe.output :as output]
+            [tic-tac-toe.records :as records]
             [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
             [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]))
 
@@ -63,11 +64,30 @@
       (should-have-invoked :output/draw-message))
     )
 
+  (context "recording-end-game"
+    (with-stubs)
+
+    (redefs-around [records/record-move (stub :record-move)
+                    records/record-end-game (stub :record-end-game)])
+
+    (it "calls record-move and end game"
+      (sut/record-end-game {:board         test-board-3x3/top-almost-winning-X
+                            :current-token :X
+                            :X             :human
+                            :O             :human
+                            :depth         2
+                            :board-size    :3x3})
+      (should-have-invoked :record-move)
+      (should-have-invoked :record-end-game))
+    )
+
   (context "take-turns"
     (with-stubs)
 
     (redefs-around [output/print-board-3x3 (stub :print-board-3x3)
-                    output/print-board-4x4 (stub :print-board-4x4)])
+                    output/print-board-4x4 (stub :print-board-4x4)
+                    records/record-move (stub :record-move)
+                    records/record-end-game (stub :record-end-game)])
 
     (it "displays 3x3 board before each turn"
       (with-in-str "2\n" (sut/take-turns {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
@@ -128,6 +148,27 @@
                                      :depth         2
                                      :board-size    :3x3})]
           (should= 3 (:depth state)))))
+
+    (it "calls record-move after every turn"
+      (with-in-str "7\n8\n3\n"
+        (sut/take-turns {:board         test-board-3x3/top-almost-winning-X
+                         :current-token :X
+                         :X             :human
+                         :O             :human
+                         :depth         2
+                         :board-size    :3x3}))
+      (should-have-invoked :record-move {:times 4}))
+
+    (it "calls record-move and end game after win"
+      (with-in-str "3\n"
+        (sut/take-turns {:board         test-board-3x3/top-almost-winning-X
+                         :current-token :X
+                         :X             :human
+                         :O             :human
+                         :depth         2
+                         :board-size    :3x3}))
+      (should-have-invoked :record-move {:times 2})
+      (should-have-invoked :record-end-game))
     )
 
   (context "when asking to choose a token"

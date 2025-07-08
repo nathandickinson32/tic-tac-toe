@@ -5,10 +5,8 @@
             [tic-tac-toe.human]
             [tic-tac-toe.easy-ai]
             [tic-tac-toe.medium-ai]
-            [tic-tac-toe.expert-ai]))
-
-(defn ->player-type [token state]
-  (get state (get token state)))
+            [tic-tac-toe.expert-ai]
+            [tic-tac-toe.records :as records]))
 
 (def board-sizes {"3" :3x3 "4" :4x4})
 
@@ -67,17 +65,9 @@
     (when (= input "Y")
       (build-game-state))))
 
-#_(defn ->state-to-record [state]
-  (select-keys state [:X :O :board :current-token]))
-
-#_(defn format-record [state]
-  (str (->state-to-record state) "\n"))
-
-#_(defn record-move [state]
-  (spit "game-history.edn" (format-record state) :append true))
-
-#_(defn record-end-game []
-  (spit "game-history.edn" "Game Has Ended\n" :append true))
+(defn record-end-game [new-state]
+  (records/record-move new-state)
+  (records/record-end-game))
 
 (defn take-turns [{:keys [board current-token depth board-size] :as state}]
   (output/determine-board-to-print board-size board)
@@ -89,11 +79,10 @@
                       :current-token next-player
                       :board new-board
                       :depth new-depth)]
-    #_(record-move state)
+    (records/record-move state)
     (if (board/game-over? new-board current-token board-size)
       (do (output/determine-board-to-print board-size new-board)
-          #_(record-move new-state)
-          #_(record-end-game)
+          (record-end-game new-state)
           new-state)
       (recur new-state))))
 
