@@ -5,32 +5,19 @@
 (describe "keeping record of game history"
 
   (context "when recording moves"
+    (with-stubs)
 
     (it "gets the correct args to record moves"
-      (let [test-state     {:X             :human
-                            :O             :easy-ai
-                            :board         [[1 2 3] [4 5 6] [7 8 9]]
-                            :current-token :X
-                            :should-ignore "should be ignored"}
-            recorded-state (atom nil)]
-        (with-redefs [spit (fn [& args] (reset! recorded-state args))]
+      (let [test-state {:X             :human
+                        :O             :easy-ai
+                        :board         [[1 2 3] [4 5 6] [7 8 9]]
+                        :current-token :X
+                        :should-ignore "should be ignored"}]
+        (with-redefs [spit (stub :spit)]
           (sut/record-move test-state))
-        (should= "game-history.edn" (nth @recorded-state 0))
-        (should= :append (nth @recorded-state 2))
-        (should= true (nth @recorded-state 3))
-        (should= (str (select-keys test-state [:X :O :board :current-token]) "\n")
-                 (nth @recorded-state 1))))
+        (let [content (str (dissoc test-state :should-ignore) "\n")]
+          (should-have-invoked :spit {:with ["game-history.edn" content :append true]}))))
     )
 
-  (context "when recording end game"
-
-    (it "gets the correct args to record moves"
-      (let [recorded-state (atom nil)]
-        (with-redefs [spit (fn [& args] (reset! recorded-state args))]
-          (sut/record-end-game))
-        (should= "game-history.edn" (nth @recorded-state 0))
-        (should= :append (nth @recorded-state 2))
-        (should= true (nth @recorded-state 3))
-        (should= "Game Has Ended\n" (nth @recorded-state 1))))
-    )
+  ; FIXME need to test uuid
   )

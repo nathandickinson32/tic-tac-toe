@@ -65,26 +65,30 @@
     (when (= input "Y")
       (build-game-state))))
 
-(defn record-end-game [new-state]
-  (records/record-move new-state)
-  (records/record-end-game))
+; FIXME need to test
+(defn add-game-id-at-start [state]
+  (if (nil? (:game-id state))
+    (assoc state :game-id (str (random-uuid)))
+    state))
 
+; FIXME need to test uuid
 (defn take-turns [{:keys [board current-token depth board-size] :as state}]
-  (output/determine-board-to-print board-size board)
-  (let [move        (->player-move state)
-        new-board   (board/make-move board move current-token)
-        next-player (switch-player current-token)
-        new-depth   (inc depth)
-        new-state   (assoc state
-                      :current-token next-player
-                      :board new-board
-                      :depth new-depth)]
-    (records/record-move state)
-    (if (board/game-over? new-board current-token board-size)
-      (do (output/determine-board-to-print board-size new-board)
-          (record-end-game new-state)
-          new-state)
-      (recur new-state))))
+  (let [state (add-game-id-at-start state)]
+    (output/determine-board-to-print board-size board)
+    (let [move        (->player-move state)
+          new-board   (board/make-move board move current-token)
+          next-player (switch-player current-token)
+          new-depth   (inc depth)
+          new-state   (assoc state
+                        :current-token next-player
+                        :board new-board
+                        :depth new-depth)]
+      (records/record-move new-state)
+      (if (board/game-over? new-board current-token board-size)
+        (do (output/determine-board-to-print board-size new-board)
+            (records/record-move new-state)
+            new-state)
+        (recur new-state)))))
 
 (defn build-game-state []
   (let [board-size     (ask-for-board-size)
@@ -101,7 +105,8 @@
                         :O             (:O players)
                         :board         board
                         :current-token first-token
-                        :depth         0}]
+                        :depth         0
+                        :game-id       nil}]
     (take-turns state)
     (output/play-again?)
     (play-again? build-game-state)))
