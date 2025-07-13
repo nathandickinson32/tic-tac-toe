@@ -12,12 +12,11 @@
                         :O             :easy-ai
                         :board         [[1 2 3] [4 5 6] [7 8 9]]
                         :current-token :X
+                        :game-id       nil
                         :should-ignore "should be ignored"}]
         (with-redefs [spit (stub :spit)]
           (sut/record-move test-state))
         (let [content (str (dissoc test-state :should-ignore) "\n")]
           (should-have-invoked :spit {:with ["game-history.edn" content :append true]}))))
     )
-
-  ; FIXME need to test uuid
   )

@@ -8,6 +8,3 @@
 
 (defn record-move [state]
   (spit "game-history.edn" (format-record state) :append true))
-
-(defn record-end-game []
-  (spit "game-history.edn" (str (random-uuid) "\n") :append true))

@@ -70,7 +70,7 @@
     (redefs-around [output/print-board-3x3 (stub :print-board-3x3)
                     output/print-board-4x4 (stub :print-board-4x4)
                     records/record-move (stub :record-move)
-                    ])
+                    random-uuid (stub :uuid {:return "123"})])
 
     (it "displays 3x3 board before each turn"
       (with-in-str "2\n" (sut/take-turns {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
@@ -132,11 +132,10 @@
                                      :board-size    :3x3})]
           (should= 3 (:depth state)))))
 
-    ; FIXME
-    #_(it "calls record-move after win"
-      (with-in-str "3\n"
+    (it "calls record-move after win"
+      (with-in-str "4\n3\n"
         (sut/take-turns {:board         test-board-3x3/top-almost-winning-X
-                         :current-token :X
+                         :current-token :O
                          :X             :human
                          :O             :human
                          :depth         2
@@ -285,7 +284,8 @@
     (redefs-around [sut/ask-for-token (stub :ask-for-token {:return :O})
                     sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
                     sut/take-turns (stub :take-turns)
-                    sut/play-again? (stub :play-again {:return nil})])
+                    sut/play-again? (stub :play-again {:return nil})
+                    random-uuid (stub :uuid {:return "123"})])
 
     (it "calls all input functions and builds correct 3x3 game state"
       (with-in-str "3\n4\n2\n" (sut/build-game-state)
@@ -296,7 +296,7 @@
                                             :board         output/starting-board-3x3
                                             :current-token :X
                                             :depth         0
-                                            :game-id       nil}]})))
+                                            :game-id       "123"}]})))
 
 
 
@@ -309,7 +309,7 @@
                                             :board         output/starting-board-4x4
                                             :current-token :X
                                             :depth         0
-                                            :game-id       nil}]})))
+                                            :game-id       "123"}]})))
 
     (it "asks the user if they want to play again"
       (with-redefs [sut/ask-for-board-size (stub :ask-for-board-size {:return :3x3})
