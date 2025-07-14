@@ -116,10 +116,21 @@
     (winning-diagonal-3x3? board token)
     (winning-diagonal-4x4? board token)))
 
-(defn win? [board token board-size]
+; FIXME need to add all diagonal checks
+(defn winning-3d-options [board token]
+  (or (winning-row-3d? board token)
+      (winning-col-3d? board token)
+      (winning-diagonal-3d? board token)))
+
+(defn winning-2d-options [board token board-size]
   (or (winning-row-2d? board token)
       (winning-col-2d? board token)
       (winning-diagonal? board token board-size)))
+
+(defn win? [board token board-size]
+  (if (= board-size :3x3x3)
+    (winning-3d-options board token)
+    (winning-2d-options board token board-size)))
 
 (defn game-over? [board token board-size]
   (cond

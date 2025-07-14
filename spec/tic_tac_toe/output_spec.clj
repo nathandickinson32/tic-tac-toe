@@ -18,7 +18,7 @@
         (should= output (with-out-str (sut/invalid-token-response)))))
 
     (it "prints invalid input message when choosing a board size"
-      (let [output "Invalid Input. Please enter 3, 4 or 9.\n"]
+      (let [output "Invalid Input. Please enter 9, 16 or 27.\n"]
         (should= output (with-out-str (sut/invalid-board-size-response)))))
     )
 
@@ -32,7 +32,7 @@
   (context "when building a game state"
 
     (it "asks the user what board size they want to play on"
-      (let [output "Choose a board size:\n3 (3x3)\n4 (4x4)\n9 (3x3x3)\n"]
+      (let [output "Choose a board size:\n9 (3x3)\n16 (4x4)\n27 (3x3x3)\n"]
         (should= output (with-out-str (sut/choose-board-size)))))
 
     (it "asks the user to choose a player type"

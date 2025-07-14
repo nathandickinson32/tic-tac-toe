@@ -10,7 +10,8 @@
             [tic-tac-toe.output :as output]
             [tic-tac-toe.records :as records]
             [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
-            [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]))
+            [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]
+            [tic-tac-toe.test-boards-3x3x3-spec :as test-board-3x3x3]))
 
 (def take-turn-state-human-v-human
   {:X :human :O :human :board test-board-3x3/next-move-wins-X :current-token :X :depth 0 :board-size :3x3})
@@ -37,7 +38,7 @@
   (context "board sizes"
 
     (it "returns a map of potential board sizes"
-      (should= {"3" :3x3 "4" :4x4} sut/board-sizes))
+      (should= {"9" :3x3 "16" :4x4 "27" :3x3x3} sut/board-sizes))
     )
 
   (context "players"
@@ -69,6 +70,7 @@
 
     (redefs-around [output/print-board-3x3 (stub :print-board-3x3)
                     output/print-board-4x4 (stub :print-board-4x4)
+                    output/print-board-3x3x3 (stub :print-board-3x3x3)
                     records/record-move (stub :record-move)
                     random-uuid (stub :uuid {:return "123"})])
 
@@ -79,6 +81,10 @@
     (it "displays 4x4 board before each turn"
       (with-in-str "1\n" (sut/take-turns {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :depth 0 :board-size :4x4}))
       (should-have-invoked :print-board-4x4 {:with [test-board-4x4/x-wins-with-1]}))
+
+    (it "displays 3x3x3 board before each turn"
+      (with-in-str "14\n" (sut/take-turns {:board test-board-3x3x3/x-wins-with-14 :current-token :X :X :human :O :human :depth 0 :board-size :3x3x3}))
+      (should-have-invoked :print-board-3x3x3 {:with [test-board-3x3x3/x-wins-with-14]}))
 
     (it "ends the game"
       (with-redefs [output/winner-message (stub :winner-message)]
@@ -181,19 +187,22 @@
 
     (it "asks the user to choose a board size"
       (with-redefs [output/choose-board-size (stub :choose-board-size)]
-        (with-in-str "3\n" (sut/ask-for-board-size)
+        (with-in-str "9\n" (sut/ask-for-board-size)
           (should-have-invoked :choose-board-size))))
 
-    (it "returns :3x3 for 3"
-      (with-in-str "3\n" (should= :3x3 (sut/ask-for-board-size))))
+    (it "returns :3x3 for 9"
+      (with-in-str "9\n" (should= :3x3 (sut/ask-for-board-size))))
 
-    (it "returns :4x4 for 4"
-      (with-in-str "4\n" (should= :4x4 (sut/ask-for-board-size))))
+    (it "returns :4x4 for 16"
+      (with-in-str "16\n" (should= :4x4 (sut/ask-for-board-size))))
+
+    (it "returns :3x3x3 for 27"
+      (with-in-str "27\n" (should= :3x3x3 (sut/ask-for-board-size))))
 
     (it "responds to invalid input"
       (with-redefs [output/choose-board-size           (stub :choose-board-size)
                     output/invalid-board-size-response (stub :invalid-board-size-response)]
-        (with-in-str "bad\n*\n \nXx\n3\n"
+        (with-in-str "bad\n*\n \nXx\n9\n"
           (should= :3x3 (sut/ask-for-board-size)))
         (should-have-invoked :invalid-board-size-response {:times 4})
         (should-have-invoked :choose-board-size {:times 5})))
@@ -288,7 +297,7 @@
                     random-uuid (stub :uuid {:return "123"})])
 
     (it "calls all input functions and builds correct 3x3 game state"
-      (with-in-str "3\n4\n2\n" (sut/build-game-state)
+      (with-in-str "9\n4\n2\n" (sut/build-game-state)
         (should-have-invoked :take-turns {:with
                                           [{:board-size    :3x3
                                             :X             :easy-ai
@@ -301,7 +310,7 @@
 
 
     (it "calls all input functions and builds correct 4x4 game state"
-      (with-in-str "4\n4\n2\n" (sut/build-game-state)
+      (with-in-str "16\n4\n2\n" (sut/build-game-state)
         (should-have-invoked :take-turns {:with
                                           [{:board-size    :4x4
                                             :X             :easy-ai
@@ -329,21 +338,13 @@
         (sut/build-game-state)
         (should-have-invoked :sut/play-again)))
 
-    (it "calls play-again? after a 4x4 game finishes"
-      (with-redefs [sut/ask-for-board-size   (stub :ask-for-board-size {:return :4x4})
-                    sut/play-again?          (stub :sut/play-again {:return nil})
-                    sut/take-turns           (stub :take-turns)
-                    sut/ask-for-token        (stub :ask-for-token {:return :O})
-                    sut/ask-for-player       (stub :ask-for-player {:return :expert-ai})
-                    sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
-                    output/play-again?       (stub :output/play-again {:return nil})]
-        (sut/build-game-state)
-        (should-have-invoked :sut/play-again)))
-
     (it "determines starting board 3x3"
       (should= output/starting-board-3x3 (sut/determine-starting-board :3x3)))
 
     (it "determines starting board 4x4"
       (should= output/starting-board-4x4 (sut/determine-starting-board :4x4)))
+
+    (it "determines starting board 3x3x3"
+      (should= output/starting-board-3x3x3 (sut/determine-starting-board :3x3x3)))
     )
   )

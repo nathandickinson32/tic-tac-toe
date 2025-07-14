@@ -8,7 +8,7 @@
             [tic-tac-toe.expert-ai]
             [tic-tac-toe.records :as records]))
 
-(def board-sizes {"3" :3x3 "4" :4x4})
+(def board-sizes {"9" :3x3 "16" :4x4 "27" :3x3x3})
 
 (def tokens {"X" :X "O" :O})
 
@@ -31,7 +31,8 @@
 (defn determine-starting-board [board-size]
   (cond
     (= :3x3 board-size) output/starting-board-3x3
-    (= :4x4 board-size) output/starting-board-4x4))
+    (= :4x4 board-size) output/starting-board-4x4
+    (= :3x3x3 board-size) output/starting-board-3x3x3))
 
 (defn ask-for-token []
   (output/choose-token)

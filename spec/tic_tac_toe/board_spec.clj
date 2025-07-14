@@ -391,23 +391,28 @@
 
     (it "no row, column or diagonal is filled by X"
       (should-not (sut/win? test-board-3x3/no-winners-board :X :3x3))
-      (should-not (sut/win? test-board-4x4/x-wins-with-1 :X :4x4)))
+      (should-not (sut/win? test-board-4x4/x-wins-with-1 :X :4x4))
+      (should-not (sut/win? test-board-3x3x3/x-wins-with-14 :X :3x3x3))
+      )
 
     (it "no row, column or diagonal is filled by O"
       (should-not (sut/win? test-board-3x3/no-winners-board :O :3x3))
-      (should-not (sut/win? test-board-4x4/x-wins-with-1 :O :4x4)))
+      (should-not (sut/win? test-board-4x4/x-wins-with-1 :O :4x4))
+      (should-not (sut/win? test-board-3x3x3/x-wins-top-row-top-layer :O :3x3x3)))
 
     (it "a row is filled by same player symbol"
       (should (sut/win? test-board-3x3/top-winning-row-X :X :3x3))
       (should (sut/win? test-board-3x3/bottom-winning-row-X :X :3x3))
       (should (sut/win? test-board-3x3/middle-winning-row-O :O :3x3))
-      (should (sut/win? test-board-4x4/x-wins-top-row :X :4x4)))
+      (should (sut/win? test-board-4x4/x-wins-top-row :X :4x4))
+      (should (sut/win? test-board-3x3x3/x-wins-top-row-top-layer :X :3x3x3)))
 
     (it "a column is filled by same player symbol"
       (should (sut/win? test-board-3x3/left-winning-col-X :X :3x3))
       (should (sut/win? test-board-3x3/right-winning-col-X :X :3x3))
       (should (sut/win? test-board-3x3/middle-winning-col-O :O :3x3))
-      (should (sut/win? test-board-4x4/x-wins-left-col :X :4x4)))
+      (should (sut/win? test-board-4x4/x-wins-left-col :X :4x4))
+      (should (sut/win? test-board-3x3x3/O-wins-left-column-middle-layer :O :3x3x3)))
 
     (it "a diagonal is filled by same player symbol"
       (should (sut/win? test-board-3x3/diagonal-dright-win-X :X :3x3))
