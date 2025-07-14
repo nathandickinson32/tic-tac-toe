@@ -73,19 +73,39 @@
    (get-in board [2 1])
    (get-in board [3 0])])
 
-(defn winning-row? [board token]
+(defn diagonal-right-3d [board]
+  [(get-in board [0 0 0])
+   (get-in board [1 1 1])
+   (get-in board [2 2 2])])
+
+(defn diagonal-left-3d [board]
+  [(get-in board [0 0 2])
+   (get-in board [1 1 1])
+   (get-in board [2 2 0])])
+
+(defn winning-row-2d? [board token]
   (some #(all-matching-tokens? % token) board))
 
-(defn winning-3d-row? [board token]
-  (some #(winning-row? % token) board))
-
-(defn winning-col? [board token]
+(defn winning-col-2d? [board token]
   (let [columns-as-rows (apply mapv vector board)]
-    (winning-row? columns-as-rows token)))
+    (winning-row-2d? columns-as-rows token)))
+
+(defn winning-row-3d? [board token]
+  (some #(winning-row-2d? % token) board))
+
+(defn winning-col-3d? [board token]
+  (some #(winning-col-2d? % token) board))
 
 (defn winning-diagonal-3x3? [board token]
   (or (all-matching-tokens? (diagonal-right-3x3 board) token)
       (all-matching-tokens? (diagonal-left-3x3 board) token)))
+
+; FIXME need algorithm to solve for all 3d diagonals
+(defn winning-diagonal-3d? [board token]
+  (or
+    (or (all-matching-tokens? (diagonal-right-3d board) token)
+        (all-matching-tokens? (diagonal-left-3d board) token))
+    (some #(winning-diagonal-3x3? % token) board)))
 
 (defn winning-diagonal-4x4? [board token]
   (or (all-matching-tokens? (diagonal-right-4x4 board) token)
@@ -97,8 +117,8 @@
     (winning-diagonal-4x4? board token)))
 
 (defn win? [board token board-size]
-  (or (winning-row? board token)
-      (winning-col? board token)
+  (or (winning-row-2d? board token)
+      (winning-col-2d? board token)
       (winning-diagonal? board token board-size)))
 
 (defn game-over? [board token board-size]

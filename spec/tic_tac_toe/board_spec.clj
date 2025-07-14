@@ -263,25 +263,25 @@
       (should (sut/all-matching-tokens? (first test-board-4x4/x-wins-top-row) :X)))
 
     (it "is a winning row"
-      (should (sut/winning-row? test-board-3x3/top-winning-row-X :X))
-      (should (sut/winning-row? test-board-3x3/bottom-winning-row-X :X))
-      (should (sut/winning-row? test-board-3x3/middle-winning-row-O :O))
-      (should (sut/winning-row? test-board-4x4/x-wins-top-row :X)))
+      (should (sut/winning-row-2d? test-board-3x3/top-winning-row-X :X))
+      (should (sut/winning-row-2d? test-board-3x3/bottom-winning-row-X :X))
+      (should (sut/winning-row-2d? test-board-3x3/middle-winning-row-O :O))
+      (should (sut/winning-row-2d? test-board-4x4/x-wins-top-row :X)))
     )
 
   (context "2d columns"
 
     (it "returns false when no cols have all matching symbols"
-      (should-not (sut/winning-col? test-board-3x3/left-winning-col-X :O))
-      (should-not (sut/winning-col? test-board-3x3/right-winning-col-X :O))
-      (should-not (sut/winning-col? test-board-3x3/left-winning-col-X :O))
-      (should-not (sut/winning-col? test-board-4x4/x-wins-with-1 :O)))
+      (should-not (sut/winning-col-2d? test-board-3x3/left-winning-col-X :O))
+      (should-not (sut/winning-col-2d? test-board-3x3/right-winning-col-X :O))
+      (should-not (sut/winning-col-2d? test-board-3x3/left-winning-col-X :O))
+      (should-not (sut/winning-col-2d? test-board-4x4/x-wins-with-1 :O)))
 
     (it "is a winning column"
-      (should (sut/winning-col? test-board-3x3/left-winning-col-X :X))
-      (should (sut/winning-col? test-board-3x3/right-winning-col-X :X))
-      (should (sut/winning-col? test-board-3x3/middle-winning-col-O :O))
-      (should (sut/winning-col? test-board-4x4/x-wins-left-col :X)))
+      (should (sut/winning-col-2d? test-board-3x3/left-winning-col-X :X))
+      (should (sut/winning-col-2d? test-board-3x3/right-winning-col-X :X))
+      (should (sut/winning-col-2d? test-board-3x3/middle-winning-col-O :O))
+      (should (sut/winning-col-2d? test-board-4x4/x-wins-left-col :X)))
     )
 
   (context "2d diagonals"
@@ -319,36 +319,73 @@
       (should (sut/winning-diagonal? test-board-4x4/diagonal-dleft-win-O-4x4 :O :4x4)))
     )
 
-
-
-
   (context "3d rows"
 
     (it "returns false when no rows have all matching symbols"
-      (should-not (sut/winning-3d-row? test-board-3x3x3/x-wins-with-14 :X)))
+      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
+        (should-not (sut/winning-row-3d? board :X))))
 
     (it "returns true for a single row of matching symbols in 1st layer"
-      (should (sut/winning-3d-row? test-board-3x3x3/x-wins-top-top-layer :X))
-      )
+      (should (sut/winning-row-3d? test-board-3x3x3/x-wins-top-row-top-layer :X)))
 
     (it "returns true for a single row of matching symbols in 2nd layer"
       (let [board (assoc-in test-board-3x3x3/x-wins-with-14 [1 1 1] :X)]
-        (should (sut/winning-3d-row? board :X)))
-      )
+        (should (sut/winning-row-3d? board :X))))
 
     (it "returns true for a single row of matching symbols in 3rd layer"
       (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
-        (should (sut/winning-3d-row? board :O)))
-      )
+        (should (sut/winning-row-3d? board :O))))
     )
 
+  (context "3d columns"
 
+    (it "returns false when no columns have all matching symbols"
+      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
+        (should-not (sut/winning-col-3d? board :X))))
 
+    (it "returns true for a single row of matching symbols in 1st layer"
+      (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [1 2 0] :O)]
+        (should (sut/winning-col-3d? board :O))))
 
+    (it "returns true for a single row of matching symbols in 2nd layer"
+      (let [board (assoc-in test-board-3x3x3/x-wins-with-14 [1 1 1] :X)]
+        (should (sut/winning-col-3d? board :X))))
 
+    (it "returns true for a single row of matching symbols in 3rd layer"
+      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 0 1] :O)]
+        (should (sut/winning-col-3d? board :O))))
+    )
 
+  (context "3d diagonals"
 
+    (it "false for not same symbol diagonal"
+      (should-not (sut/winning-diagonal-3d? test-board-3x3x3/O-wins-with-27 :O)))
 
+    (it "returns true for diagonal down right of matching symbols in 1st layer"
+      (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [0 2 2] :X)]
+        (should (sut/winning-diagonal-3d? board :X))))
+
+    (it "returns true for diagonal down right of matching symbols in 2nd layer"
+      (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [1 2 2] :O)]
+        (should (sut/winning-diagonal-3d? board :O))))
+
+    (it "returns true for diagonal down right of matching symbols in 3rd layer"
+      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
+        (should (sut/winning-diagonal-3d? board :O))))
+
+    (it "returns true for diagonal down right of matching symbols through 3 layers"
+      (let [board (assoc-in test-board-3x3x3/x-wins-with-14 [1 1 1] :X)]
+        (should (sut/winning-diagonal-3d? board :X))))
+
+    (it "returns true for diagonal down left of matching symbols through 3 layers"
+      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [0 0 2] :O)]
+        (should (sut/winning-diagonal-3d? board :O))))
+
+    ; FIXME need algorithm to solve
+    #_(it "returns true for 3d diagonal of matching symbols through 3 layers"
+        (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [2 0 2] :X)]
+          (should (sut/winning-diagonal-3d? board :X))))
+    )
 
   (context "win?"
 
