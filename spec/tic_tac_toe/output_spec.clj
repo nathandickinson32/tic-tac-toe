@@ -2,7 +2,8 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.output :as sut]
             [tic-tac-toe.test-boards-3x3-spec :as test-boards-3x3]
-            [tic-tac-toe.test-boards-4x4-spec :as test-boards-4x4]))
+            [tic-tac-toe.test-boards-4x4-spec :as test-boards-4x4]
+            [tic-tac-toe.test-boards-3x3x3-spec :as test-boards-3x3x3]))
 
 (describe "console output messages"
 
@@ -17,7 +18,7 @@
         (should= output (with-out-str (sut/invalid-token-response)))))
 
     (it "prints invalid input message when choosing a board size"
-      (let [output "Invalid Input. Please enter 3 or 4.\n"]
+      (let [output "Invalid Input. Please enter 3, 4 or 9.\n"]
         (should= output (with-out-str (sut/invalid-board-size-response)))))
     )
 
@@ -31,7 +32,7 @@
   (context "when building a game state"
 
     (it "asks the user what board size they want to play on"
-      (let [output "Choose a board size:\n3 (3x3)\n4 (4x4)\n"]
+      (let [output "Choose a board size:\n3 (3x3)\n4 (4x4)\n9 (3x3x3)\n"]
         (should= output (with-out-str (sut/choose-board-size)))))
 
     (it "asks the user to choose a player type"
@@ -56,6 +57,10 @@
     (it "returns 4x4 player prompt"
       (let [output "Player X Enter your move 1-16\n"]
         (should= output (with-out-str (sut/player-prompt-4x4 :X)))))
+
+    (it "returns 3x3x3 player prompt"
+      (let [output "Player X Enter your move 1-27\n"]
+        (should= output (with-out-str (sut/player-prompt-3x3x3 :X)))))
     )
 
   (context "printing 3x3 formatted boards"
@@ -185,7 +190,7 @@
                         "-----------------------------\n")]
         (should= output (with-out-str (sut/print-board-4x4 board)))))
 
-    (it "prints a 4x4 board with three in a row, down left middle row"
+    (it "prints a 4x4 board with three in a column, down left middle column"
       (let [board  (-> sut/starting-board-4x4 (assoc-in [0 1] \O)
                        (assoc-in [1 1] \O)
                        (assoc-in [2 1] \O)
@@ -235,6 +240,198 @@
         (should= output (with-out-str (sut/print-board-4x4 board)))))
     )
 
+  (context "printing 3x3x3 formatted boards"
+
+    (it "returns correct starting board for 3x3"
+      (should= test-boards-3x3x3/test-starting-board-3x3x3 sut/starting-board-3x3x3))
+
+    (it "prints an empty board"
+      (let [output (str "----------------------\n"
+                        "|   1  |   2  |   3  |\n"
+                        "----------------------\n"
+                        "|   4  |   5  |   6  |\n"
+                        "----------------------\n"
+                        "|   7  |   8  |   9  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  10  |  11  |  12  |\n"
+                        "----------------------\n"
+                        "|  13  |  14  |  15  |\n"
+                        "----------------------\n"
+                        "|  16  |  17  |  18  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  19  |  20  |  21  |\n"
+                        "----------------------\n"
+                        "|  22  |  23  |  24  |\n"
+                        "----------------------\n"
+                        "|  25  |  26  |  27  |\n"
+                        "----------------------\n\n")]
+        (should= output (with-out-str (sut/print-board-3x3x3 sut/starting-board-3x3x3)))))
+
+    (it "prints a 3x3x3 board after one move"
+      (let [board  [[["X" "2" "3"]
+                     ["4" "5" "6"]
+                     ["7" "8" "9"]]
+
+                    [["10" "11" "12"]
+                     ["13" "14" "15"]
+                     ["16" "17" "18"]]
+
+                    [["19" "20" "21"]
+                     ["22" "23" "24"]
+                     ["25" "26" "27"]]]
+
+            output (str "----------------------\n"
+                        "|   X  |   2  |   3  |\n"
+                        "----------------------\n"
+                        "|   4  |   5  |   6  |\n"
+                        "----------------------\n"
+                        "|   7  |   8  |   9  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  10  |  11  |  12  |\n"
+                        "----------------------\n"
+                        "|  13  |  14  |  15  |\n"
+                        "----------------------\n"
+                        "|  16  |  17  |  18  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  19  |  20  |  21  |\n"
+                        "----------------------\n"
+                        "|  22  |  23  |  24  |\n"
+                        "----------------------\n"
+                        "|  25  |  26  |  27  |\n"
+                        "----------------------\n\n")]
+        (should= output (with-out-str (sut/print-board-3x3x3 board)))))
+
+    (it "prints a 3x3x3 board when token is in first row"
+      (let [board  (assoc-in sut/starting-board-3x3x3 [0 0 2] "X")
+            output (str "----------------------\n"
+                        "|   1  |   2  |   X  |\n"
+                        "----------------------\n"
+                        "|   4  |   5  |   6  |\n"
+                        "----------------------\n"
+                        "|   7  |   8  |   9  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  10  |  11  |  12  |\n"
+                        "----------------------\n"
+                        "|  13  |  14  |  15  |\n"
+                        "----------------------\n"
+                        "|  16  |  17  |  18  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  19  |  20  |  21  |\n"
+                        "----------------------\n"
+                        "|  22  |  23  |  24  |\n"
+                        "----------------------\n"
+                        "|  25  |  26  |  27  |\n"
+                        "----------------------\n\n")]
+        (should= output (with-out-str (sut/print-board-3x3x3 board)))))
+
+    (it "prints a 3x3x3 board with three in a column, down middle column in second layer"
+      (let [board  (-> sut/starting-board-3x3x3 (assoc-in [1 0 1] "O")
+                       (assoc-in [1 1 1] "O")
+                       (assoc-in [1 2 1] "O"))
+            output (str "----------------------\n"
+                        "|   1  |   2  |   3  |\n"
+                        "----------------------\n"
+                        "|   4  |   5  |   6  |\n"
+                        "----------------------\n"
+                        "|   7  |   8  |   9  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  10  |   O  |  12  |\n"
+                        "----------------------\n"
+                        "|  13  |   O  |  15  |\n"
+                        "----------------------\n"
+                        "|  16  |   O  |  18  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  19  |  20  |  21  |\n"
+                        "----------------------\n"
+                        "|  22  |  23  |  24  |\n"
+                        "----------------------\n"
+                        "|  25  |  26  |  27  |\n"
+                        "----------------------\n\n")]
+        (should= output (with-out-str (sut/print-board-3x3x3 board)))))
+
+    (it "prints a 3x3x3 board with three in a row, across bottom row in 3rd layer"
+      (let [board  (-> sut/starting-board-3x3x3
+                       (assoc-in [2 2 0] "O")
+                       (assoc-in [2 2 1] "O")
+                       (assoc-in [2 2 2] "O"))
+            output (str "----------------------\n"
+                        "|   1  |   2  |   3  |\n"
+                        "----------------------\n"
+                        "|   4  |   5  |   6  |\n"
+                        "----------------------\n"
+                        "|   7  |   8  |   9  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  10  |  11  |  12  |\n"
+                        "----------------------\n"
+                        "|  13  |  14  |  15  |\n"
+                        "----------------------\n"
+                        "|  16  |  17  |  18  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|  19  |  20  |  21  |\n"
+                        "----------------------\n"
+                        "|  22  |  23  |  24  |\n"
+                        "----------------------\n"
+                        "|   O  |   O  |   O  |\n"
+                        "----------------------\n\n")]
+        (should= output (with-out-str (sut/print-board-3x3x3 board)))))
+
+    (it "prints a full 3x3x3 board"
+      (let [board  [[["X" "X" "O"]
+                     ["O" "O" "X"]
+                     ["X" "X" "O"]]
+
+                    [["X" "X" "O"]
+                     ["O" "O" "X"]
+                     ["X" "X" "O"]]
+
+                    [["X" "X" "O"]
+                     ["O" "O" "X"]
+                     ["X" "X" "O"]]]
+            output (str "----------------------\n"
+                        "|   X  |   X  |   O  |\n"
+                        "----------------------\n"
+                        "|   O  |   O  |   X  |\n"
+                        "----------------------\n"
+                        "|   X  |   X  |   O  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|   X  |   X  |   O  |\n"
+                        "----------------------\n"
+                        "|   O  |   O  |   X  |\n"
+                        "----------------------\n"
+                        "|   X  |   X  |   O  |\n"
+                        "----------------------\n\n"
+
+                        "----------------------\n"
+                        "|   X  |   X  |   O  |\n"
+                        "----------------------\n"
+                        "|   O  |   O  |   X  |\n"
+                        "----------------------\n"
+                        "|   X  |   X  |   O  |\n"
+                        "----------------------\n\n")]
+        (should= output (with-out-str (sut/print-board-3x3x3 board)))))
+    )
   (context "game-over"
 
     (it "returns winner message for X"
@@ -278,7 +475,8 @@
     (with-stubs)
 
     (redefs-around [sut/print-board-3x3 (stub :print-board-3x3)
-                    sut/print-board-4x4 (stub :print-board-4x4)])
+                    sut/print-board-4x4 (stub :print-board-4x4)
+                    sut/print-board-3x3x3 (stub :print-board-3x3x3)])
 
     (it "calls print-board-3x3 when board-size is 3x3"
       (sut/determine-board-to-print :3x3 sut/starting-board-3x3)
@@ -287,6 +485,10 @@
     (it "calls print-board-4x4 when board-size is 4x4"
       (sut/determine-board-to-print :4x4 sut/starting-board-4x4)
       (should-have-invoked :print-board-4x4 {:with [sut/starting-board-4x4]}))
+
+    (it "calls print-board-3x3x3 when board-size is 3x3x3"
+      (sut/determine-board-to-print :3x3x3 sut/starting-board-3x3x3)
+      (should-have-invoked :print-board-3x3x3 {:with [sut/starting-board-3x3x3]}))
     )
 
   (context "when determining what player prompt to print"
@@ -298,6 +500,10 @@
     (it "returns 4x4 player prompt"
       (let [output "Player O Enter your move 1-16\n"]
         (should= output (with-out-str (sut/determine-player-prompt-to-print :4x4 :O)))))
+
+    (it "returns 3x3x3 player prompt"
+      (let [output "Player O Enter your move 1-27\n"]
+        (should= output (with-out-str (sut/determine-player-prompt-to-print :3x3x3 :O)))))
     )
 
   (context "play again?"
