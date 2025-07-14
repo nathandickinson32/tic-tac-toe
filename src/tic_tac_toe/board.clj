@@ -17,10 +17,17 @@
         col (range 4)]
     [row col]))
 
+(def all-positions-3x3x3
+  (for [layer (range 3)
+        row   (range 3)
+        col   (range 3)]
+    [layer row col]))
+
 (defn ->positions-by-board-size [board-size]
-  (cond
-    (= :3x3 board-size) all-positions-3x3
-    (= :4x4 board-size) all-positions-4x4))
+  (condp = board-size
+    :3x3 all-positions-3x3
+    :4x4 all-positions-4x4
+    :3x3x3 all-positions-3x3x3))
 
 (defn switch-player [current-player]
   (if (= :X current-player)

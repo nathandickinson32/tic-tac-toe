@@ -3,6 +3,7 @@
             [speclj.core :refer :all]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
+            [tic-tac-toe.test-boards-3x3x3-spec :as test-board-3x3x3]
             [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]))
 
 (describe "board conditions"
@@ -21,6 +22,18 @@
                 [2 0] [2 1] [2 2] [2 3]
                 [3 0] [3 1] [3 2] [3 3]]
                (sort sut/all-positions-4x4)))
+
+    (it "gets all 27 board positions for 3x3x3 board"
+      (should= [[0 0 0] [0 0 1] [0 0 2]
+                [0 1 0] [0 1 1] [0 1 2]
+                [0 2 0] [0 2 1] [0 2 2]
+                [1 0 0] [1 0 1] [1 0 2]
+                [1 1 0] [1 1 1] [1 1 2]
+                [1 2 0] [1 2 1] [1 2 2]
+                [2 0 0] [2 0 1] [2 0 2]
+                [2 1 0] [2 1 1] [2 1 2]
+                [2 2 0] [2 2 1] [2 2 2]]
+               (sort sut/all-positions-3x3x3)))
     )
 
   (context "getting available 3x3 moves"
@@ -88,6 +101,64 @@
         (should-not-contain [3 3] (sut/available-moves test-board :4x4))))
     )
 
+  (context "getting available 3x3x3 moves"
+
+    (it "gets all positions when board-size is 3x3x3"
+      (should= sut/all-positions-3x3x3 (sut/->positions-by-board-size :3x3x3)))
+
+    (it "gets one available move 3x3x3"
+      (let [test-board
+            [[[:O :X :O]
+              [:X :X :O]
+              [:X :O "9"]]
+
+             [[:O :X :O]
+              [:X :X :O]
+              [:X :O :X]]
+
+             [[:O :X :O]
+              [:X :X :O]
+              [:X :O :X]]]]
+        (should= [[0 2 2]] (sut/available-moves test-board :3x3x3))))
+
+    (it "gets all available moves for 3x3x3"
+      (let [test-board
+            [[[:O :X :O]
+              ["4" :X "6"]
+              [:X :O \9]]
+
+             [[:O :X :O]
+              [:O :X "15"]
+              [:X :O :X]]
+
+             [[:O :X :O]
+              [:O :X "24"]
+              [:X :O "27"]]]]
+        (should= [[0 1 0] [0 1 2] [0 2 2]
+                  [1 1 2] [2 1 2] [2 2 2]] (sort (sut/available-moves test-board :3x3x3)))))
+
+    (it "does not contain moves that are taken for 3x3x3"
+      (let [test-board
+            [[[:X "2" "3"]
+              ["4" "5" "6"]
+              [:X "8" :O]]
+
+             [["10" "11" "12"]
+              ["13" "14" "15"]
+              [:X "17" :O]]
+
+             [["19" "20" "21"]
+              ["22" "23" "24"]
+              [:X "26" :O]]]]
+        (should-not-contain [0 0 0] (sut/available-moves test-board :3x3x3))
+        (should-not-contain [0 2 0] (sut/available-moves test-board :3x3x3))
+        (should-not-contain [0 2 2] (sut/available-moves test-board :3x3x3))
+        (should-not-contain [1 2 0] (sut/available-moves test-board :3x3x3))
+        (should-not-contain [1 2 2] (sut/available-moves test-board :3x3x3))
+        (should-not-contain [2 2 0] (sut/available-moves test-board :3x3x3))
+        (should-not-contain [2 2 2] (sut/available-moves test-board :3x3x3))))
+    )
+
   (context "make-move"
 
     (it "marks 3x3 grid with X"
@@ -121,6 +192,36 @@
         (should= test-board (sut/make-move output/starting-board-4x4 move :O))))
     )
 
+  (it "marks 3x3x3 grid with X"
+    (let [test-board [[["1" "2" "3"]
+                       ["4" :X "6"]
+                       ["7" "8" "9"]]
+
+                      [["10" "11" "12"]
+                       ["13" "14" "15"]
+                       ["16" "17" "18"]]
+
+                      [["19" "20" "21"]
+                       ["22" "23" "24"]
+                       ["25" "26" "27"]]]
+          move       [0 1 1]]
+      (should= test-board (sut/make-move output/starting-board-3x3x3 move :X))))
+
+  (it "marks 3x3x3 grid with O"
+    (let [test-board [[[:O "2" "3"]
+                       ["4" "5" "6"]
+                       ["7" "8" "9"]]
+
+                      [["10" "11" "12"]
+                       ["13" "14" "15"]
+                       ["16" "17" "18"]]
+
+                      [["19" "20" "21"]
+                       ["22" "23" "24"]
+                       ["25" "26" "27"]]]
+          move       [0 0 0]]
+      (should= test-board (sut/make-move output/starting-board-3x3x3 move :O))))
+
   (context "draw/tie game"
 
     (it "returns false when the 3x3 board has available spaces"
@@ -137,9 +238,15 @@
 
     (it "returns true when the 4x4 board is full with no winner"
       (should (sut/full-board? test-board-4x4/full-board)))
+
+    (it "returns false when the 3x3x3 board has available spaces"
+      (should-not (sut/full-board? test-board-3x3x3/test-starting-board-3x3x3)))
+
+    (it "returns true when the 3x3x3 board is full with no winner"
+      (should (sut/full-board? test-board-3x3x3/full-board)))
     )
 
-  (context "rows"
+  (context "2d rows"
 
     (it "returns false when no rows have all matching symbols"
       (should-not (sut/all-matching-tokens? (first test-board-3x3/top-winning-row-X) :O))
@@ -162,7 +269,7 @@
       (should (sut/winning-row? test-board-4x4/x-wins-top-row :X)))
     )
 
-  (context "columns"
+  (context "2d columns"
 
     (it "returns false when no cols have all matching symbols"
       (should-not (sut/winning-col? test-board-3x3/left-winning-col-X :O))
@@ -177,7 +284,7 @@
       (should (sut/winning-col? test-board-4x4/x-wins-left-col :X)))
     )
 
-  (context "diagonals"
+  (context "2d diagonals"
 
     (it "gets diagonal left for 3x3 board"
       (should= [:X :X :X] (sut/diagonal-right-3x3 test-board-3x3/diagonal-dright-win-X)))
@@ -212,7 +319,7 @@
       (should (sut/winning-diagonal? test-board-4x4/diagonal-dleft-win-O-4x4 :O :4x4)))
     )
 
-  (context "win?"
+  (context "2d win?"
 
     (it "no row, column or diagonal is filled by X"
       (should-not (sut/win? test-board-3x3/no-winners-board :X :3x3))
