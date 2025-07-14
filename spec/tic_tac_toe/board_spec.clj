@@ -319,7 +319,38 @@
       (should (sut/winning-diagonal? test-board-4x4/diagonal-dleft-win-O-4x4 :O :4x4)))
     )
 
-  (context "2d win?"
+
+
+
+  (context "3d rows"
+
+    (it "returns false when no rows have all matching symbols"
+      (should-not (sut/winning-3d-row? test-board-3x3x3/x-wins-with-14 :X)))
+
+    (it "returns true for a single row of matching symbols in 1st layer"
+      (should (sut/winning-3d-row? test-board-3x3x3/x-wins-top-top-layer :X))
+      )
+
+    (it "returns true for a single row of matching symbols in 2nd layer"
+      (let [board (assoc-in test-board-3x3x3/x-wins-with-14 [1 1 1] :X)]
+        (should (sut/winning-3d-row? board :X)))
+      )
+
+    (it "returns true for a single row of matching symbols in 3rd layer"
+      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
+        (should (sut/winning-3d-row? board :O)))
+      )
+    )
+
+
+
+
+
+
+
+
+
+  (context "win?"
 
     (it "no row, column or diagonal is filled by X"
       (should-not (sut/win? test-board-3x3/no-winners-board :X :3x3))

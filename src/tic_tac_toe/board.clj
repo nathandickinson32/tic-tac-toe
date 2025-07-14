@@ -76,6 +76,9 @@
 (defn winning-row? [board token]
   (some #(all-matching-tokens? % token) board))
 
+(defn winning-3d-row? [board token]
+  (some #(winning-row? % token) board))
+
 (defn winning-col? [board token]
   (let [columns-as-rows (apply mapv vector board)]
     (winning-row? columns-as-rows token)))
