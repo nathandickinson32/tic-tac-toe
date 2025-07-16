@@ -79,26 +79,28 @@
    [[0 2 0] [1 1 1] [2 0 2]]
    [[0 2 2] [1 1 1] [2 0 0]]])
 
-(defn ->yz-diagonals [x]
-  [(for [i (range 3)] [i x i])
-   (for [i (range 3)] [(- 2 i) x i])])
+(defn ->diagonals-from-x [x]
+  [[[0 x 0] [1 x 1] [2 x 2]]
+   [[2 x 0] [1 x 1] [0 x 2]]])
 
-(defn ->xz-diagonals [y]
-  [(for [i (range 3)] [i i y])
-   (for [i (range 3)] [(- 2 i) i y])])
+(defn ->diagonals-from-y [y]
+  [[[0 0 y] [1 1 y] [2 2 y]]
+   [[2 0 y] [1 1 y] [0 2 y]]])
 
-(defn ->x-diags []
-  (for [x       (range 3)
-        x-diags (->yz-diagonals x)] x-diags))
+(defn ->x-plane-diags []
+  (for [x         (range 3)
+        diagonals (->diagonals-from-x x)]
+    diagonals))
 
-(defn ->y-diags []
-  (for [y       (range 3)
-        y-diags (->xz-diagonals y)] y-diags))
+(defn ->y-plane-diags []
+  (for [y         (range 3)
+        diagonals (->diagonals-from-y y)]
+    diagonals))
 
 (defn ->all-diagonals []
   (concat
-    (->x-diags)
-    (->y-diags)))
+    (->x-plane-diags)
+    (->y-plane-diags)))
 
 (defn winning-row-2d? [board token]
   (some #(all-matching-tokens? % token) board))
@@ -162,7 +164,6 @@
             (winning-diag-line board token line))
           all-diagonals)))
 
-; FIXME need to add all 3D checks
 (defn winning-3d-options [board token]
   (or (winning-row-3d? board token)
       (winning-col-3d? board token)
