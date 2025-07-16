@@ -104,41 +104,33 @@
     (= token :O) (str red padded-token reset)
     :else padded-token))
 
-(defn format-4x4-board-space [token]
+(defn format-space [token padding]
   (let [token-str    (name token)
-        padded-token (format "%3s" token-str)]
+        padded-token (format padding token-str)]
     (colorize-token token padded-token)))
 
-(defn colorize-4x4-board [board]
-  (map #(format-4x4-board-space %) board))
-
-(defn print-board-4x4 [board]
+(defn print-board [board padding board-format]
   (->> board
        flatten
-       colorize-4x4-board
-       (apply format board-format-4x4)
+       (map #(format-space % padding))
+       (apply format board-format)
        print))
 
-(defn colorize-3x3-token [token]
-  (colorize-token token (name token)))
-
-(defn colorize-3x3-board [board]
-  (map #(map colorize-3x3-token %) board))
+(defn print-board-4x4 [board]
+  (print-board board "%3s" board-format-4x4))
 
 (defn print-board-3x3 [board]
-  (let [colorized-board (colorize-3x3-board board)]
-    (->> colorized-board
-         flatten
-         (apply format board-format-3x3)
-         print)))
+  (print-board board "%s" board-format-3x3))
 
 (defn print-board-3x3x3 [board]
   (doseq [layer board]
-    (->> layer
-         flatten
-         colorize-4x4-board
-         (apply format board-format-3x3x3)
-         print)))
+    (print-board layer "%3s" board-format-3x3x3)))
+
+(comment
+  (defmulti print-board-asdfsadf (fn [board-size _board] board-size))
+
+  (defmethod print-board-asdfsadf :3x3 [_ board]
+    (print-board board "%s" board-format-3x3)))
 
 (defn determine-board-to-print [board-size board]
   (condp = board-size
@@ -147,7 +139,7 @@
     :3x3x3 (print-board-3x3x3 board)))
 
 (defn winner-message [token]
-  (println (colorize-3x3-token token) "wins!"))
+  (println (format-space token "%s") "wins!"))
 
 (defn draw-message []
   (println "It's a tie!"))

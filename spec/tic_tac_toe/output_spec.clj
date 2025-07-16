@@ -144,8 +144,6 @@
 
   (context "printing 4x4 formatted boards"
 
-    (redefs-around [sut/format-4x4-board-space identity])
-
     (it "returns correct starting board for 4x4"
       (should= test-boards-4x4/test-starting-board-4x4 sut/starting-board-4x4))
 
@@ -162,12 +160,12 @@
         (should= output (with-out-str (sut/print-board-4x4 sut/starting-board-4x4)))))
 
     (it "prints a 4x4 board after one move"
-      (let [board  [[\X "2" "3" "4"]
+      (let [board  [[:X "2" "3" "4"]
                     ["5" "6" "7" "8"]
                     ["9" "10" "11" "12"]
                     ["13" "14" "15" "16"]]
             output (str "-----------------------------\n"
-                        "|   X  |   2  |   3  |   4  |\n"
+                        "| " sut/green "  X" sut/reset "  |   2  |   3  |   4  |\n"
                         "-----------------------------\n"
                         "|   5  |   6  |   7  |   8  |\n"
                         "-----------------------------\n"
@@ -178,9 +176,9 @@
         (should= output (with-out-str (sut/print-board-4x4 board)))))
 
     (it "prints a 4x4 board when token is in first row"
-      (let [board  (assoc-in sut/starting-board-4x4 [0 3] \X)
+      (let [board  (assoc-in sut/starting-board-4x4 [0 3] :X)
             output (str "-----------------------------\n"
-                        "|   1  |   2  |   3  |   X  |\n"
+                        "|   1  |   2  |   3  | " sut/green "  X" sut/reset "  |\n"
                         "-----------------------------\n"
                         "|   5  |   6  |   7  |   8  |\n"
                         "-----------------------------\n"
@@ -191,31 +189,33 @@
         (should= output (with-out-str (sut/print-board-4x4 board)))))
 
     (it "prints a 4x4 board with three in a column, down left middle column"
-      (let [board  (-> sut/starting-board-4x4 (assoc-in [0 1] \O)
-                       (assoc-in [1 1] \O)
-                       (assoc-in [2 1] \O)
-                       (assoc-in [3 1] \O))
+      (let [board  (-> sut/starting-board-4x4
+                       (assoc-in [0 1] :O)
+                       (assoc-in [1 1] :O)
+                       (assoc-in [2 1] :O)
+                       (assoc-in [3 1] :O))
             output (str "-----------------------------\n"
-                        "|   1  |   O  |   3  |   4  |\n"
+                        "|   1  | " sut/red "  O" sut/reset "  |   3  |   4  |\n"
                         "-----------------------------\n"
-                        "|   5  |   O  |   7  |   8  |\n"
+                        "|   5  | " sut/red "  O" sut/reset "  |   7  |   8  |\n"
                         "-----------------------------\n"
-                        "|   9  |   O  |  11  |  12  |\n"
+                        "|   9  | " sut/red "  O" sut/reset "  |  11  |  12  |\n"
                         "-----------------------------\n"
-                        "|  13  |   O  |  15  |  16  |\n"
+                        "|  13  | " sut/red "  O" sut/reset "  |  15  |  16  |\n"
                         "-----------------------------\n")]
         (should= output (with-out-str (sut/print-board-4x4 board)))))
 
     (it "prints a 4x4 board with three in a row, across the upper middle row"
       (let [board  (-> sut/starting-board-4x4
-                       (assoc-in [1 0] \O)
-                       (assoc-in [1 1] \O)
-                       (assoc-in [1 2] \O)
-                       (assoc-in [1 3] \O))
+                       (assoc-in [1 0] :O)
+                       (assoc-in [1 1] :O)
+                       (assoc-in [1 2] :O)
+                       (assoc-in [1 3] :O))
+            o      (str sut/red "  O" sut/reset)
             output (str "-----------------------------\n"
                         "|   1  |   2  |   3  |   4  |\n"
                         "-----------------------------\n"
-                        "|   O  |   O  |   O  |   O  |\n"
+                        "| " o "  | " o "  | " o "  | " o "  |\n"
                         "-----------------------------\n"
                         "|   9  |  10  |  11  |  12  |\n"
                         "-----------------------------\n"
@@ -224,18 +224,20 @@
         (should= output (with-out-str (sut/print-board-4x4 board)))))
 
     (it "prints a full 4x4 board"
-      (let [board  [[\X \X \X \O]
-                    [\O \O \X \O]
-                    [\X \X \O \O]
-                    [\X \O \O \X]]
+      (let [board  [[:X :X :X :O]
+                    [:O :O :X :O]
+                    [:X :X :O :O]
+                    [:X :O :O :X]]
+            o      (str sut/red "  O" sut/reset)
+            x      (str sut/green "  X" sut/reset)
             output (str "-----------------------------\n"
-                        "|   X  |   X  |   X  |   O  |\n"
+                        "| " x "  | " x "  | " x "  | " o "  |\n"
                         "-----------------------------\n"
-                        "|   O  |   O  |   X  |   O  |\n"
+                        "| " o "  | " o "  | " x "  | " o "  |\n"
                         "-----------------------------\n"
-                        "|   X  |   X  |   O  |   O  |\n"
+                        "| " x "  | " x "  | " o "  | " o "  |\n"
                         "-----------------------------\n"
-                        "|   X  |   O  |   O  |   X  |\n"
+                        "| " x "  | " o "  | " o "  | " x "  |\n"
                         "-----------------------------\n")]
         (should= output (with-out-str (sut/print-board-4x4 board)))))
     )
@@ -460,15 +462,6 @@
 
     (it "resets the color"
       (should= "\u001B[0m" sut/reset))
-    )
-
-  (context "when printing the tokens on 4x4 board"
-
-    (it "prints padded X token in green"
-      (should= (str sut/green "  X" sut/reset) (sut/format-4x4-board-space :X)))
-
-    (it "prints padded X token in green"
-      (should= (str sut/red "  O" sut/reset) (sut/format-4x4-board-space :O)))
     )
 
   (context "when determining what board to print"

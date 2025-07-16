@@ -319,72 +319,216 @@
       (should (sut/winning-diagonal? test-board-4x4/diagonal-dleft-win-O-4x4 :O :4x4)))
     )
 
-  (context "3d rows"
+  (context "2D win conditions for 3D board"
 
-    (it "returns false when no rows have all matching symbols"
-      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
-        (should-not (sut/winning-row-3d? board :X))))
+    (context "3d rows"
 
-    (it "returns true for a single row of matching symbols in 1st layer"
-      (should (sut/winning-row-3d? test-board-3x3x3/x-wins-top-row-top-layer :X)))
+      (it "returns false when no rows have all matching symbols"
+        (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
+          (should-not (sut/winning-row-3d? board :X))))
 
-    (it "returns true for a single row of matching symbols in 2nd layer"
-      (let [board (assoc-in test-board-3x3x3/x-wins-with-14 [1 1 1] :X)]
-        (should (sut/winning-row-3d? board :X))))
+      (it "returns true for a single row of matching symbols in 1st layer"
+        (should (sut/winning-row-3d? test-board-3x3x3/x-wins-top-row-top-layer :X)))
 
-    (it "returns true for a single row of matching symbols in 3rd layer"
-      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
-        (should (sut/winning-row-3d? board :O))))
-    )
+      (it "returns true for a single row of matching symbols in 2nd layer"
+        (let [board (assoc-in test-board-3x3x3/x-wins-with-14 [1 1 1] :X)]
+          (should (sut/winning-row-3d? board :X))))
 
-  (context "3d columns"
+      (it "returns true for a single row of matching symbols in 3rd layer"
+        (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
+          (should (sut/winning-row-3d? board :O))))
+      )
 
-    (it "returns false when no columns have all matching symbols"
-      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
-        (should-not (sut/winning-col-3d? board :X))))
+    (context "3d columns"
 
-    (it "returns true for a single row of matching symbols in 1st layer"
-      (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [1 2 0] :O)]
-        (should (sut/winning-col-3d? board :O))))
+      (it "returns false when no columns have all matching symbols"
+        (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
+          (should-not (sut/winning-col-3d? board :X))))
 
-    (it "returns true for a single row of matching symbols in 2nd layer"
-      (let [board (assoc-in test-board-3x3x3/x-wins-with-14 [1 1 1] :X)]
-        (should (sut/winning-col-3d? board :X))))
+      (it "returns true for a single row of matching symbols in 1st layer"
+        (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [1 2 0] :O)]
+          (should (sut/winning-col-3d? board :O))))
 
-    (it "returns true for a single row of matching symbols in 3rd layer"
-      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 0 1] :O)]
-        (should (sut/winning-col-3d? board :O))))
-    )
+      (it "returns true for a single row of matching symbols in 2nd layer"
+        (let [board (assoc-in test-board-3x3x3/x-wins-with-14 [1 1 1] :X)]
+          (should (sut/winning-col-3d? board :X))))
 
-  (context "3d diagonals"
+      (it "returns true for a single row of matching symbols in 3rd layer"
+        (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 0 1] :O)]
+          (should (sut/winning-col-3d? board :O))))
+      )
 
-    (it "false for not same symbol diagonal"
-      (should-not (sut/winning-diagonal-3d? test-board-3x3x3/O-wins-with-27 :O)))
+    (context "3d diagonals"
 
-    (it "returns true for diagonal down right of matching symbols in 1st layer"
-      (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [0 2 2] :X)]
-        (should (sut/winning-diagonal-3d? board :X))))
+      (it "false for not same symbol diagonal"
+        (should-not (sut/winning-diagonal-3d? test-board-3x3x3/O-wins-with-27 :O)))
 
-    (it "returns true for diagonal down right of matching symbols in 2nd layer"
-      (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [1 2 2] :O)]
-        (should (sut/winning-diagonal-3d? board :O))))
-
-    (it "returns true for diagonal down right of matching symbols in 3rd layer"
-      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
-        (should (sut/winning-diagonal-3d? board :O))))
-
-    (it "returns true for diagonal down right of matching symbols through 3 layers"
-      (let [board (assoc-in test-board-3x3x3/x-wins-with-14 [1 1 1] :X)]
-        (should (sut/winning-diagonal-3d? board :X))))
-
-    (it "returns true for diagonal down left of matching symbols through 3 layers"
-      (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [0 0 2] :O)]
-        (should (sut/winning-diagonal-3d? board :O))))
-
-    ; FIXME need algorithm to solve
-    #_(it "returns true for 3d diagonal of matching symbols through 3 layers"
-        (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [2 0 2] :X)]
+      (it "returns true for diagonal down right of matching symbols in 1st layer"
+        (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [0 2 2] :X)]
           (should (sut/winning-diagonal-3d? board :X))))
+
+      (it "returns true for diagonal down right of matching symbols in 2nd layer"
+        (let [board (assoc-in test-board-3x3x3/x-wins-top-row-top-layer [1 2 2] :O)]
+          (should (sut/winning-diagonal-3d? board :O))))
+
+      (it "returns true for diagonal down right of matching symbols in 3rd layer"
+        (let [board (assoc-in test-board-3x3x3/O-wins-with-27 [2 2 2] :O)]
+          (should (sut/winning-diagonal-3d? board :O))))
+      )
+    )
+
+  (context "wins across 3 dimensions"
+
+    (context "pillar wins"
+
+      (it "false for no winner"
+        (let [board test-board-3x3x3/test-starting-board-3x3x3]
+          (should-not (sut/winning-line-3d? board :X))))
+
+      (it "X wins top left pillar"
+        (let [board test-board-3x3x3/x-wins-pillar-1]
+          (should (sut/winning-line-3d? board :X))))
+
+      (it "O wins top middle pillar"
+        (let [board [[["1" :O "6"]
+                      ["4" "5" "6"]
+                      ["7" "8" "9"]]
+
+                     [["10" :O "12"]
+                      ["13" "14" "15"]
+                      ["16" "17" "18"]]
+
+                     [["19" :O "21"]
+                      ["22" "23" "24"]
+                      ["25" "26" "27"]]]]
+          (should (sut/winning-line-3d? board :O))))
+
+      (it "X wins top right pillar"
+        (let [board [[["1" "2" :X]
+                      ["4" "5" "6"]
+                      ["7" "8" "9"]]
+
+                     [["10" "11" :X]
+                      ["13" "14" "15"]
+                      ["16" "17" "18"]]
+
+                     [["19" "20" :X]
+                      ["22" "23" "24"]
+                      ["25" "26" "27"]]]]
+          (should (sut/winning-line-3d? board :X))))
+
+      (it "X wins middle left pillar"
+        (let [board [[["1" "2" "3"]
+                      [:X "5" "6"]
+                      ["7" "8" "9"]]
+
+                     [["10" "11" "12"]
+                      [:X "14" "15"]
+                      ["16" "17" "18"]]
+
+                     [["19" "20" "21"]
+                      [:X "23" "24"]
+                      ["25" "26" "27"]]]]
+          (should (sut/winning-line-3d? board :X))))
+
+      (it "X wins bottom right pillar"
+        (let [board [[["1" "2" "3"]
+                      ["4" "5" "6"]
+                      ["7" "8" :X]]
+
+                     [["10" "11" "12"]
+                      ["13" "14" "15"]
+                      ["16" "17" :X]]
+
+                     [["19" "20" "21"]
+                      ["22" "23" "24"]
+                      ["25" "26" :X]]]]
+          (should (sut/winning-line-3d? board :X))))
+      )
+
+    (context "diagonal wins through middle"
+
+      (it "x wins from [0 0 0]"
+        (let [board test-board-3x3x3/x-wins-center-diag-3d]
+          (should (sut/winning-center-diag-3d? board :X))))
+
+      (it "x wins from [0 0 2]"
+        (let [board [[["1" "2" :X]
+                      ["4" "5" "6"]
+                      ["7" "8" "9"]]
+
+                     [["10" "11" "12"]
+                      ["13" :X "15"]
+                      ["16" "17" "18"]]
+
+                     [["19" "20" "21"]
+                      ["22" "23" "24"]
+                      [:X "26" "27"]]]]
+          (should (sut/winning-center-diag-3d? board :X))))
+
+      (it "x wins from [0 2 0]"
+        (let [board [[["1" "2" "3"]
+                      ["4" "5" "6"]
+                      [:X "8" "9"]]
+
+                     [["10" "11" "12"]
+                      ["13" :X "15"]
+                      ["16" "17" "18"]]
+
+                     [["19" "20" :X]
+                      ["22" "23" "24"]
+                      ["25" "26" "27"]]]]
+          (should (sut/winning-center-diag-3d? board :X))))
+
+      (it "x wins from [0 2 2]"
+        (let [board [[["1" "2" "3"]
+                      ["4" "5" "6"]
+                      ["7" "8" :X]]
+
+                     [["10" "11" "12"]
+                      ["13" :X "15"]
+                      ["16" "17" "18"]]
+
+                     [[:X "20" "21"]
+                      ["22" "23" "24"]
+                      ["25" "26" "27"]]]]
+          (should (sut/winning-center-diag-3d? board :X))))
+      )
+
+    (context "diagonal wins not through center"
+
+      (it "x wins from [0 0 0]"
+        (let [board [[[:X "2" "3"]
+                      ["4" "5" "6"]
+                      ["7" "8" "9"]]
+
+                     [["10" :X "12"]
+                      ["13" "14" "15"]
+                      ["16" "17" "18"]]
+
+                     [["19" "20" :X]
+                      ["22" "23" "24"]
+                      ["25" "26" "27"]]]]
+          (should (sut/winning-diag-line-3d? board :X))))
+
+      (it "x wins from [0 0 2]"
+        (let [board [[["1" "2" :X]
+                      ["4" "5" "6"]
+                      ["7" "8" "9"]]
+
+                     [["10" :X "12"]
+                      ["13" "14" "15"]
+                      ["16" "17" "18"]]
+
+                     [[:X "20" "21"]
+                      ["22" "23" "24"]
+                      ["25" "26" "27"]]]]
+          (should (sut/winning-diag-line-3d? board :X))))
+
+      (it "x wins from [0 1 0]"
+        (let [board test-board-3x3x3/x-wins-off-center-diag-3d]
+          (should (sut/winning-diag-line-3d? board :X))))
+      )
     )
 
   (context "win?"
@@ -392,8 +536,7 @@
     (it "no row, column or diagonal is filled by X"
       (should-not (sut/win? test-board-3x3/no-winners-board :X :3x3))
       (should-not (sut/win? test-board-4x4/x-wins-with-1 :X :4x4))
-      (should-not (sut/win? test-board-3x3x3/x-wins-with-14 :X :3x3x3))
-      )
+      (should-not (sut/win? test-board-3x3x3/x-wins-with-14 :X :3x3x3)))
 
     (it "no row, column or diagonal is filled by O"
       (should-not (sut/win? test-board-3x3/no-winners-board :O :3x3))
@@ -420,6 +563,11 @@
       (should (sut/win? test-board-3x3/diagonal-dleft-win-O :O :3x3))
       (should (sut/win? test-board-3x3/diagonal-dright-win-O :O :3x3))
       (should (sut/win? test-board-4x4/diagonal-dright-win-X-4x4 :X :4x4)))
+
+    (it "checks for 3D wins"
+      (should (sut/win? test-board-3x3x3/x-wins-pillar-1 :X :3x3x3))
+      (should (sut/win? test-board-3x3x3/x-wins-center-diag-3d :X :3x3x3))
+      (should (sut/win? test-board-3x3x3/x-wins-off-center-diag-3d :X :3x3x3)))
     )
 
   (context "switching player"

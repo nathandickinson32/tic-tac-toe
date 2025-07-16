@@ -73,15 +73,32 @@
    (get-in board [2 1])
    (get-in board [3 0])])
 
-(defn diagonal-right-3d [board]
-  [(get-in board [0 0 0])
-   (get-in board [1 1 1])
-   (get-in board [2 2 2])])
+(def center-line-diagonals
+  [[[0 0 0] [1 1 1] [2 2 2]]
+   [[0 0 2] [1 1 1] [2 2 0]]
+   [[0 2 0] [1 1 1] [2 0 2]]
+   [[0 2 2] [1 1 1] [2 0 0]]])
 
-(defn diagonal-left-3d [board]
-  [(get-in board [0 0 2])
-   (get-in board [1 1 1])
-   (get-in board [2 2 0])])
+(defn ->yz-diagonals [x]
+  [(for [i (range 3)] [i x i])
+   (for [i (range 3)] [(- 2 i) x i])])
+
+(defn ->xz-diagonals [y]
+  [(for [i (range 3)] [i i y])
+   (for [i (range 3)] [(- 2 i) i y])])
+
+(defn ->x-diags []
+  (for [x       (range 3)
+        x-diags (->yz-diagonals x)] x-diags))
+
+(defn ->y-diags []
+  (for [y       (range 3)
+        y-diags (->xz-diagonals y)] y-diags))
+
+(defn ->all-diagonals []
+  (concat
+    (->x-diags)
+    (->y-diags)))
 
 (defn winning-row-2d? [board token]
   (some #(all-matching-tokens? % token) board))
@@ -100,12 +117,8 @@
   (or (all-matching-tokens? (diagonal-right-3x3 board) token)
       (all-matching-tokens? (diagonal-left-3x3 board) token)))
 
-; FIXME need algorithm to solve for all 3d diagonals
 (defn winning-diagonal-3d? [board token]
-  (or
-    (or (all-matching-tokens? (diagonal-right-3d board) token)
-        (all-matching-tokens? (diagonal-left-3d board) token))
-    (some #(winning-diagonal-3x3? % token) board)))
+  (some #(winning-diagonal-3x3? % token) board))
 
 (defn winning-diagonal-4x4? [board token]
   (or (all-matching-tokens? (diagonal-right-4x4 board) token)
@@ -116,11 +129,46 @@
     (winning-diagonal-3x3? board token)
     (winning-diagonal-4x4? board token)))
 
-; FIXME need to add all diagonal checks
+(defn ->board-values [board line]
+  (map #(get-in board %) line))
+
+(defn winning-3d-line [board token [x y]]
+  (let [line   (for [z (range 3)] [z x y])
+        values (->board-values board line)]
+    (all-matching-tokens? values token)))
+
+(defn winning-line-3d? [board token]
+  (some (fn [[x y]]
+          (winning-3d-line board token [x y]))
+        all-positions-3x3))
+
+(defn winning-center-line [board line token]
+  (let [values (->board-values board line)]
+    (all-matching-tokens? values token)))
+
+(defn winning-center-diag-3d? [board token]
+  (let [lines center-line-diagonals]
+    (some (fn [line]
+            (winning-center-line board line token))
+          lines)))
+
+(defn winning-diag-line [board token line]
+  (let [values (->board-values board line)]
+    (all-matching-tokens? values token)))
+
+(defn winning-diag-line-3d? [board token]
+  (let [all-diagonals (->all-diagonals)]
+    (some (fn [line]
+            (winning-diag-line board token line))
+          all-diagonals)))
+
+; FIXME need to add all 3D checks
 (defn winning-3d-options [board token]
   (or (winning-row-3d? board token)
       (winning-col-3d? board token)
-      (winning-diagonal-3d? board token)))
+      (winning-line-3d? board token)
+      (winning-center-diag-3d? board token)
+      (winning-diag-line-3d? board token)))
 
 (defn winning-2d-options [board token board-size]
   (or (winning-row-2d? board token)
