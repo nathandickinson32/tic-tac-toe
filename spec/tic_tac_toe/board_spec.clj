@@ -450,7 +450,7 @@
 
       (it "x wins from [0 0 0]"
         (let [board test-board-3x3x3/x-wins-center-diagR-3d]
-          (should (sut/winning-center-diag-3d? board :X))))
+          (should (sut/winning-diag-line-3d? board :X))))
 
       (it "x wins from [0 0 2]"
         (let [board [[["1" "2" :X]
@@ -464,7 +464,7 @@
                      [["19" "20" "21"]
                       ["22" "23" "24"]
                       [:X "26" "27"]]]]
-          (should (sut/winning-center-diag-3d? board :X))))
+          (should (sut/winning-diag-line-3d? board :X))))
 
       (it "x wins from [0 2 0]"
         (let [board [[["1" "2" "3"]
@@ -478,7 +478,7 @@
                      [["19" "20" :X]
                       ["22" "23" "24"]
                       ["25" "26" "27"]]]]
-          (should (sut/winning-center-diag-3d? board :X))))
+          (should (sut/winning-diag-line-3d? board :X))))
 
       (it "x wins from [0 2 2]"
         (let [board [[["1" "2" "3"]
@@ -492,7 +492,7 @@
                      [[:X "20" "21"]
                       ["22" "23" "24"]
                       ["25" "26" "27"]]]]
-          (should (sut/winning-center-diag-3d? board :X))))
+          (should (sut/winning-diag-line-3d? board :X))))
       )
 
     (context "diagonal wins not through center"

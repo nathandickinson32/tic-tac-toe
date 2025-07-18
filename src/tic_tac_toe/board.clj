@@ -102,7 +102,8 @@
 (defn ->all-diagonals []
   (concat
     (->x-plane-diags)
-    (->y-plane-diags)))
+    (->y-plane-diags)
+    center-line-diagonals))
 
 (defn winning-row-2d? [board token]
   (some #(all-matching-tokens? % token) board))
@@ -146,16 +147,6 @@
           (winning-3d-line board token [x y]))
         all-positions-3x3))
 
-(defn winning-center-line [board line token]
-  (let [values (->board-values board line)]
-    (all-matching-tokens? values token)))
-
-(defn winning-center-diag-3d? [board token]
-  (let [lines center-line-diagonals]
-    (some (fn [line]
-            (winning-center-line board line token))
-          lines)))
-
 (defn winning-diag-line [board token line]
   (let [values (->board-values board line)]
     (all-matching-tokens? values token)))
@@ -170,7 +161,6 @@
   (or (winning-row-3d? board token)
       (winning-col-3d? board token)
       (winning-line-3d? board token)
-      (winning-center-diag-3d? board token)
       (winning-diag-line-3d? board token)))
 
 (defn winning-2d-options [board token board-size]
