@@ -45,14 +45,14 @@
       (let [test-board
             [[:O :X :O]
              [:X :X :O]
-             [:X :O \9]]]
+             [:X :O "9"]]]
         (should= [[2 2]] (sut/available-moves test-board :3x3))))
 
     (it "gets all available moves for 3x3"
       (let [test-board
             [[:O :X :O]
-             [\4 :X \6]
-             [:X :O \9]]]
+             ["4" :X "6"]
+             [:X :O "9"]]]
         (should= [[1 0] [1 2] [2 2]] (sort (sut/available-moves test-board :3x3)))))
 
     (it "does not contain moves that are taken for 3x3"
@@ -83,8 +83,8 @@
 
     (it "gets all available moves for 4x4"
       (let [test-board
-            [[:O \2 :O :X]
-             [\5 :X :O :X]
+            [[:O "2" :O :X]
+             ["5" :X :O :X]
              [:X :O "11" :O]
              [:O :X :O "16"]]]
         (should= [[0 1] [1 0] [2 2] [3 3]] (sort (sut/available-moves test-board :4x4)))))
@@ -125,7 +125,7 @@
       (let [test-board
             [[[:O :X :O]
               ["4" :X "6"]
-              [:X :O \9]]
+              [:X :O "9"]]
 
              [[:O :X :O]
               [:O :X "15"]
@@ -449,7 +449,7 @@
     (context "diagonal wins through middle"
 
       (it "x wins from [0 0 0]"
-        (let [board test-board-3x3x3/x-wins-center-diag-3d]
+        (let [board test-board-3x3x3/x-wins-center-diagR-3d]
           (should (sut/winning-center-diag-3d? board :X))))
 
       (it "x wins from [0 0 2]"
@@ -525,8 +525,12 @@
                       ["25" "26" "27"]]]]
           (should (sut/winning-diag-line-3d? board :X))))
 
-      (it "x wins from [0 1 0]"
-        (let [board test-board-3x3x3/x-wins-off-center-diag-3d]
+      (it "x wins from x plane diagonal"
+        (let [board test-board-3x3x3/x-wins-x-plane-diag-3d]
+          (should (sut/winning-diag-line-3d? board :X))))
+
+      (it "x wins from y plane diagonal"
+        (let [board test-board-3x3x3/x-wins-y-plane-diag-3d]
           (should (sut/winning-diag-line-3d? board :X))))
       )
     )
@@ -566,8 +570,11 @@
 
     (it "checks for 3D wins"
       (should (sut/win? test-board-3x3x3/x-wins-pillar-1 :X :3x3x3))
-      (should (sut/win? test-board-3x3x3/x-wins-center-diag-3d :X :3x3x3))
-      (should (sut/win? test-board-3x3x3/x-wins-off-center-diag-3d :X :3x3x3)))
+      (should (sut/win? test-board-3x3x3/x-wins-center-diagR-3d :X :3x3x3))
+      (should (sut/win? test-board-3x3x3/x-wins-y-plane-diag-3d :X :3x3x3))
+      (should (sut/win? test-board-3x3x3/o-wins-y-plane-diag-3d :O :3x3x3))
+      (should (sut/win? test-board-3x3x3/x-wins-x-plane-diag-3d :X :3x3x3))
+      (should (sut/win? test-board-3x3x3/o-wins-x-plane-diag-3d :O :3x3x3)))
     )
 
   (context "switching player"

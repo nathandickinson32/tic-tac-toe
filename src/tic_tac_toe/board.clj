@@ -46,7 +46,9 @@
   (assoc-in board move token))
 
 (defn full-board? [board]
-  (every? #{:X :O} (flatten board)))
+  (every? #(contains? #{:X :O} %)
+          (flatten (mapcat flatten board))))
+
 
 (defn all-matching-tokens? [row token]
   (every? #(= % token) row))
