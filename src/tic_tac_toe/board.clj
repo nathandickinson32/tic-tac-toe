@@ -45,9 +45,11 @@
 (defn make-move [board move token]
   (assoc-in board move token))
 
-(defn full-board? [board]
-  (every? #(contains? #{:X :O} %)
-          (flatten (mapcat flatten board))))
+(defn full-board? [board board-size]
+  (if (= :3x3x3 board-size)
+    (every? #(contains? #{:X :O} %)
+          (flatten (mapcat flatten board)))
+    (every? #(contains? #{:X :O} %) (flatten board))))
 
 
 (defn all-matching-tokens? [row token]
@@ -176,4 +178,4 @@
 (defn game-over? [board token board-size]
   (cond
     (win? board token board-size) (do (output/winner-message token) true)
-    (full-board? board) (do (output/draw-message) true)))
+    (full-board? board board-size) (do (output/draw-message) true)))

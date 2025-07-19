@@ -5,7 +5,7 @@
 (defn end-game? [board board-size]
   (or (board/win? board :X board-size)
       (board/win? board :O board-size)
-      (board/full-board? board)))
+      (board/full-board? board board-size)))
 
 (defn game-over? [board board-size depth]
   (cond

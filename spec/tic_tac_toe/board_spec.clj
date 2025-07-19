@@ -225,25 +225,25 @@
   (context "draw/tie game"
 
     (it "returns false when the 3x3 board has available spaces"
-      (should-not (sut/full-board? test-board-3x3/next-move-wins-X-O))
-      (should-not (sut/full-board? test-board-3x3/left-winning-col-X))
-      (should-not (sut/full-board? test-board-3x3/top-winning-row-X)))
+      (should-not (sut/full-board? test-board-3x3/next-move-wins-X-O :3x3))
+      (should-not (sut/full-board? test-board-3x3/left-winning-col-X :3x3))
+      (should-not (sut/full-board? test-board-3x3/top-winning-row-X :3x3)))
 
     (it "returns true when the 3x3 board is full with no winner"
-      (should (sut/full-board? test-board-3x3/full-board))
-      (should (sut/full-board? test-board-3x3/full-board2)))
+      (should (sut/full-board? test-board-3x3/full-board :3x3))
+      (should (sut/full-board? test-board-3x3/full-board2 :3x3)))
 
     (it "returns false when the 4x4 board has available spaces"
-      (should-not (sut/full-board? test-board-4x4/test-starting-board-4x4)))
+      (should-not (sut/full-board? test-board-4x4/test-starting-board-4x4 :4x4)))
 
     (it "returns true when the 4x4 board is full with no winner"
-      (should (sut/full-board? test-board-4x4/full-board)))
+      (should (sut/full-board? test-board-4x4/full-board :4x4)))
 
     (it "returns false when the 3x3x3 board has available spaces"
-      (should-not (sut/full-board? test-board-3x3x3/test-starting-board-3x3x3)))
+      (should-not (sut/full-board? test-board-3x3x3/test-starting-board-3x3x3 :3x3x3)))
 
     (it "returns true when the 3x3x3 board is full with no winner"
-      (should (sut/full-board? test-board-3x3x3/full-board)))
+      (should (sut/full-board? test-board-3x3x3/full-board :3x3x3)))
     )
 
   (context "2d rows"

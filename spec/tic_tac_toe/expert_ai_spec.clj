@@ -57,7 +57,7 @@
 
 (defn ai-win-every-game [all-finished-games token board-size]
   (every? #(or (board/win? (first %) token board-size)
-               (board/full-board? (first %)))
+               (board/full-board? (first %) board-size))
           all-finished-games))
 
 (describe "Expert AI"
