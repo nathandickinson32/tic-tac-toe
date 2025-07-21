@@ -163,6 +163,7 @@
   (or (winning-row-3d? board token)
       (winning-col-3d? board token)
       (winning-line-3d? board token)
+      (winning-diagonal-3d? board token)
       (winning-diag-line-3d? board token)))
 
 (defn winning-2d-options [board token board-size]
