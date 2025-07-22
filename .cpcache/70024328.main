@@ -1,0 +1,8 @@
+-m
+speclj.cloverage
+-c
+--
+-p
+src
+-s
+spec

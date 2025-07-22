@@ -16,5 +16,13 @@
       (let [board (board/make-move test-board/full-board [0 1] \2)
             state {:X :medium-ai :O :human :board board :current-token :X :depth 8 :board-size :3x3}]
         (should= [0 1] (->player-move state))))
+
+    ;(it "moves with easy ai"
+    ;  (with-redefs [sut/medium-ai-moves [:easy-ai]]
+    ;    (should= [0 0] nil)))
+    ;
+    ;(it "moves with expert ai"
+    ;  (with-redefs [sut/medium-ai-moves [:expert-ai]]
+    ;    (should= [0 0] nil)))
     )
   )
