@@ -6,7 +6,7 @@
 
 (defn -main [& args]
   (output/greeting)
-  (game/build-game-state))
+  (game/start-game))
 
 #_(defn -main [& args]
   (prn "args:" args)
@@ -14,5 +14,5 @@
     ;replay
     (do
       (output/greeting)
-      (game/build-game-state)))
+      (game/start-new-game)))
   )

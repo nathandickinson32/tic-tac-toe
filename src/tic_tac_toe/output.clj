@@ -146,3 +146,6 @@
 
 (defn play-again? []
   (println "Would you like to play again? Y/N"))
+
+(defn finish-last-game? []
+  (println "Your last game was left unfinished.\nWould you like to resume? Y/N"))

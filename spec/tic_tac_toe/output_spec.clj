@@ -505,4 +505,11 @@
       (let [output (str "Would you like to play again? Y/N\n")]
         (should= output (with-out-str (sut/play-again?)))))
     )
+
+  (context "finish last game prompt"
+
+    (it "asks the user if they want to finish last game"
+      (let [output (str "Your last game was left unfinished.\nWould you like to resume? Y/N\n")]
+        (should= output (with-out-str (sut/finish-last-game?)))))
+    )
   )

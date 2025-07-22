@@ -48,7 +48,7 @@
 (defn full-board? [board board-size]
   (if (= :3x3x3 board-size)
     (every? #(contains? #{:X :O} %)
-          (flatten (mapcat flatten board)))
+            (flatten (mapcat flatten board)))
     (every? #(contains? #{:X :O} %) (flatten board))))
 
 
@@ -177,6 +177,5 @@
     (winning-2d-options board token board-size)))
 
 (defn game-over? [board token board-size]
-  (cond
-    (win? board token board-size) (do (output/winner-message token) true)
-    (full-board? board board-size) (do (output/draw-message) true)))
+  (or (win? board token board-size)
+      (full-board? board board-size)))

@@ -66,7 +66,98 @@
     (when (= input "Y")
       (build-game-state))))
 
-(defn take-turns [{:keys [board current-token depth board-size] :as state}]
+(defn Y-or-N []
+  (output/finish-last-game?)
+  (let [input (board/->clean-user-input)]
+    (if (or (= input "Y") (= input "N"))
+      input
+      (do
+        (output/invalid-response)
+        (recur)))))
+
+(defn winner-response [new-board new-state board-size current-token]
+  (do
+    (output/winner-message current-token)
+    (output/determine-board-to-print board-size new-board)
+    new-state))
+
+(defn draw-response [new-board new-state board-size]
+  (do
+    (output/draw-message)
+    (output/determine-board-to-print board-size new-board)
+    new-state))
+
+(defn starting-game-state [board-size players board first-token]
+  {:board-size    board-size
+   :X             (:X players)
+   :O             (:O players)
+   :board         board
+   :current-token first-token
+   :depth         0
+   :game-id       (str (random-uuid))})
+
+(defn last-playable-state [last-state]
+  {:board-size    (:board-size last-state)
+   :X             (:X last-state)
+   :O             (:O last-state)
+   :board         (:board last-state)
+   :current-token (:current-token last-state)
+   :depth         (:depth last-state)
+   :game-id       (:game-id last-state)})
+
+(defn unfinished-game? [last-state]
+  (and last-state
+       (not (board/game-over? (:board last-state)
+                              (switch-player (:current-token last-state))
+                              (:board-size last-state)))))
+
+(declare start-game take-turn)
+
+(defn start-new-game []
+  (let [board-size     (ask-for-board-size)
+        board          (determine-starting-board board-size)
+        player-1       (ask-for-player)
+        player-1-token (ask-for-token)
+        player-2       (ask-for-player)
+        first-token    (ask-for-first-player)
+        player-2-token (board/switch-player player-1-token)
+        players        {player-1-token player-1
+                        player-2-token player-2}
+        state          (starting-game-state board-size players board first-token)]
+    (take-turn state)))
+
+(defn end-of-turn [new-state new-board current-token board-size]
+  (cond
+    (board/win? new-board current-token board-size)
+    (winner-response new-board new-state board-size current-token)
+    (board/full-board? new-board board-size)
+    (draw-response new-board new-state board-size)
+    :else (take-turn new-state)))
+
+(defn play-new-game []
+  (do
+    (start-new-game)
+    (output/play-again?)
+    (play-again? start-game)))
+
+(defn prompt-resume-or-new-game [state]
+  (if (= (Y-or-N) "Y")
+    (do
+      (take-turn state)
+      (output/play-again?)
+      (play-again? start-game))
+    (play-new-game)))
+
+(defn resume-last-game? [last-state]
+  (let [state (last-playable-state last-state)]
+    (prompt-resume-or-new-game state)))
+
+(defn start-or-resume-game [unfinished? last-state]
+  (if unfinished?
+    (resume-last-game? last-state)
+    (play-new-game)))
+
+(defn take-turn [{:keys [board current-token depth board-size] :as state}]
   (output/determine-board-to-print board-size board)
   (let [move        (->player-move state)
         new-board   (board/make-move board move current-token)
@@ -77,28 +168,9 @@
                       :board new-board
                       :depth new-depth)]
     (records/record-move new-state)
-    (if (board/game-over? new-board current-token board-size)
-      (do (output/determine-board-to-print board-size new-board)
-          new-state)
-      (recur new-state))))
+    (end-of-turn new-state new-board current-token board-size)))
 
-(defn build-game-state []
-  (let [board-size     (ask-for-board-size)
-        board          (determine-starting-board board-size)
-        player-1       (ask-for-player)
-        player-1-token (ask-for-token)
-        player-2       (ask-for-player)
-        first-token    (ask-for-first-player)
-        player-2-token (board/switch-player player-1-token)
-        players        {player-1-token player-1
-                        player-2-token player-2}
-        state          {:board-size    board-size
-                        :X             (:X players)
-                        :O             (:O players)
-                        :board         board
-                        :current-token first-token
-                        :depth         0
-                        :game-id       (str (random-uuid))}]
-    (take-turns state)
-    (output/play-again?)
-    (play-again? build-game-state)))
+(defn start-game []
+  (let [last-state  (records/read-last-record)
+        unfinished? (unfinished-game? last-state)]
+    (start-or-resume-game unfinished? last-state)))
