@@ -126,12 +126,6 @@
   (doseq [layer board]
     (print-board layer "%3s" board-format-3x3x3)))
 
-(comment
-  (defmulti print-board-asdfsadf (fn [board-size _board] board-size))
-
-  (defmethod print-board-asdfsadf :3x3 [_ board]
-    (print-board board "%s" board-format-3x3)))
-
 (defn determine-board-to-print [board-size board]
   (condp = board-size
     :3x3 (print-board-3x3 board)
