@@ -4,17 +4,18 @@
             [tic-tac-toe.main :as sut]
             [tic-tac-toe.output :as output]))
 
-#_(describe "main"
+(describe "main"
   (with-stubs)
 
   (redefs-around [output/greeting (stub :output/greeting)
+                  game/play-again? (stub :play-again)
                   game/start-new-game (stub :game/play-game)])
 
-    (it "displays a greeting"
-      (sut/-main)
-      (should-have-invoked :output/greeting))
+  (it "displays a greeting"
+    (sut/-main)
+    (should-have-invoked :output/greeting))
 
-    (it "gets user to select game mode"
-      (sut/-main)
-      (should-have-invoked :game/play-game))
+  (it "gets user to select game mode"
+    (sut/-main)
+    (should-have-invoked :game/play-game))
   )

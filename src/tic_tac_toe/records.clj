@@ -3,7 +3,7 @@
             [clojure.edn :as edn]))
 
 (defn ->state-to-record [state]
-  (select-keys state [:board-size :X :O :board :current-token :depth :game-id]))
+  (select-keys state [:board-size :X :O :board :current-token :game-id]))
 
 (defn format-record [state]
   (str (->state-to-record state) "\n"))

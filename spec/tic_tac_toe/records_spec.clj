@@ -32,7 +32,7 @@
         (with-redefs [slurp (stub :slurp {:return (str record "\n")})]
           (should= record (sut/read-last-record)))))
 
-    (it "returns a last record"
+    (it "returns last record"
       (let [record-1 {:X             :human
                       :O             :human
                       :board         [[1 2 3] [4 5 6] [7 8 9]]
@@ -43,7 +43,7 @@
                       :board         [[:X 2 3] [4 5 6] [7 8 9]]
                       :current-token :O
                       :game-id       nil}
-            content (str record-1 "\n" record-2 "\n")]
+            content  (str record-1 "\n" record-2 "\n")]
         (with-redefs [slurp (stub :slurp {:return content})]
           (should= record-2 (sut/read-last-record)))))
     )

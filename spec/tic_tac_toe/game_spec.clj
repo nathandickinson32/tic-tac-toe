@@ -58,25 +58,25 @@
                     random-uuid (stub :uuid {:return "123"})])
 
     (it "displays 3x3 board before each turn"
-      (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
+      (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
       (should-have-invoked :print-board-3x3 {:with [test-board-3x3/no-winners-board]}))
 
     (it "displays 4x4 board before each turn"
-      (with-in-str "1\n" (sut/take-turn {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :depth 0 :board-size :4x4}))
+      (with-in-str "1\n" (sut/take-turn {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :board-size :4x4}))
       (should-have-invoked :print-board-4x4 {:with [test-board-4x4/x-wins-with-1]}))
 
     (it "displays 3x3x3 board before each turn"
-      (with-in-str "14\n" (sut/take-turn {:board test-board-3x3x3/x-wins-with-14 :current-token :X :X :human :O :human :depth 0 :board-size :3x3x3}))
+      (with-in-str "14\n" (sut/take-turn {:board test-board-3x3x3/x-wins-with-14 :current-token :X :X :human :O :human :board-size :3x3x3}))
       (should-have-invoked :print-board-3x3x3 {:with [test-board-3x3x3/x-wins-with-14]}))
 
     (it "ends the game"
       (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
+        (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
         (should-have-invoked :winner-message {:with [:X]})))
 
     (it "repeats until game ends"
       (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "7\n6\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :depth 0 :board-size :3x3}))
+        (with-in-str "7\n6\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
         (should-have-invoked :winner-message {:with [:O]})))
 
     (it "gets user input for game mode"
@@ -111,24 +111,13 @@
         (should-have-invoked :expert-ai)
         (should-not-have-invoked :user)))
 
-    (it "increases depth after every turn"
-      (with-redefs [human/get-user-move (stub :user-move {:return [0 2]})]
-        (let [state (sut/take-turn {:board          test-board-3x3/top-almost-winning-X
-                                     :current-token :X
-                                     :X             :human
-                                     :O             :human
-                                     :depth         2
-                                     :board-size    :3x3})]
-          (should= 3 (:depth state)))))
-
     (it "calls record-move after win"
       (with-in-str "4\n3\n"
-        (sut/take-turn {:board          test-board-3x3/top-almost-winning-X
-                         :current-token :O
-                         :X             :human
-                         :O             :human
-                         :depth         2
-                         :board-size    :3x3}))
+        (sut/take-turn {:board         test-board-3x3/top-almost-winning-X
+                        :current-token :O
+                        :X             :human
+                        :O             :human
+                        :board-size    :3x3}))
       (should-have-invoked :record-move {:times 2}))
     )
 
@@ -255,30 +244,30 @@
     )
 
   (describe "ask-to-finish-last-game"
-      (with-stubs)
+    (with-stubs)
 
-      (it "invokes unfinished game prompt"
-        (with-redefs [output/finish-last-game? (stub :finish-last-game?)]
-          (with-in-str "n\n"
-            (sut/Y-or-N)
-            (should-have-invoked :finish-last-game?))))
-
-      (it "returns Y for y"
-        (with-in-str "y\n"
-          (should= "Y" (sut/Y-or-N))))
-
-      (it "returns N for n"
+    (it "invokes unfinished game prompt"
+      (with-redefs [output/finish-last-game? (stub :finish-last-game?)]
         (with-in-str "n\n"
-          (should= "N" (sut/Y-or-N))))
+          (sut/Y-or-N)
+          (should-have-invoked :finish-last-game?))))
 
-      (it "responds to invalid input"
-        (with-redefs [output/finish-last-game? (stub :finish-last-game?)
-                      output/invalid-response  (stub :invalid-response)]
-          (with-in-str "bad\nX\n \nBb\nn\n"
-            (should= "N" (sut/Y-or-N)))
-          (should-have-invoked :invalid-response {:times 4})
-          (should-have-invoked :finish-last-game? {:times 5})))
-      )
+    (it "returns Y for y"
+      (with-in-str "y\n"
+        (should= "Y" (sut/Y-or-N))))
+
+    (it "returns N for n"
+      (with-in-str "n\n"
+        (should= "N" (sut/Y-or-N))))
+
+    (it "responds to invalid input"
+      (with-redefs [output/finish-last-game? (stub :finish-last-game?)
+                    output/invalid-response  (stub :invalid-response)]
+        (with-in-str "bad\nX\n \nBb\nn\n"
+          (should= "N" (sut/Y-or-N)))
+        (should-have-invoked :invalid-response {:times 4})
+        (should-have-invoked :finish-last-game? {:times 5})))
+    )
 
   (context "when user is asked to play again"
     (with-stubs)
@@ -313,7 +302,6 @@
                                             :O             :expert-ai
                                             :board         output/starting-board-3x3
                                             :current-token :X
-                                            :depth         0
                                             :game-id       "123"}]})))
 
     (it "calls all input functions and builds correct 4x4 game state"
@@ -324,7 +312,6 @@
                                             :O             :expert-ai
                                             :board         output/starting-board-4x4
                                             :current-token :X
-                                            :depth         0
                                             :game-id       "123"}]})))
 
     (it "determines starting board 3x3"
@@ -362,7 +349,6 @@
                            :X             :human
                            :O             :easy-ai
                            :current-token :X
-                           :depth         2
                            :game-id       "123"}]
         (with-redefs [records/read-last-record (constantly finished-game)
                       board/game-over?         (constantly true)
@@ -376,7 +362,6 @@
                              :X             :human
                              :O             :easy-ai
                              :current-token :X
-                             :depth         2
                              :game-id       "123"}]
         (with-redefs [records/read-last-record (constantly unfinished-game)
                       board/game-over?         (constantly false)
@@ -391,7 +376,6 @@
                              :O             :easy-ai
                              :board         [[1 2 3] [4 5 6] [7 8 9]]
                              :current-token :X
-                             :depth         2
                              :game-id       "123"}]
         (with-redefs [records/read-last-record (constantly unfinished-game)
                       board/game-over?         (constantly false)
@@ -402,7 +386,6 @@
                                                     :O             :easy-ai
                                                     :board         [[1 2 3] [4 5 6] [7 8 9]]
                                                     :current-token :X
-                                                    :depth         2
                                                     :game-id       "123"}]}))))
 
     (it "asks the user if they want to play again"

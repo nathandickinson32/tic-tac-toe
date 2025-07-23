@@ -93,7 +93,6 @@
    :O             (:O players)
    :board         board
    :current-token first-token
-   :depth         0
    :game-id       (str (random-uuid))})
 
 (defn last-playable-state [last-state]
@@ -102,7 +101,6 @@
    :O             (:O last-state)
    :board         (:board last-state)
    :current-token (:current-token last-state)
-   :depth         (:depth last-state)
    :game-id       (:game-id last-state)})
 
 (defn unfinished-game? [last-state]
@@ -157,16 +155,14 @@
     (resume-last-game? last-state)
     (play-new-game)))
 
-(defn take-turn [{:keys [board current-token depth board-size] :as state}]
+(defn take-turn [{:keys [board current-token board-size] :as state}]
   (output/determine-board-to-print board-size board)
   (let [move        (->player-move state)
         new-board   (board/make-move board move current-token)
         next-player (switch-player current-token)
-        new-depth   (inc depth)
         new-state   (assoc state
                       :current-token next-player
-                      :board new-board
-                      :depth new-depth)]
+                      :board new-board)]
     (records/record-move new-state)
     (end-of-turn new-state new-board current-token board-size)))
 
