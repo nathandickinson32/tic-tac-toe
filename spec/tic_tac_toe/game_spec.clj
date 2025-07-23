@@ -69,10 +69,15 @@
       (with-in-str "14\n" (sut/take-turn {:board test-board-3x3x3/x-wins-with-14 :current-token :X :X :human :O :human :board-size :3x3x3}))
       (should-have-invoked :print-board-3x3x3 {:with [test-board-3x3x3/x-wins-with-14]}))
 
-    (it "ends the game"
+    (it "ends the game on a win"
       (with-redefs [output/winner-message (stub :winner-message)]
         (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
         (should-have-invoked :winner-message {:with [:X]})))
+
+    (it "ends the game on a tie"
+      (with-redefs [output/draw-message (stub :draw-message)]
+        (with-in-str "1\n" (sut/take-turn {:board test-board-3x3/move-1-for-tie :current-token :X :X :human :O :human :board-size :3x3}))
+        (should-have-invoked :draw-message)))
 
     (it "repeats until game ends"
       (with-redefs [output/winner-message (stub :winner-message)]

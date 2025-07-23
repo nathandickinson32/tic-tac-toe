@@ -83,8 +83,8 @@
 
 (defn draw-response [new-board new-state board-size]
   (do
-    #_(output/draw-message)
-    #_(output/determine-board-to-print board-size new-board)
+    (output/draw-message)
+    (output/determine-board-to-print board-size new-board)
     new-state))
 
 (defn starting-game-state [board-size players board first-token]
