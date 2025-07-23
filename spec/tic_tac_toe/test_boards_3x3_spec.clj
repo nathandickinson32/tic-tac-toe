@@ -7,58 +7,58 @@
    ["7" "8" "9"]])
 
 (def no-winners-board
-  [[:X \space :X]
-   [:O :O \space]
-   [\space \space \space]])
+  [[:X "2" :X]
+   [:O :O "6"]
+   ["7" "8" "9"]])
 
 (def no-winners-board1
-  [[:X \space :X]
-   [:O :O \space]
-   [:X \space \space]])
+  [[:X "2" :X]
+   [:O :O "7"]
+   [:X "8" "9"]])
 
 (def top-almost-winning-X
-  [[:X :X \3]
-   [\4 \5 \6]
-   [\7 \8 \9]])
+  [[:X :X "3"]
+   ["4" "5" "6"]
+   ["7" "8" "9"]])
 
 (def top-winning-row-X
   [[:X :X :X]
-   [:O :O \space]
-   [\space \space \space]])
+   [:O :O "6"]
+   ["7" "8" "9"]])
 
 (def bottom-winning-row-X
-  [[:O :O \space]
-   [:O \space \space]
+  [[:O :O "3"]
+   [:O "5" "6"]
    [:X :X :X]])
 
 (def middle-winning-row-O
-  [[:X \space :X]
+  [[:X "2" :X]
    [:O :O :O]
-   [:X \space \space]])
+   [:X "8" "9"]])
 
 (def left-winning-col-X
-  [[:X :O \space]
+  [[:X :O "3"]
    [:X :O :O]
-   [:X \space :X]])
+   [:X "8" :X]])
 
 (def right-winning-col-X
-  [[\space :O :X]
+  [["1" :O :X]
    [:O :O :X]
-   [:X \space :X]])
+   [:X "8" :X]])
 
 (def middle-winning-col-O
   [[:X :O :X]
-   [\space :O \space]
-   [:X :O \space]])
+   ["4" :O "6"]
+   [:X :O "9"]])
 
 (def next-move-wins-X-O
   [[:X :O :X]
-   [\space \space :O]
-   [:X :O \space]])
+   ["4" "5" :O]
+   [:X :O "9"]])
 
 (def next-move-wins-X
-  [[:X \space :X]
-   [\space \space :O]
+  [[:X "2" :X]
+   ["4" "5" :O]
    [:X :O :O]])
 
 (def full-board
@@ -82,24 +82,24 @@
    [:X :O :O]])
 
 (def diagonal-dleft-win-O
-  [[:X \space :O]
+  [[:X "2" :O]
    [:O :O :X]
    [:O :X :X]])
 
 (def diagonal-dright-win-O
-  [[:O \space :X]
+  [[:O "2" :X]
    [:X :O :X]
    [:X :O :O]])
 
 (def O-should-block
-  [[:O \2 \3]
-   [:X :X \6]
-   [\7 \8 \9]])
+  [[:O "2" "3"]
+   [:X :X "6"]
+   ["7" "8" "9"]])
 
 (def choose-win-over-block
-  [[:X :O \3]
-   [\4 \5 \6]
-   [:X :O \9]])
+  [[:X :O "3"]
+   ["4" "5" "6"]
+   [:X :O "9"]])
 
 (def move-1-for-tie
   [["1" :X :O]
