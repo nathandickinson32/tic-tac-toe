@@ -40,15 +40,15 @@
 (defn min-value [scores]
   (apply min scores))
 
-(defn best-score-by-depth [scores depth]
+(defn best-score-by-depth [scores]
   (if (some pos? scores)
-    (/ (min-value scores) depth)
-    (/ (apply + scores) depth)))
+    (min-value scores)
+    (apply + scores)))
 
 (defn ->best-score [scores maximizing? depth]
   (if maximizing?
     (/ (max-value scores) depth)
-    (best-score-by-depth scores depth)))
+    (/ (best-score-by-depth scores) depth)))
 
 (defn evaluate-branch [board token max-token depth board-size]
   (let [moves       (board/available-moves board board-size)
