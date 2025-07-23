@@ -83,8 +83,8 @@
 
 (defn draw-response [new-board new-state board-size]
   (do
-    (output/draw-message)
-    (output/determine-board-to-print board-size new-board)
+    #_(output/draw-message)
+    #_(output/determine-board-to-print board-size new-board)
     new-state))
 
 (defn starting-game-state [board-size players board first-token]
@@ -95,7 +95,7 @@
    :current-token first-token
    :game-id       (str (random-uuid))})
 
-(defn last-playable-state [last-state]
+(defn playable-state [last-state]
   {:board-size    (:board-size last-state)
    :X             (:X last-state)
    :O             (:O last-state)
@@ -138,7 +138,7 @@
     (output/play-again?)
     (play-again? start-game)))
 
-(defn prompt-resume-or-new-game [state]
+(defn start-new-or-resume [state]
   (if (= (Y-or-N) "Y")
     (do
       (take-turn state)
@@ -146,13 +146,13 @@
       (play-again? start-game))
     (play-new-game)))
 
-(defn resume-last-game? [last-state]
-  (let [state (last-playable-state last-state)]
-    (prompt-resume-or-new-game state)))
+(defn ->option-to-resume [last-state]
+  (let [state (playable-state last-state)]
+    (start-new-or-resume state)))
 
-(defn start-or-resume-game [unfinished? last-state]
+(defn start-new-or-option-to-resume [unfinished? last-state]
   (if unfinished?
-    (resume-last-game? last-state)
+    (->option-to-resume last-state)
     (play-new-game)))
 
 (defn take-turn [{:keys [board current-token board-size] :as state}]
@@ -169,4 +169,4 @@
 (defn start-game []
   (let [last-state  (records/read-last-record)
         unfinished? (unfinished-game? last-state)]
-    (start-or-resume-game unfinished? last-state)))
+    (start-new-or-option-to-resume unfinished? last-state)))

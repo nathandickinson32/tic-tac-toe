@@ -15,7 +15,7 @@
     (sut/-main)
     (should-have-invoked :output/greeting))
 
-  (it "gets user to select game mode"
+  (it "starts the game"
     (sut/-main)
     (should-have-invoked :game/play-game))
   )
