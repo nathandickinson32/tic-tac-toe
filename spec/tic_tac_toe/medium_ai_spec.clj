@@ -13,8 +13,8 @@
       (should= [:easy-ai :expert-ai] sut/medium-ai-moves))
 
     (it "one move available"
-      (let [board (board/make-move test-board/full-board [0 1] \2)
-            state {:X :medium-ai :O :human :board board :current-token :X :depth 8 :board-size :3x3}]
+      (let [board (board/make-move test-board/full-board [0 1] "2")
+            state {:X :medium-ai :O :human :board board :current-token :X :board-size :3x3}]
         (should= [0 1] (->player-move state))))
 
     ;(it "moves with easy ai"

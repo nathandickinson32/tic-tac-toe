@@ -11,14 +11,14 @@
   (cond
     (= board-size :3x3) (end-game? board board-size)
     (= board-size :4x4) (or (end-game? board board-size)
-                            (= depth 4))
+                            (>= depth 7))
     (= board-size :3x3x3) (or (end-game? board board-size)
-                            (= depth 3))))
+                              (>= depth 3))))
 
 (defn score [board token board-size]
   (cond
-    (board/win? board token board-size) 10
-    (board/win? board (board/switch-player token) board-size) -10
+    (board/win? board token board-size) 5
+    (board/win? board (board/switch-player token) board-size) -5
     :else 0))
 
 (defn score-end-game [board max-token depth board-size]
@@ -34,18 +34,18 @@
        (map #(let [next-board (board/make-move board % token)]
                (->score-one-move next-board token max-token depth board-size)))))
 
-(defn negative-scores? [scores]
+(defn max-value [scores]
   (apply max scores))
 
-(defn positive-scores? [scores depth]
+(defn best-score [scores depth]
   (if (some pos? scores)
-    (apply min scores)
+    (/ (apply min scores) depth)
     (/ (apply + scores) depth)))
 
 (defn ->best-score [scores maximizing? depth]
   (if maximizing?
-    (negative-scores? scores)
-    (positive-scores? scores depth)))
+    (/ (max-value scores) depth)
+    (best-score scores depth)))
 
 (defn evaluate-branch [board token max-token depth board-size]
   (let [moves       (board/available-moves board board-size)
@@ -66,11 +66,11 @@
         score      (->score-one-move next-board token token depth board-size)]
     {:move move :score score}))
 
-(defn choose-best-move [board token depth board-size]
+(defn choose-best-move [board token board-size]
   (->> (board/available-moves board board-size)
-       (map #(evaluate-move board token % depth board-size))
+       (map #(evaluate-move board token % 0 board-size))
        (apply max-key :score)
        :move))
 
-(defmethod ->player-move :expert-ai [{:keys [board current-token depth board-size]}]
-  (choose-best-move board current-token depth board-size))
+(defmethod ->player-move :expert-ai [{:keys [board current-token board-size]}]
+  (choose-best-move board current-token board-size))

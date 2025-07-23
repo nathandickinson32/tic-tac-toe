@@ -5,8 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :main tic-tac-toe.main
   :dependencies [[org.clojure/clojure "1.12.0"]
-                 [com.github.seancorfield/next.jdbc "1.3.909"]
-                 [org.postgresql/postgresql "42.7.3"]]
+                 [com.github.seancorfield/next.jdbc "1.3.1048"]
+                 [org.postgresql/postgresql "42.7.4"]]
 
   :profiles {:dev {:dependencies [[speclj "3.10.0"]]}}
   :plugins [[speclj "3.10.0"]]

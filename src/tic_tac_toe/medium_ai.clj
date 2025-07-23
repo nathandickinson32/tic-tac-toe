@@ -6,11 +6,11 @@
 (def medium-ai-moves [:easy-ai
                       :expert-ai])
 
-(defn best-or-rand-move [board current-token depth board-size]
+(defn best-or-rand-move [board current-token board-size]
   (let [move (rand-nth medium-ai-moves)]
     (if (= move :easy-ai)
       (choose-random-move board board-size)
-      (choose-best-move board current-token depth board-size))))
+      (choose-best-move board current-token board-size))))
 
-(defmethod ->player-move :medium-ai [{:keys [board current-token depth board-size]}]
-  (best-or-rand-move board current-token depth board-size))
+(defmethod ->player-move :medium-ai [{:keys [board current-token board-size]}]
+  (best-or-rand-move board current-token board-size))

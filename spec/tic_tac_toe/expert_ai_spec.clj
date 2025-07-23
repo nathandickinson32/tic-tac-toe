@@ -17,7 +17,7 @@
   (mapcat #(opponent-moves % opponent-token board-size) unfinished-games))
 
 (defn ai-make-move [[board depth] ai-token board-size]
-  [(board/make-move board (sut/choose-best-move board ai-token depth board-size) ai-token)
+  [(board/make-move board (sut/choose-best-move board ai-token board-size) ai-token)
    (inc depth)])
 
 (defn simulate-ai-moves [opponent-boards ai-token board-size]
@@ -79,17 +79,17 @@
     (it "returns false if depth is 3 with 4x4 board"
       (should-not (sut/game-over? test-board-4x4/x-wins-with-1 :4x4 3)))
 
-    (it "returns true if depth is 4 with 4x4 board"
-      (should (sut/game-over? test-board-4x4/x-wins-with-1 :4x4 4)))
+    (it "returns true if depth is 7 with 4x4 board"
+      (should (sut/game-over? test-board-4x4/x-wins-with-1 :4x4 7)))
     )
 
   (context "when getting a score"
 
-    (it "returns 10 if current token wins"
-      (should= 10 (sut/score test-board-3x3/top-winning-row-X :X :3x3)))
-
-    (it "returns -10 if opponent token wins"
-      (should= -10 (sut/score test-board-3x3/middle-winning-row-O :X :3x3)))
+    (it "return positive for winner negative for loser"
+      (let [winning-score (sut/score test-board-3x3/top-winning-row-X :X :3x3)
+            losing-score  (sut/score test-board-3x3/middle-winning-row-O :X :3x3)]
+        (should= winning-score (abs losing-score))
+        (should-be neg? losing-score)))
 
     (it "returns 0 if no winner"
       (should= 0 (sut/score test-board-3x3/no-winners-board :X :3x3)))
@@ -115,9 +115,9 @@
       (letfn [(example-minimax [board maximizing-token move]
                 (let [next-board (board/make-move board move maximizing-token)]
                   (sut/minimax next-board (board/switch-player maximizing-token) maximizing-token 1 :3x3)))]
-        (let [board          [[:X :X \3]
-                              [:O :O \6]
-                              [\7 \8 \9]]
+        (let [board          [[:X :X "3"]
+                              [:O :O "6"]
+                              ["7" "8" "9"]]
               best-move      (example-minimax board :X [0 2])
               next-best-move (example-minimax board :X [1 2])
               worst-move     (example-minimax board :X [2 2])]
@@ -125,17 +125,17 @@
           (should> next-best-move worst-move))))
 
     (it "maximizes score for maximizing player"
-      (let [board            [[:X :X \space]
-                              [:O :O \space]
-                              [\space \space \space]]
+      (let [board            [[:X :X "3"]
+                              [:O :O "6"]
+                              ["7" "8" "9"]]
             maximizing-token :X]
         (let [score (sut/minimax board maximizing-token maximizing-token 1 :3x3)]
           (should (>= score 0)))))
 
     (it "minimizes score when maximizing player loses"
-      (let [board [[:X :X \space]
-                   [:O :O \space]
-                   [\space \space \space]]]
+      (let [board [[:X :X "3"]
+                   [:O :O "6"]
+                   ["7" "8" "9"]]]
         (let [score (sut/minimax board :O :X 1 :3x3)]
           (should (< score 0)))))
 
@@ -146,37 +146,37 @@
         (should= -1 (sut/minimax board :X :X 1 :3x3))))
     )
 
-  (context "when choosing the best move"
+  (context "when choosing the best move 3x3"
 
     (it "returns the only available move"
-      (let [board (board/make-move test-board-3x3/full-board [0 1] \2)]
-        (should= [0 1] (sut/choose-best-move board :X 8 :3x3))))
+      (let [board (board/make-move test-board-3x3/full-board [0 1] "2")]
+        (should= [0 1] (sut/choose-best-move board :X :3x3))))
 
     (it "chooses any corner on an empty board"
       (let [board   output/starting-board-3x3
             corners #{[0 0] [0 2] [2 0] [2 2]}
-            move    (sut/choose-best-move board :X 5 :3x3)]
+            move    (sut/choose-best-move board :X :3x3)]
         (should-contain move corners)))
 
     (it "chooses a winning move"
       (let [board test-board-3x3/choose-win-over-block]
-        (should= [1 0] (sut/choose-best-move board :X 4 :3x3))))
+        (should= [1 0] (sut/choose-best-move board :X :3x3))))
 
     (it "chooses a blocking move"
       (let [board test-board-3x3/O-should-block]
-        (should= [1 2] (sut/choose-best-move board :X 3 :3x3))))
+        (should= [1 2] (sut/choose-best-move board :X :3x3))))
 
     (it "chooses the best available move for O"
       (let [board [[:X :O :X]
-                   [\space :O \space]
-                   [\space :X \space]]]
-        (should-contain (sut/choose-best-move board :O 7 :3x3) [[1 0] [1 2]])))
+                   ["4" :O "6"]
+                   ["7" :X "9"]]]
+        (should-contain (sut/choose-best-move board :O :3x3) [[1 0] [1 2]])))
 
     (it "chooses the best available move when values are even for x and o"
       (let [board [[:X :O :X]
-                   [\space \space \space]
-                   [:O :X \space]]]
-        (should-contain (sut/choose-best-move board :O 7 :3x3) [[1 2] [2 2]])))
+                   ["4" "5" "6"]
+                   [:O :X "9"]]]
+        (should-contain (sut/choose-best-move board :O :3x3) [[1 2] [2 2]])))
 
     (it "AI never loses as X playing first"
       (let [all-finished-games (finished-games-ai-plays-first :3x3)]
@@ -187,10 +187,61 @@
         (should (ai-win-every-game all-finished-games :O :3x3))))
     )
 
+  (context "4x4 expert-ai"
+
+    (it "chooses a blocking move 4x4"
+      (let [board
+            [[:X :X :X "4"]
+             ["5" "6" "7" "8"]
+             ["9" "10" "11" "12"]
+             ["13" "14" :O :O]]]
+        (should= [0 3] (sut/choose-best-move board :O :4x4))))
+
+    (it "chooses a winning over blocking 4x4"
+      (let [board
+            [[:X :X :X "4"]
+             ["5" "6" "7" "8"]
+             ["9" "10" "11" "12"]
+             ["13" :O :O :O]]]
+        (should= [3 0] (sut/choose-best-move board :O :4x4))))
+    )
+
+  (context "3x3x3 expert-ai"
+
+    (it "chooses a blocking move 3x3x3"
+      (let [board [[[:X :X "3"]
+                    ["4" "5" "6"]
+                    ["7" "8" "9"]]
+
+                   [["10" "11" "12"]
+                    ["13" "14" "15"]
+                    ["16" "17" "18"]]
+
+                   [["19" "20" "21"]
+                    ["22" "23" "24"]
+                    ["25" :O :O]]]]
+        (should= [2 2 0] (sut/choose-best-move board :O :3x3x3))))
+
+    (it "chooses winning over blocking 3x3x3"
+      (let [board [[[:X :X "3"]
+                    ["4" "5" "6"]
+                    ["7" "8" "9"]]
+
+                   [["10" "11" "12"]
+                    ["13" "14" "15"]
+                    ["16" "17" "18"]]
+
+                   [["19" "20" "21"]
+                    ["22" "23" "24"]
+                    ["25" "26" :O]]]]
+        (should= [0 0 2] (sut/choose-best-move board :O :3x3x3))))
+
+    )
+
   (context "expert AI ->player-move"
 
     (it "one move available"
-      (let [board (board/make-move test-board-3x3/full-board [0 1] \2)
+      (let [board (board/make-move test-board-3x3/full-board [0 1] "2")
             state {:X :expert-ai :O :human :board board :current-token :X :depth 8 :board-size :3x3}]
         (should= [0 1] (->player-move state))))
 
@@ -223,9 +274,9 @@
       (letfn [(example-minimax [board maximizing-token move board-size]
                 (let [next-board (board/make-move board move maximizing-token)]
                   (sut/memoized-minimax next-board (board/switch-player maximizing-token) maximizing-token 1 board-size)))]
-        (let [board          [[:X :X \3]
-                              [:O :O \6]
-                              [\7 \8 \9]]
+        (let [board          [[:X :X "3"]
+                              [:O :O "6"]
+                              ["7" "8" "9"]]
               best-move      (example-minimax board :X [0 2] :3x3)
               next-best-move (example-minimax board :X [1 2] :3x3)
               worst-move     (example-minimax board :X [2 2] :3x3)]
