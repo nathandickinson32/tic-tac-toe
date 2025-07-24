@@ -76,16 +76,14 @@
         (recur)))))
 
 (defn winner-response [new-board new-state board-size current-token]
-  (do
-    (output/winner-message current-token)
-    (output/determine-board-to-print board-size new-board)
-    new-state))
+  (output/winner-message current-token)
+  (output/determine-board-to-print board-size new-board)
+  new-state)
 
 (defn draw-response [new-board new-state board-size]
-  (do
-    (output/draw-message)
-    (output/determine-board-to-print board-size new-board)
-    new-state))
+  (output/draw-message)
+  (output/determine-board-to-print board-size new-board)
+  new-state)
 
 (defn starting-game-state [board-size players board first-token]
   {:board-size    board-size
@@ -133,17 +131,18 @@
     :else (take-turn new-state)))
 
 (defn play-new-game []
-  (do
-    (start-new-game)
-    (output/play-again?)
-    (play-again? start-game)))
+  (start-new-game)
+  (output/play-again?)
+  (play-again? start-game))
+
+(defn resume-last-game [state]
+  (take-turn state)
+  (output/play-again?)
+  (play-again? start-game))
 
 (defn start-new-or-resume [state]
   (if (= (Y-or-N) "Y")
-    (do
-      (take-turn state)
-      (output/play-again?)
-      (play-again? start-game))
+    (resume-last-game state)
     (play-new-game)))
 
 (defn ->option-to-resume [last-state]
