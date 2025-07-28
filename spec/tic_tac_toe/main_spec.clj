@@ -3,7 +3,7 @@
             [tic-tac-toe.game :as game]
             [tic-tac-toe.main :as sut]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.records :as records]))
+            [tic-tac-toe.edn-records :as records]))
 
 (describe "main"
   (with-stubs)

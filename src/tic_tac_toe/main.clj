@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.game :as game]
-            [tic-tac-toe.records :as records]
+            [tic-tac-toe.edn-records :as records]
             [tic-tac-toe.player-types]))
 
 (defn run-game [args]

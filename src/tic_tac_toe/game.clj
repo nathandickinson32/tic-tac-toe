@@ -6,7 +6,7 @@
             [tic-tac-toe.easy-ai]
             [tic-tac-toe.medium-ai]
             [tic-tac-toe.expert-ai]
-            [tic-tac-toe.records :as records]))
+            [tic-tac-toe.edn-records :as records]))
 
 (def board-sizes {"9" :3x3 "16" :4x4 "27" :3x3x3})
 

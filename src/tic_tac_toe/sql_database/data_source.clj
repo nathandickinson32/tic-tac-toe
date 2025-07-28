@@ -1,4 +1,4 @@
-(ns tic-tac-toe.database.core
+(ns tic-tac-toe.sql_database.data_source
   (:require [next.jdbc :as jdbc]))
 
 (def db-spec

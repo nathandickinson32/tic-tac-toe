@@ -9,7 +9,7 @@
             [tic-tac-toe.human]
             [tic-tac-toe.game :as sut]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.records :as records]
+            [tic-tac-toe.edn-records :as records]
             [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
             [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]
             [tic-tac-toe.test-boards-3x3x3-spec :as test-board-3x3x3]))

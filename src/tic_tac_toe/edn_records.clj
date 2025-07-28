@@ -1,4 +1,4 @@
-(ns tic-tac-toe.records
+(ns tic-tac-toe.edn-records
   (:require [clojure.string :as str]
             [clojure.edn :as edn]
             [tic-tac-toe.board :as board]

@@ -1,6 +1,6 @@
-(ns tic-tac-toe.records-spec
+(ns tic-tac-toe.edn-records-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.records :as sut]
+            [tic-tac-toe.edn-records :as sut]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.game :as game]
             [tic-tac-toe.board :as board]))
