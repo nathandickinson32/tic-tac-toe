@@ -166,6 +166,8 @@
     ;TODO need to check if --edn was in main args if not save to postgres
     (records/record-move new-state)
     (records/save-to-db! new-state)
+
+    ;TODO need to test
     (end-of-turn new-state new-board current-token board-size)))
 
 (defn start-game []
