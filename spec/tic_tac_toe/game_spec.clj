@@ -75,7 +75,7 @@
         (should-have-invoked :winner-message {:with [:X]})))
 
     (it "ends the game on a tie"
-      (with-redefs [output/draw-message (stub :draw-message)]
+      (with-redefs [output/tie-game-message (stub :draw-message)]
         (with-in-str "1\n" (sut/take-turn {:board test-board-3x3/move-1-for-tie :current-token :X :X :human :O :human :board-size :3x3}))
         (should-have-invoked :draw-message)))
 

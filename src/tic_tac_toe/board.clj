@@ -1,6 +1,5 @@
 (ns tic-tac-toe.board
-  (:require [clojure.string :as str]
-            [tic-tac-toe.output :as output]))
+  (:require [clojure.string :as str]))
 
 (defn ->clean-user-input []
   (-> (read-line)
@@ -50,7 +49,6 @@
     (every? #(contains? #{:X :O} %)
             (flatten (mapcat flatten board)))
     (every? #(contains? #{:X :O} %) (flatten board))))
-
 
 (defn all-matching-tokens? [row token]
   (every? #(= % token) row))

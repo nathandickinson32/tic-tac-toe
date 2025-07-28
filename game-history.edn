@@ -21,3 +21,422 @@
 {:board-size :3x3, :X :human, :O :easy-ai, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :O, :game-id "2160ddf7-cc5d-449b-aa2e-371bf779f1af"}
 {:board-size :3x3, :X :human, :O :easy-ai, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" :O]], :current-token :X, :game-id "2160ddf7-cc5d-449b-aa2e-371bf779f1af"}
 {:board-size :3x3, :X :human, :O :easy-ai, :board [[:X :X :X] [:O "5" "6"] ["7" "8" :O]], :current-token :O, :game-id "2160ddf7-cc5d-449b-aa2e-371bf779f1af"}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" "9"]], :current-token :O, :game-id "889772f8-5a40-4f9b-8c15-3507276d0a07"}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" :O]], :current-token :X, :game-id "889772f8-5a40-4f9b-8c15-3507276d0a07"}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" "9"]], :current-token :O, :game-id "fe2c0dec-63d6-45e9-9103-f50363c10554"}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" "3"] ["4" :O "6"] ["7" "8" "9"]], :current-token :X, :game-id "fe2c0dec-63d6-45e9-9103-f50363c10554"}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X :X "3"] ["4" :O "6"] ["7" "8" "9"]], :current-token :O, :game-id "fe2c0dec-63d6-45e9-9103-f50363c10554"}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X :X "3"] ["4" :O :O] ["7" "8" "9"]], :current-token :X, :game-id "fe2c0dec-63d6-45e9-9103-f50363c10554"}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X :X :X] ["4" :O :O] ["7" "8" "9"]], :current-token :O, :game-id "fe2c0dec-63d6-45e9-9103-f50363c10554"}
+{:board-size :3x3, :X :expert-ai, :O :expert-ai, :board [["1" "2" "3"] ["4" "5" "6"] ["7" "8" :X]], :current-token :O, :game-id "6d14b68d-ac54-44c3-bf4a-1d552b28caef"}
+{:board-size :3x3, :X :expert-ai, :O :expert-ai, :board [["1" "2" "3"] ["4" :O "6"] ["7" "8" :X]], :current-token :X, :game-id "6d14b68d-ac54-44c3-bf4a-1d552b28caef"}
+{:board-size :3x3, :X :expert-ai, :O :expert-ai, :board [["1" "2" "3"] ["4" :O "6"] ["7" :X :X]], :current-token :O, :game-id "6d14b68d-ac54-44c3-bf4a-1d552b28caef"}
+{:board-size :3x3, :X :expert-ai, :O :expert-ai, :board [["1" "2" "3"] ["4" :O "6"] [:O :X :X]], :current-token :X, :game-id "6d14b68d-ac54-44c3-bf4a-1d552b28caef"}
+{:board-size :3x3, :X :expert-ai, :O :expert-ai, :board [["1" "2" :X] ["4" :O "6"] [:O :X :X]], :current-token :O, :game-id "6d14b68d-ac54-44c3-bf4a-1d552b28caef"}
+{:board-size :3x3, :X :expert-ai, :O :expert-ai, :board [["1" "2" :X] ["4" :O :O] [:O :X :X]], :current-token :X, :game-id "6d14b68d-ac54-44c3-bf4a-1d552b28caef"}
+{:board-size :3x3, :X :expert-ai, :O :expert-ai, :board [["1" "2" :X] [:X :O :O] [:O :X :X]], :current-token :O, :game-id "6d14b68d-ac54-44c3-bf4a-1d552b28caef"}
+{:board-size :3x3, :X :expert-ai, :O :expert-ai, :board [["1" :O :X] [:X :O :O] [:O :X :X]], :current-token :X, :game-id "6d14b68d-ac54-44c3-bf4a-1d552b28caef"}
+{:board-size :3x3, :X :expert-ai, :O :expert-ai, :board [[:X :O :X] [:X :O :O] [:O :X :X]], :current-token :O, :game-id "6d14b68d-ac54-44c3-bf4a-1d552b28caef"}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :4x4, :X :human, :O :human, :board [[:X :X :X :X] [:O :O :O "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]], :current-token :O}
+{:board-size :3x3x3, :X :human, :O :human, :board [[[:X "2" "3"] [:O :X "6"] ["7" "8" :O]] [["10" :X :O] [:X :X :X] ["16" :X "18"]] [["19" "20" :O] [:O :X :O] [:O :O :X]]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :O] [:O :O :X] [:X :X :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O "6"] [:X "8" "9"]], :current-token :O}
+{:board-size :3x3, :X :human, :O :human, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] ["4" "5" :O] [:X :O :O]], :current-token :O}
+{:board-size :3x3, :X :human, :O :easy-ai, :board [[:X "2" :X] ["4" "5" :O] [:O :O :O]], :current-token :X}
+{:board-size :3x3, :X :human, :O :medium-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :expert-ai, :board [[:X "2" :X] [:O :O :O] [:X "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]], :current-token :X}
+{:board-size :3x3, :X :human, :O :human, :board [[:X :X :X] [:O "5" "6"] ["7" "8" "9"]], :current-token :O}

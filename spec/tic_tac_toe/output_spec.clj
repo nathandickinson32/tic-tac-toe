@@ -20,6 +20,10 @@
     (it "prints invalid input message when choosing a board size"
       (let [output "Invalid Input. Please enter 9, 16 or 27.\n"]
         (should= output (with-out-str (sut/invalid-board-size-response)))))
+
+    (it "prints invalid game ID message"
+      (let [output "Game ID not found in records.\n"]
+        (should= output (with-out-str (sut/invalid-game-id)))))
     )
 
   (context "greeting"
@@ -437,19 +441,19 @@
   (context "game-over"
 
     (it "returns winner message for X"
-      (let [output (str sut/green "X" sut/reset " wins!\n")]
+      (let [output (str sut/green "X" sut/reset " Wins\n")]
         (with-redefs [sut/print-board-3x3 (fn [_] nil)]
           (should= output (with-out-str (sut/winner-message :X))))))
 
     (it "returns winner message for O"
-      (let [output (str sut/red "O" sut/reset " wins!\n")]
+      (let [output (str sut/red "O" sut/reset " Wins\n")]
         (with-redefs [sut/print-board-3x3 (fn [_] nil)]
           (should= output (with-out-str (sut/winner-message :O))))))
 
     (it "returns draw message"
       (with-redefs [sut/colorize-token identity]
-        (let [output "It's a tie!\n"]
-          (should= output (with-out-str (sut/draw-message))))))
+        (let [output "Tie Game\n"]
+          (should= output (with-out-str (sut/tie-game-message))))))
     )
 
   (context "colors"
@@ -511,5 +515,12 @@
     (it "asks the user if they want to finish last game"
       (let [output (str "Your last game was left unfinished.\nWould you like to resume? Y/N\n")]
         (should= output (with-out-str (sut/finish-last-game?)))))
+    )
+
+  (context "move by token message"
+
+    (it "displays a message to declare what token made a move"
+      (let [output (str "Move By: X\n")]
+        (should= output (with-out-str (sut/record-of-token-moved "X")))))
     )
   )

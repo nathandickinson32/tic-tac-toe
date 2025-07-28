@@ -81,7 +81,7 @@
   new-state)
 
 (defn draw-response [new-board new-state board-size]
-  (output/draw-message)
+  (output/tie-game-message)
   (output/determine-board-to-print board-size new-board)
   new-state)
 

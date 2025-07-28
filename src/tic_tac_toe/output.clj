@@ -54,6 +54,9 @@
 (defn invalid-board-size-response []
   (println "Invalid Input. Please enter 9, 16 or 27."))
 
+(defn invalid-game-id []
+  (println "Game ID not found in records."))
+
 (defn player-prompt-3x3 [token]
   (println "Player" (name token) "Enter your move 1-9"))
 
@@ -133,13 +136,16 @@
     :3x3x3 (print-board-3x3x3 board)))
 
 (defn winner-message [token]
-  (println (format-space token "%s") "wins!"))
+  (println (format-space token "%s") "Wins"))
 
-(defn draw-message []
-  (println "It's a tie!"))
+(defn tie-game-message []
+  (println "Tie Game"))
 
 (defn play-again? []
   (println "Would you like to play again? Y/N"))
 
 (defn finish-last-game? []
   (println "Your last game was left unfinished.\nWould you like to resume? Y/N"))
+
+(defn record-of-token-moved [token]
+  (println "Move By:" token))
