@@ -48,14 +48,15 @@
       (should= {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai} sut/players))
     )
 
-  (context "take-turns"
+  (context "take-turn"
     (with-stubs)
 
     (redefs-around [output/print-board-3x3 (stub :print-board-3x3)
                     output/print-board-4x4 (stub :print-board-4x4)
                     output/print-board-3x3x3 (stub :print-board-3x3x3)
                     records/record-move (stub :record-move)
-                    random-uuid (stub :uuid {:return "123"})])
+                    random-uuid (stub :uuid {:return "123"})
+                    sut/play-again? (stub :play-again)])
 
     (it "displays 3x3 board before each turn"
       (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
@@ -339,7 +340,7 @@
        sut/ask-for-board-size (stub :ask-for-board-size {:return :3x3})
        sut/take-turn (stub :take-turns)
        sut/play-again? (stub :sut/play-again {:return nil})
-       output/play-again? (stub :output/play-again {:return nil})
+       output/play-again? (stub :output/play-again)
        random-uuid (stub :uuid {:return "123"})])
 
     (it "starts a new game when no previous record exists"
@@ -394,11 +395,10 @@
                                                     :game-id       "123"}]}))))
 
     (it "asks the user if they want to play again"
-      (with-redefs [output/play-again?       (stub :play-again)
-                    records/read-last-record (constantly nil)]
+      (with-redefs [records/read-last-record (constantly nil)]
         (with-in-str "N\n"
           (sut/start-game)
-          (should-have-invoked :play-again))))
+          (should-have-invoked :sut/play-again))))
 
     (it "calls play-again? after a 3x3 game finishes"
       (with-redefs [records/read-last-record (constantly nil)]

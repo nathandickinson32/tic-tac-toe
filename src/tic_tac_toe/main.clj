@@ -8,7 +8,7 @@
 (defn run-game [args]
   (when-not (records/replay? args)
     (output/greeting)
-    (game/start-new-game)))
+    (game/start-game)))
 
 (defn -main [& args]
   (run-game args))

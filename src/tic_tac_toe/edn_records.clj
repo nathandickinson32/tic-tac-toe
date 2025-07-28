@@ -1,8 +1,11 @@
 (ns tic-tac-toe.edn-records
   (:require [clojure.string :as str]
             [clojure.edn :as edn]
+            [next.jdbc :as jdbc]
             [tic-tac-toe.board :as board]
-            [tic-tac-toe.output :as output]))
+            [tic-tac-toe.output :as output]
+            [tic-tac-toe.sql_database.data_source :as datasource]
+            [cheshire.core :as json]))
 
 (defn str-replay? [replay]
   (= "--replay" replay))
@@ -52,6 +55,7 @@
         last-state  (last game-states)]
     (cond
       (replay-and-valid-id replay game-states game-id)
+      ;TODO need to test
       (do
         (let [outcome (cond
                         (board/win? (:board last-state) :X (:board-size last-state)) "X Wins"
@@ -64,9 +68,22 @@
           (println (str "Player O: " (name (:O last-state))))
           (println (str "Board Size: " (name (:board-size last-state))))
           (println))
-
+        ;TODO need to test
         (print-each-move game-states)
         true)
 
       (str-replay? replay) (invalid-game-id)
       :else false)))
+
+
+;TODO need to test
+(defn save-to-db! [state]
+  (let [{:keys [X O board current-token game-id]} (->state-to-record state)]
+    (jdbc/execute! datasource/datasource
+                   ["INSERT INTO moves (game_id, player_x, player_o, current_token, board)
+        VALUES (?, ?, ?, ?, ?)"
+                    game-id
+                    (name X)
+                    (name O)
+                    (name current-token)
+                    (json/generate-string board)])))

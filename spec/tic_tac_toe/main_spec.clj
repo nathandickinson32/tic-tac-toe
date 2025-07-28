@@ -10,7 +10,7 @@
 
   (redefs-around [output/greeting (stub :greeting)
                   game/play-again? (stub :play-again)
-                  game/start-new-game (stub :start-game)])
+                  game/start-game (stub :start-game)])
 
   (context "run game with no arguments"
 

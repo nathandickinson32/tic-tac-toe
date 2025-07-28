@@ -62,6 +62,7 @@
         (recur)))))
 
 (defn play-again? [build-game-state]
+  (output/play-again?)
   (let [input (board/->clean-user-input)]
     (when (= input "Y")
       (build-game-state))))
@@ -74,16 +75,6 @@
       (do
         (output/invalid-response)
         (recur)))))
-
-(defn winner-response [new-board new-state board-size current-token]
-  (output/winner-message current-token)
-  (output/determine-board-to-print board-size new-board)
-  new-state)
-
-(defn draw-response [new-board new-state board-size]
-  (output/tie-game-message)
-  (output/determine-board-to-print board-size new-board)
-  new-state)
 
 (defn starting-game-state [board-size players board first-token]
   {:board-size    board-size
@@ -109,6 +100,18 @@
 
 (declare start-game take-turn)
 
+;TODO need to test
+(defn winner-response [new-board new-state board-size current-token]
+  (output/winner-message current-token)
+  (output/determine-board-to-print board-size new-board)
+  new-state)
+
+;TODO need to test
+(defn draw-response [new-board new-state board-size]
+  (output/tie-game-message)
+  (output/determine-board-to-print board-size new-board)
+  new-state)
+
 (defn start-new-game []
   (let [board-size     (ask-for-board-size)
         board          (determine-starting-board board-size)
@@ -132,12 +135,10 @@
 
 (defn play-new-game []
   (start-new-game)
-  (output/play-again?)
   (play-again? start-game))
 
 (defn resume-last-game [state]
   (take-turn state)
-  (output/play-again?)
   (play-again? start-game))
 
 (defn start-new-or-resume [state]
@@ -162,7 +163,9 @@
         new-state   (assoc state
                       :current-token next-player
                       :board new-board)]
+    ;TODO need to check if --edn was in main args if not save to postgres
     (records/record-move new-state)
+    (records/save-to-db! new-state)
     (end-of-turn new-state new-board current-token board-size)))
 
 (defn start-game []
