@@ -9,7 +9,7 @@
             [tic-tac-toe.human]
             [tic-tac-toe.game :as sut]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.edn-records :as records]
+            [tic-tac-toe.records :as records]
             [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
             [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]
             [tic-tac-toe.test-boards-3x3x3-spec :as test-board-3x3x3]))
@@ -301,24 +301,26 @@
                     random-uuid (stub :uuid {:return "123"})])
 
     (it "calls all input functions and builds correct 3x3 game state"
-      (with-in-str "9\n4\n2\n" (sut/start-new-game)
+      (with-in-str "9\n4\n2\n" (sut/start-new-game :edn-file)
         (should-have-invoked :take-turns {:with
                                           [{:board-size    :3x3
                                             :X             :easy-ai
                                             :O             :expert-ai
                                             :board         output/starting-board-3x3
                                             :current-token :X
-                                            :game-id       "123"}]})))
+                                            :game-id       "123"
+                                            :database      :edn-file}]})))
 
     (it "calls all input functions and builds correct 4x4 game state"
-      (with-in-str "16\n4\n2\n" (sut/start-new-game)
+      (with-in-str "16\n4\n2\n" (sut/start-new-game :edn-file)
         (should-have-invoked :take-turns {:with
                                           [{:board-size    :4x4
                                             :X             :easy-ai
                                             :O             :expert-ai
                                             :board         output/starting-board-4x4
                                             :current-token :X
-                                            :game-id       "123"}]})))
+                                            :game-id       "123"
+                                            :database      :edn-file}]})))
 
     (it "determines starting board 3x3"
       (should= output/starting-board-3x3 (sut/determine-starting-board :3x3)))
@@ -346,7 +348,7 @@
     (it "starts a new game when no previous record exists"
       (with-redefs [records/read-last-record (constantly nil)
                     game/start-new-game      (stub :new-game)]
-        (sut/start-game)
+        (sut/start-game "--edn")
         (should-have-invoked :new-game)))
 
     (it "starts a new game when last record is finished game"
@@ -359,7 +361,7 @@
         (with-redefs [records/read-last-record (constantly finished-game)
                       board/game-over?         (constantly true)
                       game/start-new-game      (stub :new-game)]
-          (sut/start-game)
+          (sut/start-game "--edn")
           (should-have-invoked :new-game))))
 
     (it "starts a new game when last record is unfinished and user chooses not to resume"
@@ -373,7 +375,7 @@
                       board/game-over?         (constantly false)
                       sut/Y-or-N               (constantly "N")
                       game/start-new-game      (stub :new-game)]
-          (sut/start-game)
+          (sut/start-game "--edn")
           (should-have-invoked :new-game))))
 
     (it "starts taking turns with last record data when user chooses to resume"
@@ -382,28 +384,30 @@
                              :O             :easy-ai
                              :board         [[1 2 3] [4 5 6] [7 8 9]]
                              :current-token :X
-                             :game-id       "123"}]
+                             :game-id       "123"
+                             :database      :edn-file}]
         (with-redefs [records/read-last-record (constantly unfinished-game)
                       board/game-over?         (constantly false)
                       sut/Y-or-N               (constantly "Y")]
-          (sut/start-game)
+          (sut/start-game "--edn")
           (should-have-invoked :take-turns {:with [{:board-size    :3x3
                                                     :X             :human
                                                     :O             :easy-ai
                                                     :board         [[1 2 3] [4 5 6] [7 8 9]]
                                                     :current-token :X
-                                                    :game-id       "123"}]}))))
+                                                    :game-id       "123"
+                                                    :database      :edn-file}]}))))
 
     (it "asks the user if they want to play again"
       (with-redefs [records/read-last-record (constantly nil)]
         (with-in-str "N\n"
-          (sut/start-game)
+          (sut/start-game "--edn")
           (should-have-invoked :sut/play-again))))
 
     (it "calls play-again? after a 3x3 game finishes"
       (with-redefs [records/read-last-record (constantly nil)]
         (with-in-str "N\n"
-          (sut/start-game)
+          (sut/start-game "--edn")
           (should-have-invoked :sut/play-again))))
     )
   )

@@ -6,7 +6,7 @@
             [tic-tac-toe.easy-ai]
             [tic-tac-toe.medium-ai]
             [tic-tac-toe.expert-ai]
-            [tic-tac-toe.edn-records :as records]))
+            [tic-tac-toe.records :as records]))
 
 (def board-sizes {"9" :3x3 "16" :4x4 "27" :3x3x3})
 
@@ -76,13 +76,14 @@
         (output/invalid-response)
         (recur)))))
 
-(defn starting-game-state [board-size players board first-token]
+(defn starting-game-state [board-size players board first-token database]
   {:board-size    board-size
    :X             (:X players)
    :O             (:O players)
    :board         board
    :current-token first-token
-   :game-id       (str (random-uuid))})
+   :game-id       (str (random-uuid))
+   :database      database})
 
 (defn playable-state [last-state]
   {:board-size    (:board-size last-state)
@@ -90,7 +91,8 @@
    :O             (:O last-state)
    :board         (:board last-state)
    :current-token (:current-token last-state)
-   :game-id       (:game-id last-state)})
+   :game-id       (:game-id last-state)
+   :database      (:database last-state)})
 
 (defn unfinished-game? [last-state]
   (and last-state
@@ -100,19 +102,17 @@
 
 (declare start-game take-turn)
 
-;TODO need to test
 (defn winner-response [new-board new-state board-size current-token]
   (output/winner-message current-token)
   (output/determine-board-to-print board-size new-board)
   new-state)
 
-;TODO need to test
 (defn draw-response [new-board new-state board-size]
   (output/tie-game-message)
   (output/determine-board-to-print board-size new-board)
   new-state)
 
-(defn start-new-game []
+(defn start-new-game [database]
   (let [board-size     (ask-for-board-size)
         board          (determine-starting-board board-size)
         player-1       (ask-for-player)
@@ -122,7 +122,7 @@
         player-2-token (board/switch-player player-1-token)
         players        {player-1-token player-1
                         player-2-token player-2}
-        state          (starting-game-state board-size players board first-token)]
+        state          (starting-game-state board-size players board first-token database)]
     (take-turn state)))
 
 (defn end-of-turn [new-state new-board current-token board-size]
@@ -133,27 +133,27 @@
     (draw-response new-board new-state board-size)
     :else (take-turn new-state)))
 
-(defn play-new-game []
-  (start-new-game)
+(defn play-new-game [database]
+  (start-new-game database)
   (play-again? start-game))
 
 (defn resume-last-game [state]
   (take-turn state)
   (play-again? start-game))
 
-(defn start-new-or-resume [state]
+(defn start-new-or-resume [state database]
   (if (= (Y-or-N) "Y")
     (resume-last-game state)
-    (play-new-game)))
+    (play-new-game database)))
 
-(defn ->option-to-resume [last-state]
+(defn ->option-to-resume [last-state database]
   (let [state (playable-state last-state)]
-    (start-new-or-resume state)))
+    (start-new-or-resume state database)))
 
-(defn start-new-or-option-to-resume [unfinished? last-state]
+(defn start-new-or-option-to-resume [unfinished? last-state database]
   (if unfinished?
-    (->option-to-resume last-state)
-    (play-new-game)))
+    (->option-to-resume last-state database)
+    (play-new-game database)))
 
 (defn take-turn [{:keys [board current-token board-size] :as state}]
   (output/determine-board-to-print board-size board)
@@ -163,14 +163,13 @@
         new-state   (assoc state
                       :current-token next-player
                       :board new-board)]
-    ;TODO need to check if --edn was in main args if not save to postgres
     (records/record-move new-state)
-    (records/save-to-db! new-state)
-
-    ;TODO need to test
     (end-of-turn new-state new-board current-token board-size)))
 
-(defn start-game []
+(defn start-game [args]
   (let [last-state  (records/read-last-record)
-        unfinished? (unfinished-game? last-state)]
-    (start-new-or-option-to-resume unfinished? last-state)))
+        unfinished? (unfinished-game? last-state)
+        database    (if (= "--edn" (first args))
+                      :edn-file
+                      :postgres)]
+    (start-new-or-option-to-resume unfinished? last-state database)))

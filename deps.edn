@@ -7,11 +7,12 @@
            cheshire/cheshire                 {:mvn/version "5.11.0"}
            }
  :aliases {
-           :test {:extra-deps  {speclj/speclj {:mvn/version "3.10.0"}}
-                  :extra-paths ["spec"]}
-           :spec {:main-opts ["-m" "speclj.main" "-c"]}
-           :run  {:main-opts ["-m" "tic-tac-toe.main"]}
-           :cov  {:main-opts  ["-m" "speclj.cloverage" "-c" "--" "-p" "src" "-s" "spec"]
-                  :extra-deps {cloverage/cloverage {:mvn/version "1.2.4"}}}
+           :test      {:extra-deps  {speclj/speclj {:mvn/version "3.10.0"}}
+                       :extra-paths ["spec" "dev"]}
+           :spec      {:main-opts ["-m" "speclj.main" "-c"]}
+           :run       {:main-opts ["-m" "tic-tac-toe.main"]}
+           :cov       {:main-opts  ["-m" "speclj.cloverage" "-c" "--" "-p" "src" "-s" "spec"]
+                       :extra-deps {cloverage/cloverage {:mvn/version "1.2.4"}}}
+           :create-db {:main-opts ["-m" "tic-tac-toe.create-db"]}
            }
  }

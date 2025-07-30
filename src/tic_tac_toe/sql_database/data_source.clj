@@ -1,4 +1,4 @@
-(ns tic-tac-toe.sql_database.data_source
+(ns tic-tac-toe.sql-database.data-source
   (:require [next.jdbc :as jdbc]))
 
 (def db-spec
@@ -7,6 +7,6 @@
    :port 5432
    :dbname "tic_tac_toe"
    :user "postgres"
-   :password ""})
+   :password "Number32!"})
 
 (def datasource (jdbc/get-datasource db-spec))

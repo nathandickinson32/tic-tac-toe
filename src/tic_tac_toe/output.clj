@@ -1,4 +1,5 @@
-(ns tic-tac-toe.output)
+(ns tic-tac-toe.output
+  (:require [clojure.string :as str]))
 
 (def green "\u001b[32m")
 (def red "\u001b[31m")
@@ -101,11 +102,15 @@
        "| %3s  | %3s  | %3s  |\n"
        "----------------------\n\n"))
 
+(defn color-red [s] (str red s reset))
+(defn color-green [s] (str green s reset))
+
+;;TODO need to test
 (defn colorize-token [token padded-token]
-  (cond
-    (= token :X) (str green padded-token reset)
-    (= token :O) (str red padded-token reset)
-    :else padded-token))
+  (case (name token)
+    "X" (color-green padded-token)
+    "O" (color-red padded-token)
+    padded-token))
 
 (defn format-space [token padding]
   (let [token-str    (name token)
@@ -148,4 +153,26 @@
   (println "Your last game was left unfinished.\nWould you like to resume? Y/N"))
 
 (defn record-of-token-moved [token]
-  (println "Move By:" token))
+  (println "Move By:" (colorize-token token (name token))))
+
+(defn replay-data [game-id outcome last-state]
+  (println (str "Replay Of Game: " game-id "\n"
+                "Outcome: " outcome "\n"
+                "Player " (colorize-token :X (name :X)) ": " (name (:X last-state)) "\n"
+                "Player " (colorize-token :O (name :O)) ": " (name (:O last-state)) "\n"
+                "Board Size: " (name (:board-size last-state)))))
+
+
+
+(defn replay-winner-message [token]
+  (let [message (str/trim (with-out-str (winner-message token)))]
+    message))
+
+
+(defn replay-draw-message []
+  (let [message (str/trim (with-out-str (tie-game-message)))]
+    message))
+
+
+(defn replay-unfinished []
+  "Unfinished")

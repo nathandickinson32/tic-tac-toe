@@ -68,6 +68,9 @@
     )
 
   (context "printing 3x3 formatted boards"
+    (with-stubs)
+
+    (redefs-around [sut/colorize-token (fn [_ token] token)])
 
     (it "returns correct starting board for 3x3"
       (should= test-boards-3x3/test-starting-board-3x3 sut/starting-board-3x3))
@@ -247,6 +250,9 @@
     )
 
   (context "printing 3x3x3 formatted boards"
+    (with-stubs)
+
+    (redefs-around [sut/colorize-token (fn [_ token] token)])
 
     (it "returns correct starting board for 3x3"
       (should= test-boards-3x3x3/test-starting-board-3x3x3 sut/starting-board-3x3x3))
@@ -517,10 +523,28 @@
         (should= output (with-out-str (sut/finish-last-game?)))))
     )
 
-  (context "move by token message"
+  (context "printing game data"
+
+    (it "returns correct message format with colored token labels"
+      (let [last-state {:board-size    :3x3
+                        :X             :human
+                        :O             :expert-ai
+                        :board         [[:X :O :X]
+                                        [:X :O :O]
+                                        [:O :X :X]]
+                        :current-token :O
+                        :game-id       "123"}
+            game-id (:game-id last-state)
+            outcome "X Wins"
+            output (str "Replay Of Game: 123\n"
+                        "Outcome: X Wins\n"
+                        "Player " sut/green "X" sut/reset ": human\n"
+                        "Player " sut/red "O" sut/reset ": expert-ai\n"
+                        "Board Size: 3x3\n")]
+        (should= output (with-out-str (sut/replay-data game-id outcome last-state)))))
 
     (it "displays a message to declare what token made a move"
-      (let [output (str "Move By: X\n")]
+      (let [output (str "Move By: " (sut/color-green "X") "\n")]
         (should= output (with-out-str (sut/record-of-token-moved "X")))))
     )
   )
