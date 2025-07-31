@@ -1,0 +1,1 @@
+["^ ","~$medium-ai-moves",["^ ","~:row",6,"~:col",1,"~:name","^0","~:ns","~$tic-tac-toe.medium-ai","~:top-ns","^5","~:type","~:vector"],"~$best-or-rand-move",["^ ","^1",9,"^2",1,"~:fixed-arities",["~#set",[3]],"^3","^9","^4","^5","^6","^5","^7","~:fn"],"~:filename","/Users/nathandickinson/Projects/tic-tac-toe/src/tic_tac_toe/medium_ai.clj"]

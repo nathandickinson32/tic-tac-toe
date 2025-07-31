@@ -105,7 +105,6 @@
 (defn color-red [s] (str red s reset))
 (defn color-green [s] (str green s reset))
 
-;;TODO need to test
 (defn colorize-token [token padded-token]
   (case (name token)
     "X" (color-green padded-token)
@@ -162,17 +161,13 @@
                 "Player " (colorize-token :O (name :O)) ": " (name (:O last-state)) "\n"
                 "Board Size: " (name (:board-size last-state)))))
 
-
-
 (defn replay-winner-message [token]
   (let [message (str/trim (with-out-str (winner-message token)))]
     message))
 
-
 (defn replay-draw-message []
   (let [message (str/trim (with-out-str (tie-game-message)))]
     message))
-
 
 (defn replay-unfinished []
   "Unfinished")

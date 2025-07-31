@@ -8,17 +8,20 @@
 $ brew install potgresql@14
 ```
 
-2. Create `tic_tac_toe` database
+2. Install Babashka
 
-```
-$ psql postgres
-# Enter Password
-#=> CREATE DATABASE tic_tac_toe;
-#=> exit
+``` 
+$ brew install borkdude/brew/babashka
 ```
 
-3. Initialize Database Schemas
+3. Install Rosetta 2
+
+``` 
+$ softwareupdate --install-rosetta --agree-to-license
+```
+
+4. Initialize Database
 
 ```
-$ clj -M:test:create-db
+$ bb create-db
 ```

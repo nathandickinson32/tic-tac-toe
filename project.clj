@@ -11,4 +11,4 @@
 
   :profiles {:dev {:dependencies [[speclj "3.10.0"]]}}
   :plugins [[speclj "3.10.0"]]
-  :test-paths ["spec"])
+  :test-paths ["spec/clj"])

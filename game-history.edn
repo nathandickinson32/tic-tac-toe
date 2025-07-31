@@ -32,3 +32,11 @@
 {:game-id "0b30857a-f813-4a51-8665-5502f444acee", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :X, :board [[:X "2" "3"] [:O :X :X] [:O "8" :O]]}
 {:game-id "0b30857a-f813-4a51-8665-5502f444acee", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :O, :board [[:X "2" :X] [:O :X :X] [:O "8" :O]]}
 {:game-id "0b30857a-f813-4a51-8665-5502f444acee", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :X, :board [[:X "2" :X] [:O :X :X] [:O :O :O]]}
+{:game-id "a0943dd3-3299-41d0-bb2d-b59d41a4fdbf", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :expert-ai, :current-token :O, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" "9"]]}
+{:game-id "a0943dd3-3299-41d0-bb2d-b59d41a4fdbf", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :expert-ai, :current-token :X, :board [[:X "2" "3"] ["4" :O "6"] ["7" "8" "9"]]}
+{:game-id "a0943dd3-3299-41d0-bb2d-b59d41a4fdbf", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :expert-ai, :current-token :O, :board [[:X :X "3"] ["4" :O "6"] ["7" "8" "9"]]}
+{:game-id "a0943dd3-3299-41d0-bb2d-b59d41a4fdbf", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :expert-ai, :current-token :X, :board [[:X :X :O] ["4" :O "6"] ["7" "8" "9"]]}
+{:game-id "a0943dd3-3299-41d0-bb2d-b59d41a4fdbf", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :expert-ai, :current-token :O, :board [[:X :X :O] ["4" :O "6"] [:X "8" "9"]]}
+{:game-id "a0943dd3-3299-41d0-bb2d-b59d41a4fdbf", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :expert-ai, :current-token :X, :board [[:X :X :O] [:O :O "6"] [:X "8" "9"]]}
+{:game-id "a0943dd3-3299-41d0-bb2d-b59d41a4fdbf", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :expert-ai, :current-token :O, :board [[:X :X :O] [:O :O "6"] [:X :X "9"]]}
+{:game-id "a0943dd3-3299-41d0-bb2d-b59d41a4fdbf", :database :edn-file, :board-size :3x3, :X :easy-ai, :O :expert-ai, :current-token :X, :board [[:X :X :O] [:O :O :O] [:X :X "9"]]}

@@ -31,8 +31,8 @@
   (cond
     (board/win? board :X board-size) (output/replay-winner-message :X)
     (board/win? board :O board-size) (output/replay-winner-message :O)
-    (board/full-board? board board-size) (output/replay-unfinished)
-    :else "Unfinished"))
+    (board/full-board? board board-size) (output/replay-draw-message)
+    :else (output/replay-unfinished)))
 
 (defn print-moves [game-states]
   (doseq [{:keys [board-size board]} game-states]
