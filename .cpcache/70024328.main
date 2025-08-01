@@ -5,4 +5,4 @@ speclj.cloverage
 -p
 src
 -s
-spec
+spec/clj

@@ -13,8 +13,8 @@
 (def create-db-sql
   (str "CREATE DATABASE " db-name))
 
-(def create-moves-sql
-  "CREATE TABLE IF NOT EXISTS moves (
+(def create-tables-sql
+  "CREATE TABLE IF NOT EXISTS games (
      move_id SERIAL Primary Key,
      game_id VARCHAR,
      database TEXT NOT NULL,
@@ -40,10 +40,10 @@
     (println "Database Already Exists:" db-name)
     (create-db!)))
 
-(defn- create-moves-table! []
-  (println "Creating Table: moves")
-  (db/execute! config/db-spec [create-moves-sql]))
+(defn- create-tables! []
+  (println "Creating Tables: games and moves")
+  (db/execute! config/db-spec [create-tables-sql]))
 
 (defn -main []
   (ensure-db-exists!)
-  (create-moves-table!))
+  (create-tables!))

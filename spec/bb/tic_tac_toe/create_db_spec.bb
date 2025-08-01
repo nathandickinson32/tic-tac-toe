@@ -11,8 +11,8 @@
 
 (def root-config (dissoc config/db-spec :dbname))
 
-(def create-table-sql
-  (str "CREATE TABLE IF NOT EXISTS moves (\n"
+(def test-create-tables-sql
+  (str "CREATE TABLE IF NOT EXISTS games (\n"
        "     move_id SERIAL Primary Key,\n"
        "     game_id VARCHAR,\n"
        "     database TEXT NOT NULL,\n"
@@ -45,5 +45,5 @@
   (it "creates moves table"
     (let [output (with-out-str (sut/-main))]
       (should-contain "Creating Table: moves\n" output)
-      (should-have-invoked :execute! {:with [config/db-spec [create-table-sql]]})))
+      (should-have-invoked :execute! {:with [config/db-spec [test-create-tables-sql]]})))
   )
