@@ -11,7 +11,7 @@
   (cond
     (= board-size :3x3) (end-game? board board-size)
     (= board-size :4x4) (or (end-game? board board-size)
-                            (>= depth 7))
+                            (>= depth 6))
     (= board-size :3x3x3) (or (end-game? board board-size)
                               (>= depth 3))))
 
