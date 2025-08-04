@@ -173,30 +173,3 @@
                       :edn-file
                       :postgres)]
     (start-new-or-option-to-resume unfinished? last-state database)))
-
-(def create-db-sql
-  "CREATE TABLE IF NOT EXISTS moves (
-    move_id SERIAL Primary Key,
-    game_id VARCHAR,
-    database TEXT NOT NULL,
-    player_x TEXT NOT NULL,
-    player_o TEXT NOT NULL,
-    current_token CHAR(1) NOT NULL,
-    board TEXT NOT NULL\n);")
-
-
-
-###Database Setup
-
-1. Install PostgreSQL
-
-```$ brew install potgresql @14
-```2. Create `tic_tac_toe `database
-
-```$ psql postgres
-#Enter Password
-#=> CREATE DATABASE tic_tac_toe                             ;
-#=> exit
-```3. Initialize Database Schemas
-
-```$ clj -M:test:create-db

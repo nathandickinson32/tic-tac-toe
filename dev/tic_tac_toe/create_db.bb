@@ -15,13 +15,15 @@
 
 (def create-tables-sql
   "CREATE TABLE IF NOT EXISTS games (
-     move_id SERIAL Primary Key,
-     game_id VARCHAR,
-     database TEXT NOT NULL,
+     game_id VARCHAR NOT NULL,
+     status BOOLEAN NOT NULL,
      player_x TEXT NOT NULL,
      player_o TEXT NOT NULL,
-     current_token CHAR(1) NOT NULL,
-     board TEXT NOT NULL
+     board_size TEXT NOT NULL
+   );
+   CREATE TABLE IF NOT EXISTS moves (
+     token VARCHAR NOT NULL,
+     move TEXT NOT NULL
    )")
 
 (def root-config

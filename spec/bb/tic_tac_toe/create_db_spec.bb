@@ -13,13 +13,15 @@
 
 (def test-create-tables-sql
   (str "CREATE TABLE IF NOT EXISTS games (\n"
-       "     move_id SERIAL Primary Key,\n"
-       "     game_id VARCHAR,\n"
-       "     database TEXT NOT NULL,\n"
+       "     game_id VARCHAR NOT NULL,\n"
+       "     status BOOLEAN NOT NULL,\n"
        "     player_x TEXT NOT NULL,\n"
        "     player_o TEXT NOT NULL,\n"
-       "     current_token CHAR(1) NOT NULL,\n"
-       "     board TEXT NOT NULL\n"
+       "     board_size TEXT NOT NULL\n"
+       "   );\n"
+       "   CREATE TABLE IF NOT EXISTS moves (\n"
+       "     token VARCHAR NOT NULL,\n"
+       "     move TEXT NOT NULL\n"
        "   )"))
 
 (describe "Create DB"
@@ -44,6 +46,6 @@
 
   (it "creates moves table"
     (let [output (with-out-str (sut/-main))]
-      (should-contain "Creating Table: moves\n" output)
+      (should-contain "Creating Tables: games and moves\n" output)
       (should-have-invoked :execute! {:with [config/db-spec [test-create-tables-sql]]})))
   )

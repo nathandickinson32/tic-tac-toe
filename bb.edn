@@ -1,14 +1,11 @@
 {:paths ["dev"]
  :deps  {tic_tac_toe/tic_tac_toe {:local/root "."}}
  :pods  {org.babashka/postgresql {:version "0.1.0"}}
- :tasks {create-db   {:doc      "Initializes the SQL Database"
-                      :requires ([tic-tac-toe.create-db :as create-db])
-                      :task     (create-db/-main)}
-         say-hello   {:doc  "Says Hello"
-                      :task (println "hello")}
-         say-goodbye (println "goodbye")
-         spec        {:extra-paths ["spec/bb"]
-                      :extra-deps  {speclj/speclj {:mvn/version "3.10.0"}}
-                      :requires    ([speclj.main :as main])
-                      :task        (apply main/-main "-c" "spec/bb" *command-line-args*)}}
+ :tasks {create-db {:doc      "Initializes the SQL Database"
+                    :requires ([tic-tac-toe.create-db :as create-db])
+                    :task     (create-db/-main)}
+         spec      {:extra-paths ["spec/bb"]
+                    :extra-deps  {speclj/speclj {:mvn/version "3.10.0"}}
+                    :requires    ([speclj.main :as main])
+                    :task        (apply main/-main "-c" "spec/bb" *command-line-args*)}}
  }
