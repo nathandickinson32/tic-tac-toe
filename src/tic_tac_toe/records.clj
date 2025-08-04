@@ -5,13 +5,13 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.sql-database.data-source :as datasource]
-            [cheshire.core :as json]))
+            [tic-tac-toe.expert-ai :as expert-ai]))
 
 (defn ->content-lines []
   (str/split-lines (slurp "game-history.edn")))
 
 (defn ->state-to-record [state]
-  (select-keys state [:game-id :database :board-size :X :O :current-token :board]))
+  (select-keys state [:game-id :board-size :X :O :current-token :board]))
 
 (defn format-record [state]
   (str (->state-to-record state) "\n"))
@@ -51,19 +51,45 @@
       (output/invalid-game-id))
     true))
 
-(defn save-to-postgres [state]
-  (let [{:keys [X O board current-token game-id database]} (->state-to-record state)]
-    (jdbc/execute! datasource/datasource
-                   ["INSERT INTO moves (game_id, database, player_x, player_o, current_token, board)
-        VALUES (?, ?, ?, ?, ?, ?)"
-                    game-id
-                    (name database)
-                    (name X)
-                    (name O)
-                    (name current-token)
-                    (json/generate-string board)])))
+(defn game-exists? [game-id]
+  (some? (jdbc/execute-one! datasource/datasource
+                            ["SELECT 1 FROM games WHERE game_id = ?" game-id])))
 
-(defn record-move [state]
+(defn update-when-finished [game-id board board-size]
+  (when (expert-ai/end-game? board board-size)
+    (jdbc/execute! datasource/datasource
+                   ["UPDATE games SET finished = true WHERE game_id = ?" game-id])))
+
+(defn initial-save-game [game-id X O board-size]
+  (jdbc/execute! datasource/datasource
+                 ["INSERT INTO games (game_id, finished, player_x, player_o, board_size)
+                        VALUES (?, ?, ?, ?, ?)"
+                  game-id
+                  false
+                  (name X)
+                  (name O)
+                  (name board-size)]))
+
+(defn save-move-postgres [game-id current-token move]
+  (jdbc/execute! datasource/datasource
+                 ["INSERT INTO moves (game_id, token, move)
+                        VALUES (?, ?, ?)"
+                  game-id
+                  (name (board/switch-player current-token))
+                  move]))
+
+(defn save-game-postgres [state move]
+  (let [{:keys [X O game-id board-size current-token board]} (->state-to-record state)
+        game-already-exists? (game-exists? game-id)]
+    (if game-already-exists?
+      (update-when-finished game-id board board-size)
+      (initial-save-game game-id X O board-size))
+    (save-move-postgres game-id current-token move)))
+
+(defn save-game-edn [state]
+  (spit "game-history.edn" (format-record state) :append true))
+
+(defn save-game [state move]
   (if (= :edn-file (:database state))
-    (spit "game-history.edn" (format-record state) :append true)
-    (save-to-postgres state)))
+    (save-game-edn state)
+    (save-game-postgres state move)))

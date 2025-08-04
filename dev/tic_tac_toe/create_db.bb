@@ -16,12 +16,13 @@
 (def create-tables-sql
   "CREATE TABLE IF NOT EXISTS games (
      game_id VARCHAR NOT NULL,
-     status BOOLEAN NOT NULL,
+     finished BOOLEAN NOT NULL,
      player_x TEXT NOT NULL,
      player_o TEXT NOT NULL,
      board_size TEXT NOT NULL
    );
    CREATE TABLE IF NOT EXISTS moves (
+     game_id VARCHAR NOT NULL,
      token VARCHAR NOT NULL,
      move TEXT NOT NULL
    )")

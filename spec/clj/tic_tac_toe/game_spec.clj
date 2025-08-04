@@ -6,7 +6,6 @@
             [tic-tac-toe.medium-ai :as medium-ai]
             [tic-tac-toe.expert-ai :as expert-ai]
             [tic-tac-toe.human :as human]
-            [tic-tac-toe.human]
             [tic-tac-toe.game :as sut]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.records :as records]
@@ -46,85 +45,6 @@
 
     (it "returns a map of potential players"
       (should= {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai} sut/players))
-    )
-
-  (context "take-turn"
-    (with-stubs)
-
-    (redefs-around [output/print-board-3x3 (stub :print-board-3x3)
-                    output/print-board-4x4 (stub :print-board-4x4)
-                    output/print-board-3x3x3 (stub :print-board-3x3x3)
-                    records/record-move (stub :record-move)
-                    random-uuid (stub :uuid {:return "123"})
-                    sut/play-again? (stub :play-again)])
-
-    (it "displays 3x3 board before each turn"
-      (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
-      (should-have-invoked :print-board-3x3 {:with [test-board-3x3/no-winners-board]}))
-
-    (it "displays 4x4 board before each turn"
-      (with-in-str "1\n" (sut/take-turn {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :board-size :4x4}))
-      (should-have-invoked :print-board-4x4 {:with [test-board-4x4/x-wins-with-1]}))
-
-    (it "displays 3x3x3 board before each turn"
-      (with-in-str "14\n" (sut/take-turn {:board test-board-3x3x3/x-wins-with-14 :current-token :X :X :human :O :human :board-size :3x3x3}))
-      (should-have-invoked :print-board-3x3x3 {:with [test-board-3x3x3/x-wins-with-14]}))
-
-    (it "ends the game on a win"
-      (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
-        (should-have-invoked :winner-message {:with [:X]})))
-
-    (it "ends the game on a tie"
-      (with-redefs [output/tie-game-message (stub :draw-message)]
-        (with-in-str "1\n" (sut/take-turn {:board test-board-3x3/move-1-for-tie :current-token :X :X :human :O :human :board-size :3x3}))
-        (should-have-invoked :draw-message)))
-
-    (it "repeats until game ends"
-      (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "7\n6\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
-        (should-have-invoked :winner-message {:with [:O]})))
-
-    (it "gets user input for game mode"
-      (with-redefs [tic-tac-toe.human/get-user-move (stub :user {:return [0 1]})
-                    easy-ai/choose-random-move      (stub :easy-ai {:return [1 0]})]
-
-        (sut/take-turn take-turn-state-human-v-human)
-        (should-have-invoked :user)
-        (should-not-have-invoked :easy-ai)))
-
-    (it "gets random easy-ai input for easy-ai game mode on easy-ai turn"
-      (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
-                    easy-ai/choose-random-move (stub :easy-ai {:return [2 0]})]
-
-        (sut/take-turn take-turn-state-human-v-easy-ai)
-        (should-have-invoked :easy-ai)
-        (should-not-have-invoked :user)))
-
-    (it "gets medium-ai input for medium-ai game mode on medium-ai turn"
-      (with-redefs [human/get-user-move         (stub :user {:return [0 1]})
-                    medium-ai/best-or-rand-move (stub :medium-ai {:return [1 2]})]
-
-        (sut/take-turn take-turn-state-human-v-medium-ai)
-        (should-have-invoked :medium-ai)
-        (should-not-have-invoked :user)))
-
-    (it "gets expert-ai input for expert-ai game mode on expert-ai turn"
-      (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
-                    expert-ai/choose-best-move (stub :expert-ai {:return [1 2]})]
-
-        (sut/take-turn take-turn-state-human-v-expert-ai)
-        (should-have-invoked :expert-ai)
-        (should-not-have-invoked :user)))
-
-    (it "calls record-move after win"
-      (with-in-str "4\n3\n"
-        (sut/take-turn {:board         test-board-3x3/top-almost-winning-X
-                        :current-token :O
-                        :X             :human
-                        :O             :human
-                        :board-size    :3x3}))
-      (should-have-invoked :record-move {:times 2}))
     )
 
   (context "when asking to choose a token"
@@ -294,11 +214,11 @@
   (context "when starting a new game"
     (with-stubs)
 
-    (redefs-around [sut/ask-for-token (stub :ask-for-token {:return :O})
+    (redefs-around [sut/ask-for-token        (stub :ask-for-token {:return :O})
                     sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
-                    sut/take-turn (stub :take-turns)
-                    sut/play-again? (stub :play-again {:return nil})
-                    random-uuid (stub :uuid {:return "123"})])
+                    sut/take-turn            (stub :take-turns)
+                    sut/play-again?          (stub :play-again {:return nil})
+                    random-uuid              (stub :uuid {:return "123"})])
 
     (it "calls all input functions and builds correct 3x3 game state"
       (with-in-str "9\n4\n2\n" (sut/start-new-game :edn-file)
@@ -336,14 +256,14 @@
     (with-stubs)
 
     (redefs-around
-      [sut/ask-for-token (stub :ask-for-token {:return :O})
+      [sut/ask-for-token        (stub :ask-for-token {:return :O})
        sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
-       sut/ask-for-player (stub :ask-for-player {:return :expert-ai})
-       sut/ask-for-board-size (stub :ask-for-board-size {:return :3x3})
-       sut/take-turn (stub :take-turns)
-       sut/play-again? (stub :sut/play-again {:return nil})
-       output/play-again? (stub :output/play-again)
-       random-uuid (stub :uuid {:return "123"})])
+       sut/ask-for-player       (stub :ask-for-player {:return :expert-ai})
+       sut/ask-for-board-size   (stub :ask-for-board-size {:return :3x3})
+       sut/take-turn            (stub :take-turns)
+       sut/play-again?          (stub :sut/play-again {:return nil})
+       output/play-again?       (stub :output/play-again)
+       random-uuid              (stub :uuid {:return "123"})])
 
     (it "starts a new game when no previous record exists"
       (with-redefs [records/read-last-record (constantly nil)
@@ -409,5 +329,147 @@
         (with-in-str "N\n"
           (sut/start-game "--edn")
           (should-have-invoked :sut/play-again))))
+    )
+
+  (context "take-turn"
+    (with-stubs)
+
+    (redefs-around [output/print-board-3x3   (stub :print-board-3x3)
+                    output/print-board-4x4   (stub :print-board-4x4)
+                    output/print-board-3x3x3 (stub :print-board-3x3x3)
+                    records/save-game        (stub :record-move)
+                    random-uuid              (stub :uuid {:return "123"})
+                    sut/play-again?          (stub :play-again)])
+
+    (it "displays 3x3 board before each turn"
+      (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
+      (should-have-invoked :print-board-3x3 {:with [test-board-3x3/no-winners-board]}))
+
+    (it "displays 4x4 board before each turn"
+      (with-in-str "1\n" (sut/take-turn {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :board-size :4x4}))
+      (should-have-invoked :print-board-4x4 {:with [test-board-4x4/x-wins-with-1]}))
+
+    (it "displays 3x3x3 board before each turn"
+      (with-in-str "14\n" (sut/take-turn {:board test-board-3x3x3/x-wins-with-14 :current-token :X :X :human :O :human :board-size :3x3x3}))
+      (should-have-invoked :print-board-3x3x3 {:with [test-board-3x3x3/x-wins-with-14]}))
+
+    (it "ends the game on a win"
+      (with-redefs [output/winner-message (stub :winner-message)]
+        (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
+        (should-have-invoked :winner-message {:with [:X]})))
+
+    (it "ends the game on a tie"
+      (with-redefs [output/tie-game-message (stub :draw-message)]
+        (with-in-str "1\n" (sut/take-turn {:board test-board-3x3/move-1-for-tie :current-token :X :X :human :O :human :board-size :3x3}))
+        (should-have-invoked :draw-message)))
+
+    (it "repeats until game ends"
+      (with-redefs [output/winner-message (stub :winner-message)]
+        (with-in-str "7\n6\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
+        (should-have-invoked :winner-message {:with [:O]})))
+
+    (it "gets user input for game mode"
+      (with-redefs [tic-tac-toe.human/get-user-move (stub :user {:return [0 1]})
+                    easy-ai/choose-random-move      (stub :easy-ai {:return [1 0]})]
+
+        (sut/take-turn take-turn-state-human-v-human)
+        (should-have-invoked :user)
+        (should-not-have-invoked :easy-ai)))
+
+    (it "gets random easy-ai input for easy-ai game mode on easy-ai turn"
+      (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
+                    easy-ai/choose-random-move (stub :easy-ai {:return [2 0]})]
+
+        (sut/take-turn take-turn-state-human-v-easy-ai)
+        (should-have-invoked :easy-ai)
+        (should-not-have-invoked :user)))
+
+    (it "gets medium-ai input for medium-ai game mode on medium-ai turn"
+      (with-redefs [human/get-user-move         (stub :user {:return [0 1]})
+                    medium-ai/best-or-rand-move (stub :medium-ai {:return [1 2]})]
+
+        (sut/take-turn take-turn-state-human-v-medium-ai)
+        (should-have-invoked :medium-ai)
+        (should-not-have-invoked :user)))
+
+    (it "gets expert-ai input for expert-ai game mode on expert-ai turn"
+      (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
+                    expert-ai/choose-best-move (stub :expert-ai {:return [1 2]})]
+
+        (sut/take-turn take-turn-state-human-v-expert-ai)
+        (should-have-invoked :expert-ai)
+        (should-not-have-invoked :user)))
+
+    (it "calls record-move after win"
+      (with-in-str "4\n3\n"
+        (sut/take-turn {:board         test-board-3x3/top-almost-winning-X
+                        :current-token :O
+                        :X             :human
+                        :O             :human
+                        :board-size    :3x3}))
+      (should-have-invoked :record-move {:times 2}))
+
+    (it "string move based on grid-move 3x3"
+      (with-redefs [human/get-user-move (stub :user {:return [0 0]})
+                    board/make-move     (stub :make-move {:return test-board-3x3/no-winners-board})
+                    board/switch-player (constantly :O)
+                    sut/end-of-turn     (stub :end-of-turn)]
+
+        (sut/take-turn {:board         test-board-3x3/no-winners-board
+                        :current-token :X
+                        :X             :human
+                        :O             :human
+                        :board-size    :3x3
+                        :game-id       "123"})
+
+        (should-have-invoked :record-move
+                             {:with [{:board         test-board-3x3/no-winners-board
+                                      :current-token :O
+                                      :X             :human
+                                      :O             :human
+                                      :board-size    :3x3
+                                      :game-id       "123"} "1"]})))
+
+    (it "string move based on grid-move 4x4"
+      (with-redefs [human/get-user-move (stub :user {:return [3 3]})
+                    board/make-move     (stub :make-move {:return test-board-3x3/no-winners-board})
+                    board/switch-player (constantly :O)
+                    sut/end-of-turn     (stub :end-of-turn)]
+
+        (sut/take-turn {:board         test-board-3x3/no-winners-board
+                        :current-token :X
+                        :X             :human
+                        :O             :human
+                        :board-size    :4x4
+                        :game-id       "123"})
+
+        (should-have-invoked :record-move
+                             {:with [{:board         test-board-3x3/no-winners-board
+                                      :current-token :O
+                                      :X             :human
+                                      :O             :human
+                                      :board-size    :4x4
+                                      :game-id       "123"} "16"]})))
+
+    (it "string move based on grid-move 3x3x3"
+      (with-redefs [human/get-user-move (stub :user {:return [2 2 2]})
+                    board/make-move     (stub :make-move {:return test-board-3x3/no-winners-board})
+                    board/switch-player (constantly :O)
+                    sut/end-of-turn     (stub :end-of-turn)]
+
+        (sut/take-turn {:board         test-board-3x3/no-winners-board
+                        :current-token :X
+                        :X             :human
+                        :O             :human
+                        :board-size    :3x3x3
+                        :game-id       "123"})
+
+        (should-have-invoked :record-move
+                             {:with [{:board         test-board-3x3/no-winners-board
+                                      :current-token :O
+                                      :X             :human
+                                      :O             :human
+                                      :board-size    :3x3x3
+                                      :game-id       "123"} "27"]})))
     )
   )

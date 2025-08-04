@@ -2,11 +2,12 @@
   (:require [tic-tac-toe.board :as board]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]
-            [tic-tac-toe.human]
+            [tic-tac-toe.human :as human]
             [tic-tac-toe.easy-ai]
             [tic-tac-toe.medium-ai]
             [tic-tac-toe.expert-ai]
-            [tic-tac-toe.records :as records]))
+            [tic-tac-toe.records :as records]
+            [clojure.set :as set]))
 
 (def board-sizes {"9" :3x3 "16" :4x4 "27" :3x3x3})
 
@@ -155,15 +156,20 @@
     (->option-to-resume last-state database)
     (play-new-game database)))
 
+(defn ->str-move [grid-move board-size]
+  (let [positions (set/map-invert (human/determine-grid-coordinate-size board-size))]
+    (get positions grid-move)))
+
 (defn take-turn [{:keys [board current-token board-size] :as state}]
   (output/determine-board-to-print board-size board)
-  (let [move        (->player-move state)
-        new-board   (board/make-move board move current-token)
+  (let [grid-move   (->player-move state)
+        new-board   (board/make-move board grid-move current-token)
         next-player (switch-player current-token)
         new-state   (assoc state
                       :current-token next-player
-                      :board new-board)]
-    (records/record-move new-state)
+                      :board new-board)
+        str-move    (->str-move grid-move board-size)]
+    (records/save-game new-state str-move)
     (end-of-turn new-state new-board current-token board-size)))
 
 (defn start-game [args]

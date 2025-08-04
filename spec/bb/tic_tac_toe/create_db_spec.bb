@@ -14,12 +14,13 @@
 (def test-create-tables-sql
   (str "CREATE TABLE IF NOT EXISTS games (\n"
        "     game_id VARCHAR NOT NULL,\n"
-       "     status BOOLEAN NOT NULL,\n"
+       "     finished BOOLEAN NOT NULL,\n"
        "     player_x TEXT NOT NULL,\n"
        "     player_o TEXT NOT NULL,\n"
        "     board_size TEXT NOT NULL\n"
        "   );\n"
        "   CREATE TABLE IF NOT EXISTS moves (\n"
+       "     game_id VARCHAR NOT NULL,\n"
        "     token VARCHAR NOT NULL,\n"
        "     move TEXT NOT NULL\n"
        "   )"))

@@ -9,7 +9,7 @@
             [tic-tac-toe.sql-database.data-source :as datasource]
             [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
             [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]
-            ))
+            [tic-tac-toe.expert-ai :as expert-ai]))
 
 (def game-states-123
   [{:game-id       "123"
@@ -67,60 +67,40 @@
 
 (describe "Game records"
 
-  (context "when recording moves"
+  (context "when recording moves to edn file"
     (with-stubs)
 
     (it "gets the correct args to record moves edn file"
       (let [test-state {:game-id       "123"
                         :database      :edn-file
+                        :board-size    :3x3
                         :X             :human
                         :O             :easy-ai
-                        :current-token :X
                         :board         output/starting-board-3x3
                         :should-ignore "should be ignored"}]
         (with-redefs [spit (stub :spit)]
-          (sut/record-move test-state))
-        (let [content (str (dissoc test-state :should-ignore) "\n")]
+          (sut/save-game test-state "10"))
+        (let [content (str (dissoc test-state :should-ignore :database) "\n")]
           (should-have-invoked :spit {:with ["game-history.edn" content :append true]}))))
 
-    (it "gets the correct args to record moves postgres"
-      (let [test-state {:game-id       "123"
-                        :database      :sql
-                        :X             :human
-                        :O             :easy-ai
-                        :current-token :X
-                        :board         output/starting-board-3x3
-                        :should-ignore "should be ignored"}
-            sql-query  "INSERT INTO moves (game_id, database, player_x, player_o, current_token, board)
-        VALUES (?, ?, ?, ?, ?, ?)"
-            sql-params [sql-query "123" "sql" "human" "easy-ai" "X" (json/generate-string output/starting-board-3x3)]]
-        (with-redefs [jdbc/execute! (stub :jdbc/execute!)]
-          (sut/record-move test-state)
-          (should-have-invoked :jdbc/execute! {:with [datasource/datasource sql-params]}))))
-    )
-
-  (context "when reading the last recorded move"
-    (with-stubs)
-
     (it "returns a single record"
-      (let [record {:X             :human
-                    :O             :human
-                    :board         output/starting-board-3x3
-                    :current-token :X
-                    :game-id       nil
-                    :database      :edn-file}]
+      (let [record {:X          :human
+                    :O          :human
+                    :board_size :3x3
+                    :board      output/starting-board-3x3
+                    :game-id    nil}]
         (with-redefs [slurp (stub :slurp {:return (str record "\n")})]
           (should= record (sut/read-last-record)))))
 
     (it "returns last record"
       (let [record-1 {:game-id       nil
-                      :database      :edn-file
+                      :board_size    :3x3
                       :X             :human
                       :O             :human
-                      :current-token :X
+                      :current-token :O
                       :board         output/starting-board-3x3}
             record-2 {:game-id       nil
-                      :database      :edn-file
+                      :board_size    :3x3
                       :X             :easy-ai
                       :O             :human
                       :current-token :O
@@ -128,6 +108,62 @@
             content  (str record-1 "\n" record-2 "\n")]
         (with-redefs [slurp (stub :slurp {:return content})]
           (should= record-2 (sut/read-last-record)))))
+    )
+
+  (context "save game to postgres"
+    (with-stubs)
+
+    (it "gets the correct args to record games postgres"
+      (let [test-state {:game-id       "123"
+                        :database      :postgres
+                        :board-size    :3x3
+                        :X             :human
+                        :O             :easy-ai
+                        :current-token :O
+                        :board         output/starting-board-3x3
+                        :should-ignore "should be ignored"}
+            sql-query  "INSERT INTO games (game_id, finished, player_x, player_o, board_size)
+                        VALUES (?, ?, ?, ?, ?)"
+            sql-params [sql-query "123" false "human" "easy-ai" "3x3"]]
+        (with-redefs [jdbc/execute!          (stub :jdbc/execute!)
+                      sut/save-move-postgres (stub :save-move-postgres)
+                      sut/game-exists?       (stub :game-exists? {:return false})]
+          (let [test-state (dissoc test-state :database)]
+            (sut/save-game test-state "2")
+            (should-have-invoked :jdbc/execute! {:with [datasource/datasource sql-params]})))))
+
+    (it "updates games table to finished game"
+      (let [test-state {:game-id       "123"
+                        :database      :postgres
+                        :board-size    :3x3
+                        :X             :human
+                        :O             :easy-ai
+                        :current-token :O
+                        :board         output/starting-board-3x3}
+            sql-query  "UPDATE games SET finished = true WHERE game_id = ?"
+            sql-params [sql-query "123"]]
+        (with-redefs [jdbc/execute-one!   (constantly {:exists 1})
+                      jdbc/execute!       (stub :execute!)
+                      expert-ai/end-game? (constantly true)]
+          (let [test-state (dissoc test-state :database)]
+            (sut/save-game test-state "20")
+            (should-have-invoked :execute! {:with [datasource/datasource sql-params]})))))
+
+    (it "gets the correct args to record moves postgres"
+      (let [test-state {:game-id       "123"
+                        :database      :postgres
+                        :board-size    :3x3
+                        :X             :human
+                        :O             :easy-ai
+                        :current-token :O
+                        :board         output/starting-board-3x3}
+            sql-query  "INSERT INTO moves (game_id, token, move)
+                        VALUES (?, ?, ?)"
+            sql-params [sql-query "123" "X" "2"]]
+        (with-redefs [jdbc/execute! (stub :jdbc/execute!)]
+          (let [test-state (dissoc test-state :database)]
+            (sut/save-game test-state "2")
+            (should-have-invoked :jdbc/execute! {:with [datasource/datasource sql-params]})))))
     )
 
   (context "replay?"
