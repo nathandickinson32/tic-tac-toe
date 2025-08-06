@@ -142,7 +142,7 @@
                         :board         output/starting-board-3x3}
             sql-query  "UPDATE games SET finished = true WHERE game_id = ?"
             sql-params [sql-query "123"]]
-        (with-redefs [jdbc/execute-one!   (constantly {:exists 1})
+        (with-redefs [jdbc/execute-one!   (constantly {:exists true})
                       jdbc/execute!       (stub :execute!)
                       expert-ai/end-game? (constantly true)]
           (let [test-state (dissoc test-state :database)]

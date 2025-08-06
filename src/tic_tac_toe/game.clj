@@ -62,11 +62,11 @@
         (output/invalid-response)
         (recur)))))
 
-(defn play-again? [build-game-state]
+(defn play-again? [play-new-game database]
   (output/play-again?)
   (let [input (board/->clean-user-input)]
     (when (= input "Y")
-      (build-game-state))))
+      (play-new-game database))))
 
 (defn Y-or-N []
   (output/finish-last-game?)
@@ -136,28 +136,28 @@
 
 (defn play-new-game [database]
   (start-new-game database)
-  (play-again? start-game))
+  (play-again? play-new-game database))
 
 (defn resume-last-game [state]
   (take-turn state)
-  (play-again? start-game))
+  (play-again? play-new-game (:database state)))
 
-(defn start-new-or-resume [state database]
+(defn start-new-or-resume [state]
   (if (= (Y-or-N) "Y")
     (resume-last-game state)
-    (play-new-game database)))
+    (play-new-game (:database state))))
 
-(defn ->option-to-resume [last-state database]
+(defn ->option-to-resume [last-state]
   (let [state (playable-state last-state)]
-    (start-new-or-resume state database)))
+    (start-new-or-resume state)))
 
-(defn start-new-or-option-to-resume [unfinished? last-state database]
+(defn start-new-or-option-to-resume [unfinished? state]
   (if unfinished?
-    (->option-to-resume last-state database)
-    (play-new-game database)))
+    (->option-to-resume state)
+    (play-new-game (:database state))))
 
 (defn ->str-move [grid-move board-size]
-  (let [positions (set/map-invert (human/determine-grid-coordinate-size board-size))]
+  (let [positions (set/map-invert (human/determine-positions board-size))]
     (get positions grid-move)))
 
 (defn take-turn [{:keys [board current-token board-size] :as state}]
@@ -172,10 +172,17 @@
     (records/save-game new-state str-move)
     (end-of-turn new-state new-board current-token board-size)))
 
+(defn unfinished-edn-game [last-state database]
+  (if (and (some? last-state)
+           (= :edn-file database))
+    (unfinished-game? (assoc last-state :database :edn-file))
+    false))
+
 (defn start-game [args]
-  (let [last-state  (records/read-last-record)
-        unfinished? (unfinished-game? last-state)
-        database    (if (= "--edn" (first args))
-                      :edn-file
-                      :postgres)]
-    (start-new-or-option-to-resume unfinished? last-state database)))
+  (let [database    (if (some #(= % "--edn") args) :edn-file :postgres)
+        last-state  (records/read-last-record)
+        unfinished? (unfinished-edn-game last-state database)
+        state       (if (= :edn-file database)
+                      (assoc last-state :database :edn-file)
+                      last-state)]
+    (start-new-or-option-to-resume unfinished? state)))

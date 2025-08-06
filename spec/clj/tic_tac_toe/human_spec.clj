@@ -193,12 +193,12 @@
   (context "when determining what grid positions to get"
 
     (it "returns 3x3 positions for 3x3 board size"
-      (should= sut/positions-3x3 (sut/determine-grid-coordinate-size :3x3)))
+      (should= sut/str-positions-3x3 (sut/determine-positions :3x3)))
 
     (it "returns 4x4 positions for 4x4 board size"
-      (should= sut/positions-4x4 (sut/determine-grid-coordinate-size :4x4)))
+      (should= sut/str-positions-4x4 (sut/determine-positions :4x4)))
 
     (it "returns 3x3x3 positions for 3x3x3 board size"
-      (should= sut/positions-3x3x3 (sut/determine-grid-coordinate-size :3x3x3)))
+      (should= sut/str-positions-3x3x3 (sut/determine-positions :3x3x3)))
     )
   )
