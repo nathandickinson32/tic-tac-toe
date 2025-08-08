@@ -1,6 +1,5 @@
 (ns tic-tac-toe.records-spec
-  (:require [cheshire.core :as json]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
             [next.jdbc :as jdbc]
             [speclj.core :refer :all]
             [tic-tac-toe.records :as sut]
@@ -9,7 +8,8 @@
             [tic-tac-toe.sql-database.data-source :as datasource]
             [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
             [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]
-            [tic-tac-toe.expert-ai :as expert-ai]))
+            [tic-tac-toe.expert-ai :as expert-ai])
+  (:import (java.util UUID)))
 
 (def game-states-123
   [{:game-id       "123"
@@ -150,7 +150,7 @@
             (should-have-invoked :execute! {:with [datasource/datasource sql-params]})))))
 
     (it "gets the correct args to record moves postgres"
-      (let [test-state {:game-id       "123"
+      (let [test-state {:game-id       (UUID/fromString "3cb0c0ad-d56c-4a0d-bc8e-807914a9523e")
                         :database      :postgres
                         :board-size    :3x3
                         :X             :human
@@ -159,7 +159,8 @@
                         :board         output/starting-board-3x3}
             sql-query  "INSERT INTO moves (game_id, token, move)
                         VALUES (?, ?, ?)"
-            sql-params [sql-query "123" "X" "2"]]
+            sql-params [sql-query (UUID/fromString "3cb0c0ad-d56c-4a0d-bc8e-807914a9523e")
+                        "X" "2"]]
         (with-redefs [jdbc/execute! (stub :jdbc/execute!)]
           (let [test-state (dissoc test-state :database)]
             (sut/save-game test-state "2")

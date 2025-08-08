@@ -83,7 +83,7 @@
    :O             (:O players)
    :board         board
    :current-token first-token
-   :game-id       (str (random-uuid))
+   :game-id       (random-uuid)
    :database      database})
 
 (defn playable-state [last-state]
@@ -172,7 +172,7 @@
     (records/save-game new-state str-move)
     (end-of-turn new-state new-board current-token board-size)))
 
-(defn unfinished-edn-game [last-state database]
+(defn unfinished-edn-game? [last-state database]
   (if (and (some? last-state)
            (= :edn-file database))
     (unfinished-game? (assoc last-state :database :edn-file))
@@ -181,8 +181,8 @@
 (defn start-game [args]
   (let [database    (if (some #(= % "--edn") args) :edn-file :postgres)
         last-state  (records/read-last-record)
-        unfinished? (unfinished-edn-game last-state database)
+        unfinished? (unfinished-edn-game? last-state database)
         state       (if (= :edn-file database)
-                      (assoc last-state :database :edn-file)
-                      last-state)]
+                      (assoc last-state :database database)
+                      (assoc last-state :database database))]
     (start-new-or-option-to-resume unfinished? state)))

@@ -251,85 +251,6 @@
       (should= output/starting-board-3x3x3 (sut/determine-starting-board :3x3x3)))
     )
 
-  (context "build-game-state"
-    (with-stubs)
-
-    (redefs-around
-      [sut/ask-for-token        (stub :ask-for-token {:return :O})
-       sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
-       sut/ask-for-player       (stub :ask-for-player {:return :expert-ai})
-       sut/ask-for-board-size   (stub :ask-for-board-size {:return :3x3})
-       sut/take-turn            (stub :take-turns)
-       sut/play-again?          (stub :sut/play-again {:return nil})
-       output/play-again?       (stub :output/play-again)
-       random-uuid              (stub :uuid {:return "123"})])
-
-    (it "starts a new game when no previous record exists"
-      (with-redefs [records/read-last-record (constantly nil)
-                    sut/start-new-game       (stub :new-game)]
-        (sut/start-game "--edn")
-        (should-have-invoked :new-game)))
-
-    (it "starts a new game when last record is finished game"
-      (let [finished-game {:board-size    :3x3
-                           :board         test-board-3x3/test-starting-board-3x3
-                           :X             :human
-                           :O             :easy-ai
-                           :current-token :X
-                           :game-id       "123"}]
-        (with-redefs [records/read-last-record (constantly finished-game)
-                      board/game-over?         (constantly true)
-                      sut/start-new-game       (stub :new-game)]
-          (sut/start-game "--edn")
-          (should-have-invoked :new-game))))
-
-    (it "starts a new game when last record is unfinished and user chooses not to resume"
-      (let [unfinished-game {:board-size    :3x3
-                             :board         test-board-3x3/test-starting-board-3x3
-                             :X             :human
-                             :O             :easy-ai
-                             :current-token :X
-                             :game-id       "123"}]
-        (with-redefs [records/read-last-record (constantly unfinished-game)
-                      board/game-over?         (constantly false)
-                      sut/Y-or-N               (constantly "N")
-                      sut/start-new-game       (stub :new-game)]
-          (sut/start-game "--edn")
-          (should-have-invoked :new-game))))
-
-    (it "starts taking turns with last record data when user chooses to resume"
-      (let [unfinished-game {:board-size    :3x3
-                             :X             :expert-ai
-                             :O             :expert-ai
-                             :board         test-board-3x3/test-starting-board-3x3
-                             :current-token :X
-                             :game-id       "123"
-                             :database      :edn-file}]
-        (with-redefs [records/read-last-record (constantly unfinished-game)
-                      board/game-over?         (constantly false)
-                      sut/Y-or-N               (constantly "Y")]
-          (sut/start-game "--edn")
-          (should-have-invoked :take-turns {:with [{:board-size    :3x3
-                                                    :X             :expert-ai
-                                                    :O             :expert-ai
-                                                    :board         test-board-3x3/test-starting-board-3x3
-                                                    :current-token :X
-                                                    :game-id       "123"
-                                                    :database      :edn-file}]}))))
-
-    (it "asks the user if they want to play again"
-      (with-redefs [records/read-last-record (constantly nil)]
-        (with-in-str "N\n"
-          (sut/start-game "--edn")
-          (should-have-invoked :sut/play-again))))
-
-    (it "calls play-again? after a 3x3 game finishes"
-      (with-redefs [records/read-last-record (constantly nil)]
-        (with-in-str "N\n"
-          (sut/start-game "--edn")
-          (should-have-invoked :sut/play-again))))
-    )
-
   (context "take-turn"
     (with-stubs)
 
@@ -466,110 +387,93 @@
                                       :game-id       "123"} "27"]})))
     )
 
-  (context "playable-state"
-
-    (it "returns a subset of the last-state with correct keys"
-      (let [last-state {:board-size :3x3 :X :human :O :ai :board test-board-3x3/test-starting-board-3x3 :current-token :X :game-id "123" :database :edn-file :extra-key "ignore-me"}
-            result     (sut/playable-state last-state)]
-        (should= {:board-size :3x3 :X :human :O :ai :board test-board-3x3/test-starting-board-3x3 :current-token :X :game-id "123" :database :edn-file}
-                 result)))
-    )
-
-  (context "unfinished-game?"
+  (context "starting the game"
     (with-stubs)
 
-    (it "returns false when last-state is nil"
-      (should-not (sut/unfinished-game? nil)))
+    (redefs-around
+      [sut/ask-for-token        (stub :ask-for-token {:return :O})
+       sut/ask-for-first-player (stub :ask-for-first-player {:return :X})
+       sut/ask-for-player       (stub :ask-for-player {:return :expert-ai})
+       sut/ask-for-board-size   (stub :ask-for-board-size {:return :3x3})
+       sut/take-turn            (stub :take-turns)
+       sut/play-again?          (stub :sut/play-again {:return nil})
+       output/play-again?       (stub :output/play-again)
+       random-uuid              (stub :uuid {:return "123"})])
 
-    (it "returns false when board/game-over? returns true"
-      (let [state {:board test-board-3x3/top-winning-row-X :current-token :X :board-size :3x3}]
-        (with-redefs [board/game-over?  (constantly true)
-                      sut/switch-player (stub :switch-player {:return :O})]
-          (should-not (sut/unfinished-game? state)))))
+    (it "starts a new game when no previous record exists"
+      (with-redefs [records/read-last-record (constantly nil)
+                    sut/start-new-game       (stub :new-game)]
+        (sut/start-game ["--edn"])
+        (should-have-invoked :new-game)))
 
-    (it "returns true when board/game-over? returns false"
-      (let [state {:board test-board-3x3/test-starting-board-3x3 :current-token :X :board-size :3x3}]
-        (with-redefs [board/game-over?  (constantly false)
-                      sut/switch-player (stub :switch-player {:return :O})]
-          (should (sut/unfinished-game? state)))))
-    )
+    (it "starts a new game when last record is finished game"
+      (let [finished-game {:board-size    :3x3
+                           :board         test-board-3x3/test-starting-board-3x3
+                           :X             :human
+                           :O             :easy-ai
+                           :current-token :X
+                           :game-id       "123"
+                           :database      :edn-file}]
+        (with-redefs [records/read-last-record (constantly finished-game)
+                      board/game-over?         (constantly true)
+                      sut/start-new-game       (stub :new-game)]
+          (sut/start-game ["--edn"])
+          (should-have-invoked :new-game))))
 
-  (context "resume-last-game"
-    (with-stubs)
+    (it "starts a new game when last record is unfinished and user chooses not to resume"
+      (let [unfinished-game {:board-size    :3x3
+                             :board         test-board-3x3/test-starting-board-3x3
+                             :X             :human
+                             :O             :easy-ai
+                             :current-token :X
+                             :game-id       "123"
+                             :database      :edn-file}]
+        (with-redefs [records/read-last-record (constantly unfinished-game)
+                      board/game-over?         (constantly false)
+                      sut/Y-or-N               (constantly "N")
+                      sut/start-new-game       (stub :new-game)]
+          (sut/start-game ["--edn"])
+          (should-have-invoked :new-game))))
 
-    (it "calls take-turn and then play-again?"
-      (let [state {:some :state}]
-        (with-redefs [sut/take-turn   (stub :take-turn)
-                      sut/play-again? (stub :play-again)]
-          (sut/resume-last-game state)
-          (should-have-invoked :take-turn {:with [state]})
-          (should-have-invoked :play-again))))
-    )
+    (it "starts taking turns with last record data when user chooses to resume"
+      (let [unfinished-game {:board-size    :3x3
+                             :X             :expert-ai
+                             :O             :expert-ai
+                             :board         test-board-3x3/test-starting-board-3x3
+                             :current-token :X
+                             :game-id       "123"}]
+        (with-redefs [records/read-last-record (constantly unfinished-game)
+                      board/game-over?         (constantly false)
+                      sut/Y-or-N               (constantly "Y")]
+          (sut/start-game ["--edn"])
+          (should-have-invoked :take-turns {:with [{:board-size    :3x3
+                                                    :X             :expert-ai
+                                                    :O             :expert-ai
+                                                    :board         test-board-3x3/test-starting-board-3x3
+                                                    :current-token :X
+                                                    :game-id       "123"
+                                                    :database      :edn-file}]}))))
 
-  (context "start-new-or-resume"
-    (with-stubs)
+    (it "asks the user if they want to play again"
+      (with-redefs [records/read-last-record (constantly nil)]
+        (with-in-str "N\n"
+          (sut/start-game ["--edn"])
+          (should-have-invoked :sut/play-again))))
 
-    (it "calls resume-last-game when input is Y"
-      (let [state {:some :state}]
-        (with-redefs [sut/Y-or-N           (constantly "Y")
-                      sut/resume-last-game (stub :resume)]
-          (sut/start-new-or-resume state)
-          (should-have-invoked :resume))))
+    (it "calls play-again? after a 3x3 game finishes"
+      (with-redefs [records/read-last-record (constantly nil)]
+        (with-in-str "N\n"
+          (sut/start-game ["--edn"])
+          (should-have-invoked :sut/play-again))))
 
-
-    (it "calls play-new-game when input is N"
-      (let [state {:database :edn-file}]
-        (with-redefs [sut/Y-or-N        (constantly "N")
-                      sut/play-new-game (stub :new-game)]
-          (sut/start-new-or-resume state)
-          (should-have-invoked :new-game {:with [:edn-file]})))
-      )
-    )
-
-
-  (context "start-new-or-option-to-resume"
-    (with-stubs)
-
-    (it "calls ->option-to-resume when unfinished"
-      (let [state {:some :state}]
-        (with-redefs [sut/->option-to-resume (stub :resume)]
-          (sut/start-new-or-option-to-resume true state)
-          (should-have-invoked :resume {:with [state]}))))
-
-    (it "calls play-new-game when finished"
-      (let [state {:database :edn-file}]
-        (with-redefs [sut/play-new-game (stub :new-game)]
-          (sut/start-new-or-option-to-resume false state)
-          (should-have-invoked :new-game {:with [:edn-file]}))))
-    )
-
-  (context "->option-to-resume"
-    (with-stubs)
-
-    (it "calls playable-state and passes result to start-new-or-resume"
-      (let [last-state {:database :edn-file}]
-        (with-redefs [sut/playable-state      (stub :playable {:return {:fake :state}})
-                      sut/start-new-or-resume (stub :resume)]
-          (sut/->option-to-resume last-state)
-          (should-have-invoked :playable {:with [last-state]})
-          (should-have-invoked :resume {:with [{:fake :state}]}))))
-    )
-
-  (context "unfinished-edn-game"
-    (with-stubs)
-
-    (it "returns true if unfinished-game? is true and database is :edn-file"
-      (let [last-state {:some :state}]
-        (with-redefs [sut/unfinished-game? (stub :unfinished? {:return true})]
-          (sut/unfinished-edn-game last-state :edn-file)
-          (should-have-invoked :unfinished? {:with [{:some :state :database :edn-file}]}))))
-
-    (it "returns false if database is not :edn-file"
-      (let [last-state {:some :state}]
-        (should= false
-                 (sut/unfinished-edn-game last-state :postgres))))
-
-    (it "returns false if last-state is nil"
-      (should= false (sut/unfinished-edn-game nil :edn-file)))
+    (it "starts a new game when sql database"
+      (sut/start-game [])
+      (should-have-invoked :take-turns {:with [{:board-size    :3x3
+                                                :X             :expert-ai
+                                                :O             :expert-ai
+                                                :board         test-board-3x3/test-starting-board-3x3
+                                                :current-token :X
+                                                :game-id       "123"
+                                                :database      :postgres}]}))
     )
   )
