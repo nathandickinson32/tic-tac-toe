@@ -28,3 +28,30 @@
 {:game-id "3cb0c0ad-d56c-4a0d-bc8e-807914a9523e", :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:X :O "3"] ["4" "5" "6"] ["7" "8" "9"]]}
 {:game-id "3cb0c0ad-d56c-4a0d-bc8e-807914a9523e", :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:X :O :X] ["4" "5" "6"] ["7" "8" "9"]]}
 {:game-id "3cb0c0ad-d56c-4a0d-bc8e-807914a9523e", :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:X :O :X] [:O "5" "6"] ["7" "8" "9"]]}
+{:game-id #uuid "545ec33e-5821-4edd-9d77-0f3e3586d1a2", :board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" "9"]]}
+{:game-id #uuid "545ec33e-5821-4edd-9d77-0f3e3586d1a2", :board-size :3x3, :X :human, :O :easy-ai, :current-token :X, :board [[:X "2" "3"] ["4" :O "6"] ["7" "8" "9"]]}
+{:game-id #uuid "545ec33e-5821-4edd-9d77-0f3e3586d1a2", :board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X "3"] ["4" :O "6"] ["7" "8" "9"]]}
+{:game-id #uuid "545ec33e-5821-4edd-9d77-0f3e3586d1a2", :board-size :3x3, :X :human, :O :easy-ai, :current-token :X, :board [[:X :X "3"] ["4" :O "6"] ["7" :O "9"]]}
+{:game-id #uuid "545ec33e-5821-4edd-9d77-0f3e3586d1a2", :board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X :X] ["4" :O "6"] ["7" :O "9"]]}
+{:board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" "9"]]}
+{:board-size :3x3, :X :human, :O :easy-ai, :current-token :X, :board [[:X "2" "3"] ["4" :O "6"] ["7" "8" "9"]]}
+{:board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X "3"] ["4" :O "6"] ["7" "8" "9"]]}
+{:board-size :3x3, :X :human, :O :easy-ai, :current-token :X, :board [[:X :X "3"] [:O :O "6"] ["7" "8" "9"]]}
+{:board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]]}
+{:board-size :4x4, :X :human, :O :easy-ai, :current-token :O, :board [[:X "2" "3" "4"] ["5" "6" "7" "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:board-size :4x4, :X :human, :O :easy-ai, :current-token :X, :board [[:X "2" "3" "4"] ["5" :O "7" "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:board-size :4x4, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X "3" "4"] ["5" :O "7" "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:board-size :4x4, :X :human, :O :easy-ai, :current-token :X, :board [[:X :X "3" "4"] ["5" :O "7" "8"] ["9" "10" "11" "12"] ["13" "14" :O "16"]]}
+{:board-size :4x4, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X :X "4"] ["5" :O "7" "8"] ["9" "10" "11" "12"] ["13" "14" :O "16"]]}
+{:board-size :4x4, :X :human, :O :easy-ai, :current-token :X, :board [[:X :X :X "4"] ["5" :O "7" "8"] ["9" "10" "11" "12"] ["13" "14" :O :O]]}
+{:board-size :4x4, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X :X :X] ["5" :O "7" "8"] ["9" "10" "11" "12"] ["13" "14" :O :O]]}
+{:game-id "game-id", :board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" "9"]]}
+{:game-id "game-id", :board-size :3x3, :X :human, :O :easy-ai, :current-token :X, :board [[:X "2" "3"] ["4" :O "6"] ["7" "8" "9"]]}
+{:game-id "game-id", :board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X "3"] ["4" :O "6"] ["7" "8" "9"]]}
+{:game-id "game-id", :board-size :3x3, :X :human, :O :easy-ai, :current-token :X, :board [[:X :X "3"] ["4" :O :O] ["7" "8" "9"]]}
+{:game-id "game-id", :board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X :X] ["4" :O :O] ["7" "8" "9"]]}
+{:game-id "dd61f320-66c0-4a5a-86d1-24cd16dbeb04", :board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" "9"]]}
+{:game-id "dd61f320-66c0-4a5a-86d1-24cd16dbeb04", :board-size :3x3, :X :human, :O :easy-ai, :current-token :X, :board [[:X "2" "3"] ["4" "5" :O] ["7" "8" "9"]]}
+{:game-id "dd61f320-66c0-4a5a-86d1-24cd16dbeb04", :board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X "3"] ["4" "5" :O] ["7" "8" "9"]]}
+{:game-id "dd61f320-66c0-4a5a-86d1-24cd16dbeb04", :board-size :3x3, :X :human, :O :easy-ai, :current-token :X, :board [[:X :X "3"] ["4" "5" :O] ["7" "8" :O]]}
+{:game-id "dd61f320-66c0-4a5a-86d1-24cd16dbeb04", :board-size :3x3, :X :human, :O :easy-ai, :current-token :O, :board [[:X :X :X] ["4" "5" :O] ["7" "8" :O]]}

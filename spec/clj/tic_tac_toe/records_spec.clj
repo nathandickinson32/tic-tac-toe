@@ -175,24 +175,24 @@
                     output/replay-data              (stub :replay-data)
                     output/determine-board-to-print (stub :determine-board-to-print)])
 
-    (it "returns false if first argument is not --replay"
-      (should-not-be sut/replay? ["--not-replay" "some-id"]))
+    (it "returns false if not replay"
+      (should-not (sut/replay-game false "some-id")))
 
     (it "returns true when --replay but game-id is empty"
-      (should-be sut/replay? ["--replay" ""]))
+      (should (sut/replay-game "--replay" "")))
 
     (it "responds to empty game id"
-      (should-be sut/replay? ["--replay" ""])
+      (should (sut/replay-game "--replay" ""))
       (should-have-invoked :invalid-response)
       (should-not-have-invoked :replay-data))
 
     (it "responds to an invalid game id"
-      (should-be sut/replay? ["--replay" "invalid"])
+      (should (sut/replay-game "--replay" "invalid"))
       (should-have-invoked :invalid-response)
       (should-not-have-invoked :replay-data))
 
     (it "Unfinished game returns true when replay and game ID are valid"
-      (should-be sut/replay? ["--replay" "123"])
+      (should (sut/replay-game "--replay" "123"))
       (should-have-invoked :replay-data {:with ["123" "Unfinished" (last game-states-123)]})
       (should-not-have-invoked :invalid-response)
       (let [[board-1 board-2] game-states-123]
@@ -201,7 +201,7 @@
         (should-have-invoked :determine-board-to-print {:with [:3x3 (:board board-2)]})))
 
     (it "X wins returns true when replay and game ID are valid"
-      (should-be sut/replay? ["--replay" "123-X"])
+      (should (sut/replay-game "--replay" "123-X"))
       (should-have-invoked :replay-data {:with ["123-X" (str (output/color-green "X") " Wins") (last game-states-3x3-X)]})
       (should-not-have-invoked :invalid-response)
       (let [board (last game-states-3x3-X)]
@@ -209,7 +209,7 @@
         (should-have-invoked :determine-board-to-print {:with [:3x3 (:board board)]})))
 
     (it "O wins returns true when replay and game ID are valid"
-      (should-be sut/replay? ["--replay" "123-O"])
+      (should (sut/replay-game "--replay" "123-O"))
       (should-have-invoked :replay-data {:with ["123-O" (str (output/color-red "O") " Wins") (last game-states-4x4-O)]})
       (should-not-have-invoked :invalid-response)
       (let [board (last game-states-4x4-O)]
@@ -218,7 +218,7 @@
 
     (it "Draw returns true when replay and game ID are valid"
       (with-redefs [board/full-board? (constantly true)]
-        (should-be sut/replay? ["--replay" "123-draw"])
+        (should (sut/replay-game "--replay" "123-draw"))
         (should-have-invoked :replay-data {:with ["123-draw" "Tie Game" (last game-states-3x3x3-draw)]})
         (should-not-have-invoked :invalid-response)
         (let [board (last game-states-3x3x3-draw)]

@@ -26,13 +26,13 @@
     (context "run game with arguments"
 
       (it "calls greeting and starts game when replay? is false"
-        (with-redefs [records/replay? (constantly false)]
+        (with-redefs [records/replay-game (constantly false)]
           (sut/-main ["--replay" "123"])
           (should-have-invoked :greeting)
           (should-have-invoked :start-game)))
 
       (it "does not call greeting or start-game when replay? is true"
-        (with-redefs [records/replay? (constantly true)]
+        (with-redefs [records/replay-game (constantly true)]
           (sut/-main ["--replay" "123"])
           (should-not-have-invoked :greeting)
           (should-not-have-invoked :start-game)))

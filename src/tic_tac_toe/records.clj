@@ -58,8 +58,8 @@
     (output/replay-data game-id outcome last-state)
     (print-moves game-states)))
 
-(defn replay? [[replay game-id]]
-  (when (= "--replay" replay)
+(defn replay-game [replay? game-id]
+  (when replay?
     (if-let [game-states (seq (->game-states game-id))]
       (replay-record game-states game-id)
       (output/invalid-game-id))

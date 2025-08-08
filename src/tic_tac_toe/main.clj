@@ -2,12 +2,16 @@
   (:require [tic-tac-toe.output :as output]
             [tic-tac-toe.game :as game]
             [tic-tac-toe.records :as records]
-            [tic-tac-toe.player-types]))
+            [tic-tac-toe.player-types]
+            [clojure.string :as str]))
 
-(defn run-game [args]
-  (when-not (records/replay? args)
-    (output/greeting)
-    (game/start-game args)))
+(defn setup-game [args]
+  (let [database (if (some #(= "--edn" %) args) :edn-file :postgres)
+        replay?  (some #(= "--replay" %) args)
+        game-id  (first (filter #(not (str/starts-with? % "--")) args))]
+    (when-not (records/replay-game replay? game-id)
+      (output/greeting)
+      (game/start-game args))))
 
 (defn -main [& args]
-  (run-game args))
+  (setup-game args))
