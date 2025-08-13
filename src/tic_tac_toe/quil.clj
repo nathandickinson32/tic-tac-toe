@@ -45,7 +45,7 @@
 (defn draw-tokens [board]
   (doseq [row (range 3)
           col (range 3)]
-    (when (= :x (get-in board [row col]))
+    (when (= :X (get-in board [row col]))
       (draw-x col row))))
 
 (defn setup []
@@ -54,7 +54,7 @@
    :message nil})
 
 (defn make-move [board row col state]
-  (let [new-board (assoc-in board [row col] :x)
+  (let [new-board (assoc-in board [row col] :X)
         msg       (when (all-filled? new-board) "Game Over!")]
     (assoc state :board new-board :message msg)))
 
@@ -63,9 +63,9 @@
     (make-move board row col state)
     state))
 
-(defn mouse-clicked [state event]
-  (let [col   (int (/ (:x event) cell-size))
-        row   (int (/ (:y event) cell-size))
+(defn mouse-clicked [state click-position]
+  (let [col   (int (/ (:x click-position) cell-size))
+        row   (int (/ (:y click-position) cell-size))
         board (:board state)]
     (valid-click? board row col state)))
 
