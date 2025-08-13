@@ -40,10 +40,10 @@
                             :message nil}
             click-position {:x 250 :y 150}
             new-state      (sut/mouse-clicked state click-position)]
-        (should= :x (get-in new-state [:board 0 1]))))
+        (should= :X (get-in new-state [:board 0 1]))))
 
     (it "does not mark if position unavailable"
-      (let [state          {:board   [[nil :x nil]
+      (let [state          {:board   [[nil :X nil]
                                       [nil nil nil]
                                       [nil nil nil]]
                             :message nil}
@@ -91,9 +91,9 @@
                     q/text                   (stub :text)])
 
     (it "draws background, grid and X marks"
-      (sut/draw-state {:board   [[:x nil nil]
-                                 [nil :x nil]
-                                 [nil nil :x]]
+      (sut/draw-state {:board   [[:X nil nil]
+                                 [nil :X nil]
+                                 [nil nil :X]]
                        :message nil})
       (should-have-invoked :background)
       (should-have-invoked :grid-lines)
