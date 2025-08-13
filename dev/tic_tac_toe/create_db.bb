@@ -23,6 +23,7 @@
    );
    CREATE TABLE IF NOT EXISTS moves (
      game_id UUID NOT NULL,
+     turn_count SMALLINT NOT NULL,
      token VARCHAR(1) NOT NULL,
      move VARCHAR(2) NOT NULL
    )")

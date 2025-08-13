@@ -2,7 +2,6 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.expert-ai :as sut]
             [tic-tac-toe.board :as board]
-            [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
             [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]))
@@ -47,11 +46,11 @@
        (all-finished-games unfinished finished ai-token opponent-token board-size)))))
 
 (defn finished-games-ai-plays-first [board-size]
-  (let [ai-first-move (ai-make-move [output/starting-board-3x3 0] :X board-size)]
+  (let [ai-first-move (ai-make-move [board/starting-board-3x3 0] :X board-size)]
     (all-finished-games [ai-first-move] :X :O board-size)))
 
 (defn finished-games-ai-plays-second [board-size]
-  (let [x-starting-boards (simulate-opponent-moves [[output/starting-board-3x3 0]] :X board-size)
+  (let [x-starting-boards (simulate-opponent-moves [[board/starting-board-3x3 0]] :X board-size)
         o-response-boards (simulate-ai-moves x-starting-boards :O board-size)]
     (all-finished-games o-response-boards :O :X board-size)))
 
@@ -128,16 +127,16 @@
       (let [board            [[:X :X "3"]
                               [:O :O "6"]
                               ["7" "8" "9"]]
-            maximizing-token :X]
-        (let [score (sut/minimax board maximizing-token maximizing-token 1 :3x3)]
-          (should (>= score 0)))))
+            maximizing-token :X
+            score            (sut/minimax board maximizing-token maximizing-token 1 :3x3)]
+        (should (>= score 0))))
 
     (it "minimizes score when maximizing player loses"
       (let [board [[:X :X "3"]
                    [:O :O "6"]
-                   ["7" "8" "9"]]]
-        (let [score (sut/minimax board :O :X 1 :3x3)]
-          (should (< score 0)))))
+                   ["7" "8" "9"]]
+            score (sut/minimax board :O :X 1 :3x3)]
+        (should (< score 0))))
 
     (it "returns 0 for a tie"
       (let [board [[:X :X :O]
@@ -153,7 +152,7 @@
         (should= [0 1] (sut/choose-best-move board :X :3x3))))
 
     (it "chooses any corner on an empty board"
-      (let [board   output/starting-board-3x3
+      (let [board   board/starting-board-3x3
             corners #{[0 0] [0 2] [2 0] [2 2]}
             move    (sut/choose-best-move board :X :3x3)]
         (should-contain move corners)))
@@ -235,7 +234,6 @@
                     ["22" "23" "24"]
                     ["25" "26" :O]]]]
         (should= [0 0 2] (sut/choose-best-move board :O :3x3x3))))
-
     )
 
   (context "expert AI ->player-move"
@@ -246,7 +244,7 @@
         (should= [0 1] (->player-move state))))
 
     (it "chooses any corner on an empty board"
-      (let [state   {:X :expert-ai :O :human :board output/starting-board-3x3 :current-token :X :depth 0 :board-size :3x3}
+      (let [state   {:X :expert-ai :O :human :board board/starting-board-3x3 :current-token :X :depth 0 :board-size :3x3}
             corners #{[0 0] [0 2] [2 0] [2 2]}
             move    (->player-move state)]
         (should-contain move corners)))

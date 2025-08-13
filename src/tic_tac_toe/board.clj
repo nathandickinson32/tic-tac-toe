@@ -1,6 +1,64 @@
 (ns tic-tac-toe.board
   (:require [clojure.string :as str]))
 
+(def starting-board-3x3
+  [["1" "2" "3"]
+   ["4" "5" "6"]
+   ["7" "8" "9"]])
+
+(def starting-board-4x4
+  [["1" "2" "3" "4"]
+   ["5" "6" "7" "8"]
+   ["9" "10" "11" "12"]
+   ["13" "14" "15" "16"]])
+
+(def starting-board-3x3x3
+  [[["1" "2" "3"]
+    ["4" "5" "6"]
+    ["7" "8" "9"]]
+
+   [["10" "11" "12"]
+    ["13" "14" "15"]
+    ["16" "17" "18"]]
+
+   [["19" "20" "21"]
+    ["22" "23" "24"]
+    ["25" "26" "27"]]])
+
+(def str-positions-3x3
+  {"1" [0 0] "2" [0 1] "3" [0 2]
+   "4" [1 0] "5" [1 1] "6" [1 2]
+   "7" [2 0] "8" [2 1] "9" [2 2]})
+
+(def str-positions-4x4
+  {"1"  [0 0] "2" [0 1] "3" [0 2] "4" [0 3]
+   "5"  [1 0] "6" [1 1] "7" [1 2] "8" [1 3]
+   "9"  [2 0] "10" [2 1] "11" [2 2] "12" [2 3]
+   "13" [3 0] "14" [3 1] "15" [3 2] "16" [3 3]})
+
+(def str-positions-3x3x3
+  {"1"  [0 0 0] "2" [0 0 1] "3" [0 0 2]
+   "4"  [0 1 0] "5" [0 1 1] "6" [0 1 2]
+   "7"  [0 2 0] "8" [0 2 1] "9" [0 2 2]
+
+   "10" [1 0 0] "11" [1 0 1] "12" [1 0 2]
+   "13" [1 1 0] "14" [1 1 1] "15" [1 1 2]
+   "16" [1 2 0] "17" [1 2 1] "18" [1 2 2]
+
+   "19" [2 0 0] "20" [2 0 1] "21" [2 0 2]
+   "22" [2 1 0] "23" [2 1 1] "24" [2 1 2]
+   "25" [2 2 0] "26" [2 2 1] "27" [2 2 2]})
+
+(defn determine-positions [board-size]
+  (condp = board-size
+    :3x3 str-positions-3x3
+    :4x4 str-positions-4x4
+    :3x3x3 str-positions-3x3x3))
+
+(defn ->grid-coordinates [input board-size]
+  (let [str-positions (determine-positions board-size)]
+    (get str-positions input)))
+
 (defn ->clean-user-input []
   (-> (read-line)
       str/trim
@@ -28,6 +86,12 @@
     :4x4 all-positions-4x4
     :3x3x3 all-positions-3x3x3))
 
+(defn determine-starting-board [board-size]
+  (cond
+    (= :3x3 board-size) starting-board-3x3
+    (= :4x4 board-size) starting-board-4x4
+    (= :3x3x3 board-size) starting-board-3x3x3))
+
 (defn switch-player [current-player]
   (if (= :X current-player)
     :O
@@ -40,6 +104,11 @@
 (defn available-moves [board board-size]
   (let [all-positions (->positions-by-board-size board-size)]
     (filter (partial space-available? board) all-positions)))
+
+(defn maybe-valid-move [board input board-size]
+  (when-let [move (->grid-coordinates input board-size)]
+    (when (space-available? board move)
+      move)))
 
 (defn make-move [board move token]
   (assoc-in board move token))

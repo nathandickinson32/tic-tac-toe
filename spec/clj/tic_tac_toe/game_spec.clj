@@ -13,16 +13,16 @@
             [tic-tac-toe.test-boards-3x3x3-spec :as test-board-3x3x3]))
 
 (def take-turn-state-human-v-human
-  {:X :human :O :human :board test-board-3x3/next-move-wins-X :current-token :X :depth 0 :board-size :3x3})
+  {:X :human :O :human :board test-board-3x3/next-move-wins-X :current-token :X :turn-count 0 :board-size :3x3})
 
 (def take-turn-state-human-v-easy-ai
-  {:X :human :O :easy-ai :board test-board-3x3/next-move-wins-X :current-token :O :depth 0 :board-size :3x3})
+  {:X :human :O :easy-ai :board test-board-3x3/next-move-wins-X :current-token :O :turn-count 0 :board-size :3x3})
 
 (def take-turn-state-human-v-medium-ai
-  {:X :human :O :medium-ai :board test-board-3x3/no-winners-board1 :current-token :O :depth 5 :board-size :3x3})
+  {:X :human :O :medium-ai :board test-board-3x3/no-winners-board1 :current-token :O :turn-count 0 :board-size :3x3})
 
 (def take-turn-state-human-v-expert-ai
-  {:X :human :O :expert-ai :board test-board-3x3/no-winners-board1 :current-token :O :depth 0 :board-size :3x3})
+  {:X :human :O :expert-ai :board test-board-3x3/no-winners-board1 :current-token :O :turn-count 0 :board-size :3x3})
 
 (describe "game conditions"
 
@@ -168,7 +168,7 @@
         (should-have-invoked :choose-first-player {:times 5})))
     )
 
-  (describe "ask-to-finish-last-game"
+  (context "ask-to-finish-last-game"
     (with-stubs)
 
     (it "invokes unfinished game prompt"
@@ -225,8 +225,9 @@
                                           [{:board-size    :3x3
                                             :X             :easy-ai
                                             :O             :expert-ai
-                                            :board         output/starting-board-3x3
+                                            :board         board/starting-board-3x3
                                             :current-token :X
+                                            :turn-count    0
                                             :game-id       "123"
                                             :database      :edn-file}]})))
 
@@ -236,19 +237,20 @@
                                           [{:board-size    :4x4
                                             :X             :easy-ai
                                             :O             :expert-ai
-                                            :board         output/starting-board-4x4
+                                            :board         board/starting-board-4x4
                                             :current-token :X
+                                            :turn-count    0
                                             :game-id       "123"
                                             :database      :edn-file}]})))
 
     (it "determines starting board 3x3"
-      (should= output/starting-board-3x3 (sut/determine-starting-board :3x3)))
+      (should= board/starting-board-3x3 (board/determine-starting-board :3x3)))
 
     (it "determines starting board 4x4"
-      (should= output/starting-board-4x4 (sut/determine-starting-board :4x4)))
+      (should= board/starting-board-4x4 (board/determine-starting-board :4x4)))
 
     (it "determines starting board 3x3x3"
-      (should= output/starting-board-3x3x3 (sut/determine-starting-board :3x3x3)))
+      (should= board/starting-board-3x3x3 (board/determine-starting-board :3x3x3)))
     )
 
   (context "take-turn"
@@ -262,36 +264,35 @@
                     sut/play-again?          (stub :play-again)])
 
     (it "displays 3x3 board before each turn"
-      (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
+      (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :turn-count 0 :board-size :3x3}))
       (should-have-invoked :print-board-3x3 {:with [test-board-3x3/no-winners-board]}))
 
     (it "displays 4x4 board before each turn"
-      (with-in-str "1\n" (sut/take-turn {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :board-size :4x4}))
+      (with-in-str "1\n" (sut/take-turn {:board test-board-4x4/x-wins-with-1 :current-token :X :X :human :O :human :turn-count 0 :board-size :4x4}))
       (should-have-invoked :print-board-4x4 {:with [test-board-4x4/x-wins-with-1]}))
 
     (it "displays 3x3x3 board before each turn"
-      (with-in-str "14\n" (sut/take-turn {:board test-board-3x3x3/x-wins-with-14 :current-token :X :X :human :O :human :board-size :3x3x3}))
+      (with-in-str "14\n" (sut/take-turn {:board test-board-3x3x3/x-wins-with-14 :current-token :X :X :human :O :human :turn-count 0 :board-size :3x3x3}))
       (should-have-invoked :print-board-3x3x3 {:with [test-board-3x3x3/x-wins-with-14]}))
 
     (it "ends the game on a win"
       (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
+        (with-in-str "2\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :turn-count 0 :board-size :3x3}))
         (should-have-invoked :winner-message {:with [:X]})))
 
     (it "ends the game on a tie"
       (with-redefs [output/tie-game-message (stub :draw-message)]
-        (with-in-str "1\n" (sut/take-turn {:board test-board-3x3/move-1-for-tie :current-token :X :X :human :O :human :board-size :3x3}))
+        (with-in-str "1\n" (sut/take-turn {:board test-board-3x3/move-1-for-tie :current-token :X :X :human :O :human :turn-count 0 :board-size :3x3}))
         (should-have-invoked :draw-message)))
 
     (it "repeats until game ends"
       (with-redefs [output/winner-message (stub :winner-message)]
-        (with-in-str "7\n6\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :board-size :3x3}))
+        (with-in-str "7\n6\n" (sut/take-turn {:board test-board-3x3/no-winners-board :current-token :X :X :human :O :human :turn-count 0 :board-size :3x3}))
         (should-have-invoked :winner-message {:with [:O]})))
 
     (it "gets user input for game mode"
       (with-redefs [tic-tac-toe.human/get-user-move (stub :user {:return [0 1]})
                     easy-ai/choose-random-move      (stub :easy-ai {:return [1 0]})]
-
         (sut/take-turn take-turn-state-human-v-human)
         (should-have-invoked :user)
         (should-not-have-invoked :easy-ai)))
@@ -299,7 +300,6 @@
     (it "gets random easy-ai input for easy-ai game mode on easy-ai turn"
       (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
                     easy-ai/choose-random-move (stub :easy-ai {:return [2 0]})]
-
         (sut/take-turn take-turn-state-human-v-easy-ai)
         (should-have-invoked :easy-ai)
         (should-not-have-invoked :user)))
@@ -307,7 +307,6 @@
     (it "gets medium-ai input for medium-ai game mode on medium-ai turn"
       (with-redefs [human/get-user-move         (stub :user {:return [0 1]})
                     medium-ai/best-or-rand-move (stub :medium-ai {:return [1 2]})]
-
         (sut/take-turn take-turn-state-human-v-medium-ai)
         (should-have-invoked :medium-ai)
         (should-not-have-invoked :user)))
@@ -315,7 +314,6 @@
     (it "gets expert-ai input for expert-ai game mode on expert-ai turn"
       (with-redefs [human/get-user-move        (stub :user {:return [0 1]})
                     expert-ai/choose-best-move (stub :expert-ai {:return [1 2]})]
-
         (sut/take-turn take-turn-state-human-v-expert-ai)
         (should-have-invoked :expert-ai)
         (should-not-have-invoked :user)))
@@ -326,6 +324,7 @@
                         :current-token :O
                         :X             :human
                         :O             :human
+                        :turn-count    0
                         :board-size    :3x3}))
       (should-have-invoked :record-move {:times 2}))
 
@@ -339,12 +338,14 @@
                         :X             :human
                         :O             :human
                         :board-size    :3x3
+                        :turn-count    0
                         :game-id       "123"})
         (should-have-invoked :record-move
                              {:with [{:board         test-board-3x3/no-winners-board
                                       :current-token :O
                                       :X             :human
                                       :O             :human
+                                      :turn-count    1
                                       :board-size    :3x3
                                       :game-id       "123"} "1"]})))
 
@@ -357,6 +358,7 @@
                         :current-token :X
                         :X             :human
                         :O             :human
+                        :turn-count    0
                         :board-size    :4x4
                         :game-id       "123"})
         (should-have-invoked :record-move
@@ -364,6 +366,7 @@
                                       :current-token :O
                                       :X             :human
                                       :O             :human
+                                      :turn-count    1
                                       :board-size    :4x4
                                       :game-id       "123"} "16"]})))
 
@@ -376,6 +379,7 @@
                         :current-token :X
                         :X             :human
                         :O             :human
+                        :turn-count    0
                         :board-size    :3x3x3
                         :game-id       "123"})
         (should-have-invoked :record-move
@@ -383,6 +387,7 @@
                                       :current-token :O
                                       :X             :human
                                       :O             :human
+                                      :turn-count    1
                                       :board-size    :3x3x3
                                       :game-id       "123"} "27"]})))
     )
@@ -412,6 +417,7 @@
                            :X             :human
                            :O             :easy-ai
                            :current-token :X
+                           :turn-count    0
                            :game-id       "123"
                            :database      :edn-file}]
         (with-redefs [records/read-last-record (constantly finished-game)
@@ -426,6 +432,7 @@
                              :X             :human
                              :O             :easy-ai
                              :current-token :X
+                             :turn-count    0
                              :game-id       "123"
                              :database      :edn-file}]
         (with-redefs [records/read-last-record (constantly unfinished-game)
@@ -441,6 +448,7 @@
                              :O             :expert-ai
                              :board         test-board-3x3/test-starting-board-3x3
                              :current-token :X
+                             :turn-count    0
                              :game-id       "123"}]
         (with-redefs [records/read-last-record (constantly unfinished-game)
                       board/game-over?         (constantly false)
@@ -451,6 +459,7 @@
                                                     :O             :expert-ai
                                                     :board         test-board-3x3/test-starting-board-3x3
                                                     :current-token :X
+                                                    :turn-count    0
                                                     :game-id       "123"
                                                     :database      :edn-file}]}))))
 
@@ -473,6 +482,7 @@
                                                 :O             :expert-ai
                                                 :board         test-board-3x3/test-starting-board-3x3
                                                 :current-token :X
+                                                :turn-count    0
                                                 :game-id       "123"
                                                 :database      :postgres}]}))
     )

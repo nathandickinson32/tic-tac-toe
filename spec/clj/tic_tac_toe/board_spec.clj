@@ -36,6 +36,106 @@
                (sort sut/all-positions-3x3x3)))
     )
 
+  (context "when determining what grid positions to get"
+
+    (it "returns 3x3 positions for 3x3 board size"
+      (should= sut/str-positions-3x3 (sut/determine-positions :3x3)))
+
+    (it "returns 4x4 positions for 4x4 board size"
+      (should= sut/str-positions-4x4 (sut/determine-positions :4x4)))
+
+    (it "returns 3x3x3 positions for 3x3x3 board size"
+      (should= sut/str-positions-3x3x3 (sut/determine-positions :3x3x3)))
+    )
+
+  (context "parse-user-input 3x3 board"
+
+    (it "returns nil for 0"
+      (should-be-nil (sut/->grid-coordinates "0" :3x3)))
+
+    (it "returns nil for numbers greater than 9"
+      (should-be-nil (sut/->grid-coordinates "10" :3x3))
+      (should-be-nil (sut/->grid-coordinates "11" :3x3))
+      (should-be-nil (sut/->grid-coordinates "201" :3x3)))
+
+    (it "returns nil for strings"
+      (should-be-nil (sut/->grid-coordinates "a" :3x3))
+      (should-be-nil (sut/->grid-coordinates "asd" :3x3))
+      (should-be-nil (sut/->grid-coordinates "a a" :3x3))
+      (should-be-nil (sut/->grid-coordinates " " :3x3)))
+
+    (it "returns nil for empty input"
+      (should-be-nil (sut/->grid-coordinates "" :3x3)))
+
+    (it "parses input string 1-9 into grid coordinates"
+      (should= [0 0] (sut/->grid-coordinates "1" :3x3))
+      (should= [0 1] (sut/->grid-coordinates "2" :3x3))
+      (should= [0 2] (sut/->grid-coordinates "3" :3x3))
+      (should= [1 0] (sut/->grid-coordinates "4" :3x3))
+      (should= [1 1] (sut/->grid-coordinates "5" :3x3))
+      (should= [1 2] (sut/->grid-coordinates "6" :3x3))
+      (should= [2 0] (sut/->grid-coordinates "7" :3x3))
+      (should= [2 1] (sut/->grid-coordinates "8" :3x3))
+      (should= [2 2] (sut/->grid-coordinates "9" :3x3)))
+    )
+
+  (context "parse-user-input 4x4 board"
+
+    (it "returns nil for 0"
+      (should-be-nil (sut/->grid-coordinates "0" :4x4)))
+
+    (it "returns nil for numbers greater than 16"
+      (should-be-nil (sut/->grid-coordinates "17" :4x4)))
+
+    (it "returns nil for strings"
+      (should-be-nil (sut/->grid-coordinates "a" :4x4))
+      (should-be-nil (sut/->grid-coordinates "asd" :4x4))
+      (should-be-nil (sut/->grid-coordinates "a a" :4x4))
+      (should-be-nil (sut/->grid-coordinates " " :4x4)))
+
+    (it "returns nil for empty input"
+      (should-be-nil (sut/->grid-coordinates "" :4x4)))
+
+    (it "parses input string 1-16 into grid coordinates"
+      (should= [0 0] (sut/->grid-coordinates "1" :4x4))
+      (should= [0 1] (sut/->grid-coordinates "2" :4x4))
+      (should= [0 2] (sut/->grid-coordinates "3" :4x4))
+      (should= [0 3] (sut/->grid-coordinates "4" :4x4))
+      (should= [1 0] (sut/->grid-coordinates "5" :4x4))
+      (should= [1 1] (sut/->grid-coordinates "6" :4x4))
+      (should= [2 2] (sut/->grid-coordinates "11" :4x4))
+      (should= [3 3] (sut/->grid-coordinates "16" :4x4)))
+    )
+
+  (context "parse-user-input 3x3x3 board"
+
+    (it "returns nil for 0"
+      (should-be-nil (sut/->grid-coordinates "0" :3x3x3)))
+
+    (it "returns nil for numbers greater than 27"
+
+      (should-be-nil (sut/->grid-coordinates "28" :3x3x3))
+      (should-be-nil (sut/->grid-coordinates "100" :3x3x3)))
+
+    (it "returns nil for letters, symbols and empty"
+      (should-be-nil (sut/->grid-coordinates "a" :3x3x3))
+      (should-be-nil (sut/->grid-coordinates :a :3x3x3))
+      (should-be-nil (sut/->grid-coordinates "a a" :3x3x3))
+      (should-be-nil (sut/->grid-coordinates " " :3x3x3))
+      (should-be-nil (sut/->grid-coordinates "" :3x3x3)))
+
+    (it "parses input string 1-9 into grid coordinates"
+      (should= [0 0 0] (sut/->grid-coordinates "1" :3x3x3))
+      (should= [0 1 1] (sut/->grid-coordinates "5" :3x3x3))
+      (should= [0 2 2] (sut/->grid-coordinates "9" :3x3x3))
+      (should= [1 0 0] (sut/->grid-coordinates "10" :3x3x3))
+      (should= [1 1 1] (sut/->grid-coordinates "14" :3x3x3))
+      (should= [1 2 2] (sut/->grid-coordinates "18" :3x3x3))
+      (should= [2 0 0] (sut/->grid-coordinates "19" :3x3x3))
+      (should= [2 1 1] (sut/->grid-coordinates "23" :3x3x3))
+      (should= [2 2 2] (sut/->grid-coordinates "27" :3x3x3)))
+    )
+
   (context "getting available 3x3 moves"
 
     (it "gets all positions when board-size is 3x3"
@@ -166,14 +266,14 @@
                         ["4" :X "6"]
                         ["7" "8" "9"]]
             move       [1 1]]
-        (should= test-board (sut/make-move output/starting-board-3x3 move :X))))
+        (should= test-board (sut/make-move sut/starting-board-3x3 move :X))))
 
     (it "marks 3x3 grid with O"
       (let [test-board [[:O "2" "3"]
                         ["4" "5" "6"]
                         ["7" "8" "9"]]
             move       [0 0]]
-        (should= test-board (sut/make-move output/starting-board-3x3 move :O))))
+        (should= test-board (sut/make-move sut/starting-board-3x3 move :O))))
 
     (it "marks 4x4 grid with X"
       (let [test-board [["1" "2" "3" "4"]
@@ -181,7 +281,7 @@
                         ["9" "10" "11" "12"]
                         ["13" "14" "15" :X]]
             move       [3 3]]
-        (should= test-board (sut/make-move output/starting-board-4x4 move :X))))
+        (should= test-board (sut/make-move sut/starting-board-4x4 move :X))))
 
     (it "marks 4x4 grid with O"
       (let [test-board [[:O "2" "3" "4"]
@@ -189,38 +289,38 @@
                         ["9" "10" "11" "12"]
                         ["13" "14" "15" "16"]]
             move       [0 0]]
-        (should= test-board (sut/make-move output/starting-board-4x4 move :O))))
+        (should= test-board (sut/make-move sut/starting-board-4x4 move :O))))
+
+    (it "marks 3x3x3 grid with X"
+      (let [test-board [[["1" "2" "3"]
+                         ["4" :X "6"]
+                         ["7" "8" "9"]]
+
+                        [["10" "11" "12"]
+                         ["13" "14" "15"]
+                         ["16" "17" "18"]]
+
+                        [["19" "20" "21"]
+                         ["22" "23" "24"]
+                         ["25" "26" "27"]]]
+            move       [0 1 1]]
+        (should= test-board (sut/make-move sut/starting-board-3x3x3 move :X))))
+
+    (it "marks 3x3x3 grid with O"
+      (let [test-board [[[:O "2" "3"]
+                         ["4" "5" "6"]
+                         ["7" "8" "9"]]
+
+                        [["10" "11" "12"]
+                         ["13" "14" "15"]
+                         ["16" "17" "18"]]
+
+                        [["19" "20" "21"]
+                         ["22" "23" "24"]
+                         ["25" "26" "27"]]]
+            move       [0 0 0]]
+        (should= test-board (sut/make-move sut/starting-board-3x3x3 move :O))))
     )
-
-  (it "marks 3x3x3 grid with X"
-    (let [test-board [[["1" "2" "3"]
-                       ["4" :X "6"]
-                       ["7" "8" "9"]]
-
-                      [["10" "11" "12"]
-                       ["13" "14" "15"]
-                       ["16" "17" "18"]]
-
-                      [["19" "20" "21"]
-                       ["22" "23" "24"]
-                       ["25" "26" "27"]]]
-          move       [0 1 1]]
-      (should= test-board (sut/make-move output/starting-board-3x3x3 move :X))))
-
-  (it "marks 3x3x3 grid with O"
-    (let [test-board [[[:O "2" "3"]
-                       ["4" "5" "6"]
-                       ["7" "8" "9"]]
-
-                      [["10" "11" "12"]
-                       ["13" "14" "15"]
-                       ["16" "17" "18"]]
-
-                      [["19" "20" "21"]
-                       ["22" "23" "24"]
-                       ["25" "26" "27"]]]
-          move       [0 0 0]]
-      (should= test-board (sut/make-move output/starting-board-3x3x3 move :O))))
 
   (context "draw/tie game"
 

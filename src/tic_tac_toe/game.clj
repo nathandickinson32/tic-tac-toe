@@ -2,7 +2,6 @@
   (:require [tic-tac-toe.board :as board]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.player-types :refer [->player-move]]
-            [tic-tac-toe.human :as human]
             [tic-tac-toe.easy-ai]
             [tic-tac-toe.medium-ai]
             [tic-tac-toe.expert-ai]
@@ -28,12 +27,6 @@
       (do
         (output/invalid-board-size-response)
         (recur)))))
-
-(defn determine-starting-board [board-size]
-  (cond
-    (= :3x3 board-size) output/starting-board-3x3
-    (= :4x4 board-size) output/starting-board-4x4
-    (= :3x3x3 board-size) output/starting-board-3x3x3))
 
 (defn ask-for-token []
   (output/choose-token)
@@ -83,6 +76,7 @@
    :O             (:O players)
    :board         board
    :current-token first-token
+   :turn-count    0
    :game-id       (random-uuid)
    :database      database})
 
@@ -93,6 +87,7 @@
    :board         (:board last-state)
    :current-token (:current-token last-state)
    :game-id       (:game-id last-state)
+   :turn-count    (:turn-count last-state)
    :database      (:database last-state)})
 
 (defn unfinished-game? [last-state]
@@ -115,7 +110,7 @@
 
 (defn start-new-game [database]
   (let [board-size     (ask-for-board-size)
-        board          (determine-starting-board board-size)
+        board          (board/determine-starting-board board-size)
         player-1       (ask-for-player)
         player-1-token (ask-for-token)
         player-2       (ask-for-player)
@@ -157,17 +152,19 @@
     (play-new-game (:database state))))
 
 (defn ->str-move [grid-move board-size]
-  (let [positions (set/map-invert (human/determine-positions board-size))]
+  (let [positions (set/map-invert (board/determine-positions board-size))]
     (get positions grid-move)))
 
-(defn take-turn [{:keys [board current-token board-size] :as state}]
+(defn take-turn [{:keys [board current-token board-size turn-count] :as state}]
   (output/determine-board-to-print board-size board)
   (let [grid-move   (->player-move state)
         new-board   (board/make-move board grid-move current-token)
         next-player (switch-player current-token)
+        turn-count  (inc turn-count)
         new-state   (assoc state
                       :current-token next-player
-                      :board new-board)
+                      :board new-board
+                      :turn-count turn-count)
         str-move    (->str-move grid-move board-size)]
     (records/save-game new-state str-move)
     (end-of-turn new-state new-board current-token board-size)))
