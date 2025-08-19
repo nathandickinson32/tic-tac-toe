@@ -8,11 +8,12 @@
 
 (defn update-state [state]
   (if (and (:current-token state)
+           (:X state)
+           (:O state)
            (not (board/end-game? (:board state) (:board-size state)))
            (not= :human (get state (:current-token state))))
     (->> (->player-move state)
-         (game/->new-state state)) #_(->> (easy-ai/choose-random-move (:board state) (:board-size state))
-                                          (game/->new-state state))
+         (game/->new-state state))
     state))
 
 (defn -main []
