@@ -246,3 +246,8 @@
 (defn game-over? [board token board-size]
   (or (win? board token board-size)
       (full-board? board board-size)))
+
+(defn end-game? [board board-size]
+  (or (win? board :X board-size)
+      (win? board :O board-size)
+      (full-board? board board-size)))

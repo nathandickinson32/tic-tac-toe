@@ -2,17 +2,12 @@
   (:require [tic-tac-toe.player-types :refer [->player-move]]
             [tic-tac-toe.board :as board]))
 
-(defn end-game? [board board-size]
-  (or (board/win? board :X board-size)
-      (board/win? board :O board-size)
-      (board/full-board? board board-size)))
-
 (defn game-over? [board board-size depth]
   (cond
-    (= board-size :3x3) (end-game? board board-size)
-    (= board-size :4x4) (or (end-game? board board-size)
+    (= board-size :3x3) (board/end-game? board board-size)
+    (= board-size :4x4) (or (board/end-game? board board-size)
                             (>= depth 6))
-    (= board-size :3x3x3) (or (end-game? board board-size)
+    (= board-size :3x3x3) (or (board/end-game? board board-size)
                               (>= depth 3))))
 
 (defn score [board token board-size]

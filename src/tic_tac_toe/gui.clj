@@ -3,16 +3,21 @@
             [quil.middleware :as m]
             [tic-tac-toe.game :as game]
             [tic-tac-toe.quil :as quil]
-            [tic-tac-toe.easy-ai :as easy-ai]))
+            [tic-tac-toe.board :as board]
+            [tic-tac-toe.player-types :refer [->player-move]]))
 
 (defn update-state [state]
-  (if (= :easy-ai (get state (:current-token state)))
-    (->> (easy-ai/choose-random-move (:board state) (:board-size state))
-         (game/->new-state state))
+  (if (and (:current-token state)
+           (not (board/end-game? (:board state) (:board-size state)))
+           (not= :human (get state (:current-token state))))
+    (->> (->player-move state)
+         (game/->new-state state)) #_(->> (easy-ai/choose-random-move (:board state) (:board-size state))
+                                          (game/->new-state state))
     state))
 
 (defn -main []
   (q/defsketch tic-tac-toe
+               :title "Tic Tac Toe"
                :size quil/grid-size
                :setup quil/setup
                :update update-state

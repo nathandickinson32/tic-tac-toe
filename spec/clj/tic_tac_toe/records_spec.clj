@@ -171,7 +171,7 @@
             sql-params [sql-query "123"]]
         (with-redefs [jdbc/execute-one!   (constantly {:exists true})
                       jdbc/execute!       (stub :execute!)
-                      expert-ai/end-game? (constantly true)]
+                      board/end-game? (constantly true)]
           (let [test-state (dissoc test-state :database)]
             (sut/save-game test-state "20")
             (should-have-invoked :execute! {:with [datasource/datasource sql-params]})))))

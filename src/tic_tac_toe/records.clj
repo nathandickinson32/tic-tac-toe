@@ -147,7 +147,7 @@
                   (name board-size)]))
 
 (defn update-when-finished [game-id board board-size]
-  (when (expert-ai/end-game? board board-size)
+  (when (board/end-game? board board-size)
     (update-game game-id)))
 
 (defn save-move-postgres [game-id turn-count current-token move]
