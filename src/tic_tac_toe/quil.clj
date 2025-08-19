@@ -1,5 +1,9 @@
 (ns tic-tac-toe.quil
-  (:require [quil.core :as q]))
+  (:require [quil.core :as q]
+            [tic-tac-toe.board :as board]
+            [tic-tac-toe.game :as game]))
+
+(def state (atom {}))
 
 (def grid-width 600)
 (def cell-size (/ grid-width 3))
@@ -26,14 +30,11 @@
 (defn ->pixel-location [cell]
   (+ (* cell cell-size) grid-center))
 
-(defn draw-x [col row]
+(defn draw-token [col row token]
   (fill-black)
   (q/text-align :center :center)
   (q/text-size 72)
-  (q/text "X" (->pixel-location col) (->pixel-location row)))
-
-(defn all-filled? [board]
-  (every? some? (flatten board)))
+  (q/text (name token) (->pixel-location col) (->pixel-location row)))
 
 (defn end-game-message [message]
   (when message
@@ -42,35 +43,68 @@
     (q/text-size 32)
     (q/text message (/ grid-width 2) (- (/ grid-width 2) 80))))
 
-(defn draw-tokens [board]
+(defn draw-tokens [{:keys [board]}]
   (doseq [row (range 3)
-          col (range 3)]
-    (when (= :X (get-in board [row col]))
-      (draw-x col row))))
+          col (range 3)
+          :let [cell (get-in board [row col])]]
+    (when (keyword? cell) (draw-token col row cell))))
 
-(defn setup []
-  (q/frame-rate 100)
-  {:board   (vec (repeat 3 (vec (repeat 3 nil))))
-   :message nil})
 
-(defn make-move [board row col state]
-  (let [new-board (assoc-in board [row col] :X)
-        msg       (when (all-filled? new-board) "Game Over!")]
-    (assoc state :board new-board :message msg)))
 
-(defn valid-click? [board row col state]
-  (if (and (nil? (get-in board [row col])) (nil? (:message state)))
-    (make-move board row col state)
-    state))
+#_(defn make-move [row col {:keys [board current-token board] :as state}]
+    (let [new-board (board/make-move board [row col] current-token)
+          msg       (when (board/game-over? new-board current-token board) "Game Over!")]
+      (assoc state :board new-board :message msg)))
+
+(defn valid-click? [row col {:keys [board message current-token board-size] :as state}]
+  (let [in-progress? (nil? message)
+        new-state    (game/->new-state state [row col])]
+    (if (and (board/space-available? board [row col]) in-progress?)
+      (if (board/game-over? (:board new-state) current-token board-size)
+        (assoc new-state :message "finished")
+        new-state)
+      state)))
+
+(comment
+  (defn ->new-state [state]
+    (let [updated-board (make-move)]
+      (if (game-over?)
+        (assoc state :board updated-board :message message)
+        (assoc state :board updated-board)))))
 
 (defn mouse-clicked [state click-position]
-  (let [col   (int (/ (:x click-position) cell-size))
-        row   (int (/ (:y click-position) cell-size))
-        board (:board state)]
-    (valid-click? board row col state)))
+  (let [col (int (/ (:x click-position) cell-size))
+        row (int (/ (:y click-position) cell-size))]
+    (valid-click? row col state)))
 
-(defn draw-state [{:keys [board message]}]
+(comment
+  (defmulti draw-state :page)
+
+  (defmethod draw-state :game [{:keys [message] :as state}]
+    (white-background)
+    (draw-gray-grid-lines)
+    (draw-tokens state)
+    (end-game-message message)))
+
+(defn setup []
+  (q/frame-rate 60)
+  {:game-id       (random-uuid)
+   :board         board/starting-board-3x3
+   :current-token :X
+   :board-size    :3x3
+   :X            :human
+   :O             :easy-ai
+   :turn-count    0})
+
+(defn draw-state [{:keys [message] :as state}]
+  ;(white-background)
+  ;(cond (state-ready) (do (draw-gray-grid-lines)
+  ;                        (draw-tokens state)
+  ;                        (end-game-message message))
+  ;      (state-not-ready) (options-menu))
+
   (white-background)
   (draw-gray-grid-lines)
-  (draw-tokens board)
-  (end-game-message message))
+  (draw-tokens state)
+  (end-game-message message)
+  )

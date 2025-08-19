@@ -1,1 +1,1 @@
-{:linters {:unresolved-symbol {:level :off}}}
+{:linters {:missing-else-branch {:level :off} :unresolved-symbol {:level :off}}}

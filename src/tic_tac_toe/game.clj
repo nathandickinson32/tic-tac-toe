@@ -8,6 +8,8 @@
             [tic-tac-toe.records :as records]
             [clojure.set :as set]))
 
+(declare take-turn)
+
 (def board-sizes {"9" :3x3 "16" :4x4 "27" :3x3x3})
 
 (def tokens {"X" :X "O" :O})
@@ -96,8 +98,6 @@
                               (switch-player (:current-token last-state))
                               (:board-size last-state)))))
 
-(declare start-game take-turn)
-
 (defn winner-response [new-board new-state board-size current-token]
   (output/winner-message current-token)
   (output/determine-board-to-print board-size new-board)
@@ -155,10 +155,8 @@
   (let [positions (set/map-invert (board/determine-positions board-size))]
     (get positions grid-move)))
 
-(defn take-turn [{:keys [board current-token board-size turn-count] :as state}]
-  (output/determine-board-to-print board-size board)
-  (let [grid-move   (->player-move state)
-        new-board   (board/make-move board grid-move current-token)
+(defn ->new-state [{:keys [board current-token board-size turn-count] :as state} grid-move]
+  (let [new-board   (board/make-move board grid-move current-token)
         next-player (switch-player current-token)
         turn-count  (inc turn-count)
         new-state   (assoc state
@@ -167,7 +165,13 @@
                       :turn-count turn-count)
         str-move    (->str-move grid-move board-size)]
     (records/save-game new-state str-move)
-    (end-of-turn new-state new-board current-token board-size)))
+    new-state))
+
+(defn take-turn [{:keys [board current-token board-size] :as state}]
+  (output/determine-board-to-print board-size board)
+  (let [grid-move (->player-move state)
+        new-state (->new-state state grid-move)]
+    (end-of-turn new-state (:board new-state) current-token board-size)))
 
 (defn unfinished-edn-game? [last-state database]
   (if (and (some? last-state)
