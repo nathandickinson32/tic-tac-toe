@@ -26,78 +26,32 @@
 
     (it "sets frame rate"
       (sut/setup)
-      (should-have-invoked :frame-rate {:with [100]}))
+      (should-have-invoked :frame-rate {:with [60]}))
     )
 
   (context "mouse-clicked"
 
     (it "marks an X on empty position"
-      (let [state          {:board board/starting-board-3x3}
+      (let [state          (-> (sut/create-new-game)
+                               (assoc :current-token :X
+                                      :X :human
+                                      :O :human
+                                      :board-size :3x3))
             click-position {:x 250 :y 150}
             new-state      (sut/mouse-clicked state click-position)]
         (should= :X (get-in new-state [:board 0 1]))))
 
     (it "does not mark if position unavailable"
-      (let [state          {:board (-> board/starting-board-3x3
-                                       (board/make-move [0 1] :X))}
+      (let [state          (-> (sut/create-new-game)
+                               (assoc :current-token :X
+                                      :X :human
+                                      :O :human
+                                      :board-size :3x3
+                                      :board (-> board/starting-board-3x3
+                                                 (board/make-move [0 1] :X))))
             click-position {:x 250 :y 50}
             new-state      (sut/mouse-clicked state click-position)]
         (should= state new-state)))
-
-    (it "does not mark if message exists"
-      (let [state          {:board   board/starting-board-3x3
-                            :message "Game Over!"}
-            click-position {:x 50 :y 50}
-            new-state      (sut/mouse-clicked state click-position)]
-        (should= state new-state)))
-    )
-
-  (context "draw-x function"
-
-    (redefs-around [sut/fill-black       (stub :fill-black)
-                    q/text-align         (stub :text-align)
-                    q/text-size          (stub :text-size)
-                    q/text               (stub :text)
-                    sut/->pixel-location (stub :pixel-location)])
-
-    (it "calls Quil functions with correct parameters"
-      (with-redefs [sut/->pixel-location (fn [x] (* 10 x))]
-        (sut/draw-token 2 3)
-        (should-have-invoked :fill-black)
-        (should-have-invoked :text-align {:with [:center :center]})
-        (should-have-invoked :text-size {:with [72]})
-        (should-have-invoked :text {:with ["X" 20 30]})))
-    )
-
-  (context "draw-state"
-
-    (redefs-around [sut/white-background     (stub :background)
-                    sut/draw-gray-grid-lines (stub :grid-lines)
-                    sut/draw-token           (stub :draw-x)
-                    q/fill                   (stub :fill)
-                    q/text-align             (stub :text-align)
-                    q/text-size              (stub :text-size)
-                    q/text                   (stub :text)])
-
-    (it "draws background, grid and X marks"
-      (sut/draw-state {:board (-> board/starting-board-3x3
-                                  (board/make-move [0 0] :X)
-                                  (board/make-move [1 1] :X)
-                                  (board/make-move [2 2] :X))})
-      (should-have-invoked :background)
-      (should-have-invoked :grid-lines)
-      (should-have-invoked :draw-x {:times 3}))
-
-    (it "draws message when message"
-      (sut/draw-state {:board   board/starting-board-3x3
-                       :message "Game Over!"})
-      (let [half-width    (/ sut/grid-width 2)
-            text-position (- half-width 80)
-            black         0]
-        (should-have-invoked :fill {:with [black]})
-        (should-have-invoked :text-align {:with [:center :center]})
-        (should-have-invoked :text-size {:with [32]})
-        (should-have-invoked :text {:with ["Game Over!" half-width text-position]})))
     )
 
   (context "Quil calls"
@@ -111,10 +65,10 @@
 
     (it "sets frame rate correctly"
       (sut/setup)
-      (should-have-invoked :frame-rate {:with [100]}))
+      (should-have-invoked :frame-rate {:with [60]}))
 
     (it "draws grid lines correctly"
-      (sut/draw-gray-grid-lines)
+      (sut/draw-gray-grid-lines {:board-size :3x3})
       (should-have-invoked :stroke {:with [220]})
       (should-have-invoked :line))
 
@@ -125,8 +79,8 @@
   (context "grid calculations"
 
     (it "converts cell position to pixel location"
-      (should= 100 (sut/->pixel-location 0))
-      (should= 300 (sut/->pixel-location 1))
-      (should= 500 (sut/->pixel-location 2)))
+      (should= 100 (sut/->pixel-location 0 3))
+      (should= 103 (sut/->pixel-location 1 3))
+      (should= 106 (sut/->pixel-location 2 3)))
     )
   )

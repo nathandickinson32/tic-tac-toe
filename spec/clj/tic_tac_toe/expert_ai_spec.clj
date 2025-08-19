@@ -23,7 +23,7 @@
   (map #(ai-make-move % ai-token board-size) opponent-boards))
 
 (defn ->finished-unfinished-map [board-depth-pairs board-size]
-  (group-by #(sut/end-game? (first %) board-size) board-depth-pairs))
+  (group-by #(board/end-game? (first %) board-size) board-depth-pairs))
 
 (defn simulate-next-boards [unfinished-games finished-games ai-token opponent-token board-size]
   (let [opponent-boards (simulate-opponent-moves unfinished-games opponent-token board-size)
@@ -64,16 +64,16 @@
   (context "when checking to end minimax"
 
     (it "returns true if X wins"
-      (should (sut/end-game? test-board-3x3/top-winning-row-X :3x3)))
+      (should (board/end-game? test-board-3x3/top-winning-row-X :3x3)))
 
     (it "returns true if O wins"
-      (should (sut/end-game? test-board-3x3/middle-winning-row-O :3x3)))
+      (should (board/end-game? test-board-3x3/middle-winning-row-O :3x3)))
 
     (it "returns true if board is full"
-      (should (sut/end-game? test-board-3x3/full-board :3x3)))
+      (should (board/end-game? test-board-3x3/full-board :3x3)))
 
     (it "returns false if board is full"
-      (should-not (sut/end-game? test-board-3x3/no-winners-board :3x3)))
+      (should-not (board/end-game? test-board-3x3/no-winners-board :3x3)))
 
     (it "returns false if depth is 3 with 4x4 board"
       (should-not (sut/game-over? test-board-4x4/x-wins-with-1 :4x4 3)))
