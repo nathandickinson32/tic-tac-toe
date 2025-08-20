@@ -16,6 +16,50 @@
       (should= [600 600] sut/grid-size))
     )
 
+  (context "clicked?"
+
+    (it "returns true if click is inside button"
+      (should (sut/clicked? 50 50 0 0 100 100)))
+    (it "returns false if click is outside button"
+      (should-not (sut/clicked? 200 200 0 0 100 100)))
+    )
+
+  (context "drawing"
+    (with-stubs)
+
+    (redefs-around [q/fill       (stub :fill)
+                    q/text       (stub :text)
+                    q/rect       (stub :rect)
+                    q/text-align (stub :align)
+                    q/text-size  (stub :text-size)
+                    q/stroke     (stub :stroke)
+                    q/line       (stub :line)
+                    q/background (stub :background)])
+
+    (it "white-background calls q/background 255"
+      (sut/white-background)
+      (should-have-invoked :background {:with [255]}))
+
+    (it "gray-line calls q/stroke with 220"
+      (sut/gray-line)
+      (should-have-invoked :stroke {:with [220]}))
+
+    (it "fill-black calls q/fill 0"
+      (sut/fill-black)
+      (should-have-invoked :fill {:with [0]}))
+
+    (it "draws vertical lines"
+      (sut/draw-vertical-lines 200)
+      (should-have-invoked :line))
+
+    (it "draws horizontal lines"
+      (sut/draw-horizontal-lines 200)
+      (should-have-invoked :line))
+
+    (it "->pixel-location centers correctly"
+      (should= (+ (* 2 200) (/ 600 6)) (sut/->pixel-location 2 200)))
+    )
+
   (context "setup"
     (with-stubs)
 
@@ -79,50 +123,6 @@
       (should= :expert-ai (:O (sut/choose-player-O {} {:x 300 :y 370}))))
     )
 
-  (context "clicked?"
-
-    (it "returns true if click is inside button"
-      (should (sut/clicked? 50 50 0 0 100 100)))
-    (it "returns false if click is outside button"
-      (should-not (sut/clicked? 200 200 0 0 100 100)))
-    )
-
-  (context "drawing"
-    (with-stubs)
-
-    (redefs-around [q/fill       (stub :fill)
-                    q/text       (stub :text)
-                    q/rect       (stub :rect)
-                    q/text-align (stub :align)
-                    q/text-size  (stub :text-size)
-                    q/stroke     (stub :stroke)
-                    q/line       (stub :line)
-                    q/background (stub :background)])
-
-    (it "white-background calls q/background 255"
-      (sut/white-background)
-      (should-have-invoked :background {:with [255]}))
-
-    (it "gray-line calls q/stroke with 220"
-      (sut/gray-line)
-      (should-have-invoked :stroke {:with [220]}))
-
-    (it "fill-black calls q/fill 0"
-      (sut/fill-black)
-      (should-have-invoked :fill {:with [0]}))
-
-    (it "draws vertical lines"
-      (sut/draw-vertical-lines 200)
-      (should-have-invoked :line))
-
-    (it "draws horizontal lines"
-      (sut/draw-horizontal-lines 200)
-      (should-have-invoked :line))
-
-    (it "->pixel-location centers correctly"
-      (should= (+ (* 2 200) (/ 600 6)) (sut/->pixel-location 2 200)))
-    )
-
   (context "mouse-clicked"
 
     (it "resets to new game if play-again is clicked"
@@ -141,7 +141,7 @@
 
   (context "update-state"
 
-    (it "performs AI move when ai-turn"
+    (it "AI move when ai-turn"
       (with-redefs [sut/ai-turn?     (constantly true)
                     sut/ai-make-move (stub :ai-move)]
         (sut/update-state {:X :easy-ai :O :human :current-token :X})

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
   <component name="BuildSystem">
-    <option name="buildSystemId" value="LEININGEN" />
-    <option name="displayName" value="tic-tac-toe:0.1.0-SNAPSHOT" />
+    <option name="buildSystemId" value="CLOJURE_DEPS" />
+    <option name="displayName" value="tic-tac-toe" />
   </component>
   <component name="FacetManager">
     <facet type="BABASHKA" name="Babashka">
