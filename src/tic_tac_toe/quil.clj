@@ -1,7 +1,8 @@
 (ns tic-tac-toe.quil
   (:require [quil.core :as q]
             [tic-tac-toe.board :as board]
-            [tic-tac-toe.game :as game]))
+            [tic-tac-toe.game :as game]
+            [tic-tac-toe.player-types :refer [->player-move]]))
 
 (def grid-width 600)
 (def cell-size (/ grid-width 3))
@@ -10,6 +11,12 @@
 
 (def button-width 200)
 (def button-height 40)
+
+(defn create-new-game []
+  {:game-id    (random-uuid)
+   :board      board/starting-board-3x3
+   :board-size :3x3
+   :turn-count 0})
 
 (defn draw-button [label x y width height]
   (q/fill 230)
@@ -55,25 +62,11 @@
     (q/text-size 72)
     (q/text (name token) (->pixel-location col cell-size) (->pixel-location row cell-size))))
 
-(defn end-game-message [state]
-  (when (board/end-game? (:board state) (:board-size state))
-    (q/fill 0)
-    (q/text-align :center :center)
-    (q/text-size 32)
-    (q/text "Game Over!" (/ grid-width 2) (- (/ grid-width 2) 80))))
-
 (defn draw-tokens [{:keys [board] :as state}]
   (doseq [row (range 3)
           col (range 3)
           :let [cell (get-in board [row col])]]
     (when (keyword? cell) (draw-token col row cell state))))
-
-(defn valid-click? [row col {:keys [board current-token board-size] :as state}]
-  (let [in-progress? (not (board/game-over? board current-token board-size))
-        new-state    (game/->new-state state [row col])]
-    (if (and (board/space-available? board [row col]) in-progress?)
-      new-state
-      state)))
 
 (defn choose-first-player [state click-position]
   (cond
@@ -121,11 +114,6 @@
               (- (/ grid-width 2) (/ button-width 2)) 370 button-width button-height)
     (assoc state :O :expert-ai)))
 
-(defn play-human-move [state click-position]
-  (let [col (int (/ (:x click-position) cell-size))
-        row (int (/ (:y click-position) cell-size))]
-    (valid-click? row col state)))
-
 (defn choose-board-size [state click-position]
   (cond
     (clicked? (:x click-position) (:y click-position)
@@ -138,40 +126,28 @@
     (assoc state :board-size :4x4                           ; :gui-size 4
                  :board board/starting-board-4x4)))
 
-(defn mouse-clicked [state click-position]
-  (cond (= nil (:current-token state)) (choose-first-player state click-position)
-        (= nil (:X state)) (choose-player-X state click-position)
-        (= nil (:O state)) (choose-player-O state click-position)
-        (= nil (:board-size state)) (choose-board-size state click-position)
-        :else (play-human-move state click-position)))
+#_(defn choose-board-size-page []
+    (white-background)
+    (q/text-align :center :center)
+    (q/text-size 24)
+    (q/text "Choose board size" (/ grid-width 2) 220)
+    (draw-button "3x3"
+                 (- (/ grid-width 2) button-width 20) 280
+                 button-width button-height)
 
-(defn create-new-game []
-  {:game-id       (random-uuid)
-   :board         board/starting-board-3x3
-   :board-size    :3x3
-   :turn-count    0})
+    (draw-button "4x4"
+                 (+ (/ grid-width 2) 20) 280
+                 button-width button-height))
 
-(defn setup []
-  (q/frame-rate 60)
-  (create-new-game))
+(defn player-X-button []
+  (draw-button "Player X"
+               (- (/ grid-width 2) button-width 20) 280
+               button-width button-height))
 
-(comment
-  (defmulti draw-state (fn [state] (cond (nil? (:current-token state)) :choose-first-player)))
-  (defmethod draw-state :choose-first-player [state]
-    (do (white-background)
-        (q/text-align :center :center)
-        (q/text-size 32)
-        (q/text "Welcome to Tic Tac Toe!" (/ grid-width 2) 150)
-        (q/text-size 24)
-        (q/text "Who should go first?" (/ grid-width 2) 220)
-
-        (draw-button "Player X"
-                     (- (/ grid-width 2) button-width 20) 280
-                     button-width button-height)
-
-        (draw-button "Player O"
-                     (+ (/ grid-width 2) 20) 280
-                     button-width button-height))))
+(defn player-O-button []
+  (draw-button "Player O"
+               (+ (/ grid-width 2) 20) 280
+               button-width button-height))
 
 (defn choose-first-player-page []
   (white-background)
@@ -180,20 +156,17 @@
   (q/text "Welcome to Tic Tac Toe!" (/ grid-width 2) 150)
   (q/text-size 24)
   (q/text "Who should go first?" (/ grid-width 2) 220)
+  (player-X-button)
+  (player-O-button))
 
-  (draw-button "Player X"
-               (- (/ grid-width 2) button-width 20) 280
-               button-width button-height)
-
-  (draw-button "Player O"
-               (+ (/ grid-width 2) 20) 280
-               button-width button-height))
+(defn button-position-x []
+  (- (/ grid-width 2) (/ button-width 2)))
 
 (defn draw-player-choice-buttons []
-  (draw-button "Human" (- (/ grid-width 2) (/ button-width 2)) 190 button-width button-height)
-  (draw-button "Easy Ai" (- (/ grid-width 2) (/ button-width 2)) 250 button-width button-height)
-  (draw-button "Medium Ai" (- (/ grid-width 2) (/ button-width 2)) 310 button-width button-height)
-  (draw-button "Expert Ai" (- (/ grid-width 2) (/ button-width 2)) 370 button-width button-height))
+  (draw-button "Human" (button-position-x) 190 button-width button-height)
+  (draw-button "Easy Ai" (button-position-x) 250 button-width button-height)
+  (draw-button "Medium Ai" (button-position-x) 310 button-width button-height)
+  (draw-button "Expert Ai" (button-position-x) 370 button-width button-height))
 
 (defn choose-player-X-page []
   (white-background)
@@ -209,28 +182,85 @@
   (q/text "Choose Player O" (/ grid-width 2) 150)
   (draw-player-choice-buttons))
 
+(defn play-again-button []
+  (draw-button "Play Again"
+               (button-position-x)
+               (+ (/ grid-width 2) 50)
+               button-width
+               button-height))
+
+(defn draw-end-game []
+  (q/fill 0)
+  (q/text-align :center :center)
+  (q/text-size 32)
+  (q/text "Game Over!" (/ grid-width 2) (- (/ grid-width 2) 80))
+  (play-again-button))
+
+(defn end-game-message [state]
+  (when (board/end-game? (:board state) (:board-size state))
+    (draw-end-game)))
+
 (defn play-game-page [state]
   (white-background)
   (draw-gray-grid-lines state)
   (draw-tokens state)
   (end-game-message state))
 
-#_(defn choose-board-size-page []
-  (white-background)
-  (q/text-align :center :center)
-  (q/text-size 24)
-  (q/text "Choose board size" (/ grid-width 2) 220)
-  (draw-button "3x3"
-               (- (/ grid-width 2) button-width 20) 280
-               button-width button-height)
+(defn play-again [state click-position]
+  (and (board/end-game? (:board state) (:board-size state))
+       (clicked? (:x click-position) (:y click-position)
+                 (button-position-x)
+                 (+ (/ grid-width 2) 50)
+                 button-width
+                 button-height)))
 
-  (draw-button "4x4"
-               (+ (/ grid-width 2) 20) 280
-               button-width button-height))
+(defn valid-click-move? [row col {:keys [board current-token board-size] :as state}]
+  (let [in-progress? (not (board/game-over? board current-token board-size))
+        new-state    (game/->new-state state [row col])]
+    (if (and (board/space-available? board [row col]) in-progress?)
+      new-state
+      state)))
+
+(defn play-human-move [state click-position]
+  (let [col (int (/ (:x click-position) cell-size))
+        row (int (/ (:y click-position) cell-size))]
+    (valid-click-move? row col state)))
+
+(defn build-state-or-player-move [state click-position]
+  (cond
+    (= nil (:current-token state)) (choose-first-player state click-position)
+    (= nil (:X state)) (choose-player-X state click-position)
+    (= nil (:O state)) (choose-player-O state click-position)
+    (= nil (:board-size state)) (choose-board-size state click-position)
+    :else (play-human-move state click-position)))
+
+(defn ai-turn? [state]
+  (and (:current-token state)
+       (:X state)
+       (:O state)
+       (not (board/end-game? (:board state) (:board-size state)))
+       (not= :human (get state (:current-token state)))))
+
+(defn ai-make-move [state]
+  (->> (->player-move state)
+       (game/->new-state state)))
+
+(defn update-state [state]
+  (if (ai-turn? state)
+    (ai-make-move state)
+    state))
+
+(defn mouse-clicked [state click-position]
+  (if (play-again state click-position)
+    (create-new-game)
+    (build-state-or-player-move state click-position)))
 
 (defn draw-state [state]
   (cond (nil? (:current-token state)) (choose-first-player-page)
         (nil? (:X state)) (choose-player-X-page)
         (nil? (:O state)) (choose-player-O-page)
-        ;(nil? (:board-size state)) (choose-board-size-page)
         :else (play-game-page state)))
+
+(defn setup []
+  (q/frame-rate 60)
+  (create-new-game))
