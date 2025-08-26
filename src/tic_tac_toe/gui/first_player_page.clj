@@ -1,48 +1,50 @@
-;(ns tic-tac-toe.gui.first-player-page
-;  (:require [quil.core :as q]
-;            [tic-tac-toe.quil :as quil]))
-;
-;
-;(defn player-X-button []
-;  (quil/draw-button "Player X"
-;               (- (/ quil/grid-width 2) quil/button-width 20) quil/row-top-1
-;                    quil/button-width quil/button-height))
-;
-;(defn player-O-button []
-;  (quil/draw-button "Player O"
-;               (+ (/ quil/grid-width 2) 20) quil/row-top-1
-;                    quil/button-width quil/button-height))
-;
-;(defn choose-first-player-page []
-;  (quil/white-background)
-;  (q/text-align :center :center)
-;  (q/text-size 32)
-;  (q/text "Welcome to Tic Tac Toe!" (/ quil/grid-width 2) 150)
-;  (q/text-size 24)
-;  (q/text "Who should go first?" (/ quil/grid-width 2) 220)
-;  (player-X-button)
-;  (player-O-button))
-;
-;(def x-button
-;  {:top    quil/row-top-1
-;   :right  (- (/ quil/grid-width 2) quil/button-padding)
-;   :bottom (+ quil/row-top-1 quil/button-height)
-;   :left   (- (/ quil/grid-width 2) quil/button-padding quil/button-width)})
-;
-;(def o-button
-;  {:top    quil/row-top-1
-;   :left   (+ (/ quil/grid-width 2) quil/button-padding)
-;   :bottom (+ quil/row-top-1 quil/button-height)
-;   :right  (+ (/ quil/grid-width 2) quil/button-padding quil/button-width)})
-;
-;(defn x-clicked? [click-position]
-;  (quil/region-clicked? click-position x-button))
-;
-;(defn o-clicked? [click-position]
-;  (quil/region-clicked? click-position o-button))
-;
-;(defn on-click [state click-position]
-;  (cond
-;    (x-clicked? click-position) (assoc state :current-token :X :page :choose-player-X)
-;    (o-clicked? click-position) (assoc state :current-token :O :page :choose-player-O)
-;    :else state))
+(ns tic-tac-toe.gui.first-player-page
+  (:require [quil.core :as q]
+            [tic-tac-toe.gui.core :as core]
+            [tic-tac-toe.gui.mouse :refer [on-mouse-click]]))
+
+(defn player-X-button []
+  (core/draw-button "Player X"
+                    (- (/ core/grid-width 2) core/button-width 20) core/row-top-1
+                    core/button-width core/button-height))
+
+(defn player-O-button []
+  (core/draw-button "Player O"
+                    (+ (/ core/grid-width 2) 20) core/row-top-1
+                    core/button-width core/button-height))
+
+(defn choose-first-player-page []
+  (core/white-background)
+  (q/text-align :center :center)
+  (q/text-size 32)
+  (q/text "Welcome to Tic Tac Toe!" (/ core/grid-width 2) 150)
+  (q/text-size 24)
+  (q/text "Who should go first?" (/ core/grid-width 2) 220)
+  (player-X-button)
+  (player-O-button))
+
+(def x-button
+  {:top    core/row-top-1
+   :right  (- (/ core/grid-width 2) core/button-padding)
+   :bottom (+ core/row-top-1 core/button-height)
+   :left   (- (/ core/grid-width 2) core/button-padding core/button-width)})
+
+(def o-button
+  {:top    core/row-top-1
+   :left   (+ (/ core/grid-width 2) core/button-padding)
+   :bottom (+ core/row-top-1 core/button-height)
+   :right  (+ (/ core/grid-width 2) core/button-padding core/button-width)})
+
+(defn- x-clicked? [click-position]
+  (core/region-clicked? click-position x-button))
+
+(defn- o-clicked? [click-position]
+  (core/region-clicked? click-position o-button))
+
+(defmethod on-mouse-click :choose-first-player [state click-position]
+  (cond
+    (x-clicked? click-position)
+    (assoc state :current-token :X :page :choose-board-size)
+    (o-clicked? click-position)
+    (assoc state :current-token :O :page :choose-board-size)
+    :else state))
