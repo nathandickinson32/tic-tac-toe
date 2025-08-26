@@ -3,12 +3,12 @@
             [quil.middleware :as m]
             [tic-tac-toe.quil :as quil]))
 
-(defn -main []
+(defn -main [database]
   (q/defsketch tic-tac-toe
                :title "Tic Tac Toe"
                :size quil/grid-size
-               :setup quil/setup
+               :setup #(quil/setup database)
                :update quil/update-state
                :draw quil/draw-state
-               :mouse-clicked quil/mouse-clicked
+               :mouse-pressed quil/on-mouse-click
                :middleware [m/fun-mode]))

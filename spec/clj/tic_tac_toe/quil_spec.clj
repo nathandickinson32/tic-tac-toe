@@ -4,8 +4,326 @@
             [tic-tac-toe.quil :as sut]
             [quil.core :as q]))
 
+(defn ->click [x y] {:x x :y y})
+
+(declare state)
+
 (describe "Tic Tac Toe GUI"
   (with-stubs)
+
+  (redefs-around [q/frame-rate (stub :frame-rate)])
+
+  (it "sets up the GUI state"
+    (let [state (sut/setup :postgres)]
+      (should-have-invoked :frame-rate {:with [60]})
+      (should-be uuid? (:game-id state))
+      (should= :choose-first-player (:page state))
+      (should= 0 (:turn-count state))
+      (should= :postgres (:database state))))
+
+  (context "click events"
+
+    (context "choosing the first player"
+
+      (with state (sut/setup :postgres))
+
+      #_(with state (-> (sut/setup)
+                        (sut/on-mouse-click sut/x-button)
+                        (sut/on-mouse-click sut/human-button)
+                        (sut/on-mouse-click sut/easy-ai-button)
+                        (sut/on-mouse-click sut/square-1)
+                        sut/update-state
+                        (sut/on-mouse-click sut/square-5)
+                        sut/update-state
+                        (sut/on-mouse-click sut/square-9)))
+
+      (it "clicks on something other than a button"
+        (should= @state (sut/on-mouse-click @state (->click 1 1))))
+
+      (it "clicks on the corner of X"
+        (let [x-left    (- (/ sut/grid-width 2)
+                           sut/button-width
+                           sut/button-padding)
+              new-state (sut/on-mouse-click @state (->click x-left sut/row-top-1))]
+          (should= (assoc @state :current-token :X
+                                 :page :choose-board-size) new-state)))
+
+      (it "clicks on the corner of X"
+        (let [x-left    (- (/ sut/grid-width 2)
+                           sut/button-width
+                           sut/button-padding)
+              new-state (sut/on-mouse-click @state (->click (dec x-left) sut/row-top-1))]
+          (should= @state new-state)))
+
+      (it "clicks on the bottom-left corner of X"
+        (let [x-left    (- (/ sut/grid-width 2)
+                           sut/button-width
+                           sut/button-padding)
+              y-bottom  (+ sut/row-top-1 sut/button-height)
+              new-state (sut/on-mouse-click @state (->click x-left y-bottom))]
+          (should= (assoc @state :current-token :X
+                                 :page :choose-board-size) new-state)))
+
+      (it "clicks on the bottom-right corner of X"
+        (let [x-right   (- (/ sut/grid-width 2)
+                           sut/button-padding)
+              y-bottom  (+ sut/row-top-1 sut/button-height)
+              new-state (sut/on-mouse-click @state (->click x-right y-bottom))]
+          (should= (assoc @state :current-token :X
+                                 :page :choose-board-size) new-state)))
+
+      (it "clicks below the X button"
+        (let [x-middle  (- (/ sut/grid-width 2)
+                           (/ sut/button-width 2)
+                           sut/button-padding)
+              y-bottom  (+ sut/row-top-1 sut/button-height)
+              new-state (sut/on-mouse-click @state (->click x-middle (inc y-bottom)))]
+          (should= @state new-state)))
+
+      (it "clicks center of X button"
+        (let [x-middle  (- (/ sut/grid-width 2)
+                           (/ sut/button-width 2)
+                           sut/button-padding)
+              y-middle  (+ sut/row-top-1 (/ sut/button-height 2))
+              new-state (sut/on-mouse-click @state (->click x-middle y-middle))]
+          (should= (assoc @state :current-token :X
+                                 :page :choose-board-size) new-state)))
+
+      (it "clicks on the corner of O"
+        (let [o-left    (+ (/ sut/grid-width 2) sut/button-padding)
+              new-state (sut/on-mouse-click @state (->click o-left sut/row-top-1))]
+          (should= (assoc @state :current-token :O
+                                 :page :choose-board-size) new-state)))
+
+      (it "clicks just left of O"
+        (let [o-left    (+ (/ sut/grid-width 2) sut/button-padding)
+              new-state (sut/on-mouse-click @state (->click (dec o-left) sut/row-top-1))]
+          (should= @state new-state)))
+
+      (it "clicks on the bottom-left corner of O"
+        (let [o-left    (+ (/ sut/grid-width 2) sut/button-padding)
+              y-bottom  (+ sut/row-top-1 sut/button-height)
+              new-state (sut/on-mouse-click @state (->click o-left y-bottom))]
+          (should= (assoc @state :current-token :O
+                                 :page :choose-board-size) new-state)))
+
+      (it "clicks on the bottom-right corner of O"
+        (let [o-right   (+ (/ sut/grid-width 2)
+                           sut/button-padding
+                           sut/button-width)
+              y-bottom  (+ sut/row-top-1 sut/button-height)
+              new-state (sut/on-mouse-click @state (->click o-right y-bottom))]
+          (should= (assoc @state :current-token :O
+                                 :page :choose-board-size) new-state)))
+
+      (it "clicks below the O button"
+        (let [o-middle  (+ (/ sut/grid-width 2)
+                           sut/button-padding
+                           (/ sut/button-width 2))
+              y-bottom  (+ sut/row-top-1 sut/button-height)
+              new-state (sut/on-mouse-click @state (->click o-middle (inc y-bottom)))]
+          (should= @state new-state)))
+
+      (it "clicks center of O button"
+        (let [o-middle  (+ (/ sut/grid-width 2)
+                           sut/button-padding
+                           (/ sut/button-width 2))
+              y-middle  (+ sut/row-top-1 (/ sut/button-height 2))
+              new-state (sut/on-mouse-click @state (->click o-middle y-middle))]
+          (should= (assoc @state :current-token :O
+                                 :page :choose-board-size) new-state)))
+      )
+
+    (context "choosing player X"
+
+      (with state (-> (sut/setup :postgres)
+                      (assoc :page :choose-player-X)))
+
+      (it "clicks on something other than a button"
+        (should= @state (sut/on-mouse-click @state (->click 1 1))))
+
+      (it "clicks on Human button"
+        (let [x         (- (/ sut/grid-width 2) (/ sut/button-width 2))
+              y         190
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :X :human :page :choose-player-O) new-state)))
+
+      (it "clicks on Easy AI button"
+        (let [x         (- (/ sut/grid-width 2) (/ sut/button-width 2))
+              y         250
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :X :easy-ai :page :choose-player-O) new-state)))
+
+      (it "clicks on Medium AI button"
+        (let [x         (- (/ sut/grid-width 2) (/ sut/button-width 2))
+              y         310
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :X :medium-ai :page :choose-player-O) new-state)))
+
+      (it "clicks on Expert AI button"
+        (let [x         (- (/ sut/grid-width 2) (/ sut/button-width 2))
+              y         370
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :X :expert-ai :page :choose-player-O) new-state)))
+      )
+
+    (context "choosing player O"
+
+      (with state (-> (sut/setup :postgres)
+                      (assoc :page :choose-player-O)))
+
+      (it "clicks on something other than a button"
+        (should= @state (sut/on-mouse-click @state (->click 1 1))))
+
+      (it "clicks on Human button"
+        (let [x         (- (/ sut/grid-width 2) (/ sut/button-width 2))
+              y         190
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :O :human :page :play-game) new-state)))
+
+      (it "clicks on Easy AI button"
+        (let [x         (- (/ sut/grid-width 2) (/ sut/button-width 2))
+              y         250
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :O :easy-ai :page :play-game) new-state)))
+
+      (it "clicks on Medium AI button"
+        (let [x         (- (/ sut/grid-width 2) (/ sut/button-width 2))
+              y         310
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :O :medium-ai :page :play-game) new-state)))
+
+      (it "clicks on Expert AI button"
+        (let [x         (- (/ sut/grid-width 2) (/ sut/button-width 2))
+              y         370
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :O :expert-ai :page :play-game) new-state)))
+      )
+
+    (context "choosing the board size"
+
+      (with state (-> (sut/setup :postgres)
+                      (assoc :page :choose-board-size)))
+
+      (it "clicks on something other than a button"
+        (should= @state (sut/on-mouse-click @state (->click 1 1))))
+
+      (it "clicks bottom-right corner of 3x3 button"
+        (let [x         (+ (- (/ sut/grid-width 2) sut/button-width 20)
+                           sut/button-width)
+              y         (+ sut/row-top-1 sut/button-height)
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :board-size :3x3
+                                 :board board/starting-board-3x3
+                                 :page :choose-player-X)
+                   new-state)))
+
+      (it "clicks bottom-left corner of 4x4 button"
+        (let [x         (+ (/ sut/grid-width 2) 20)
+              y         (+ sut/row-top-1 sut/button-height)
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :board-size :4x4
+                                 :board board/starting-board-4x4
+                                 :page :choose-player-X)
+                   new-state)))
+
+      (it "clicks on the 3x3 button"
+        (let [x         (- (/ sut/grid-width 2) sut/button-width 20)
+              y         sut/row-top-1
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :board-size :3x3
+                                 :board board/starting-board-3x3
+                                 :page :choose-player-X)
+                   new-state)))
+
+      (it "clicks on the 4x4 button"
+        (let [x         (+ (/ sut/grid-width 2) 20)
+              y         sut/row-top-1
+              new-state (sut/on-mouse-click @state (->click x y))]
+          (should= (assoc @state :board-size :4x4
+                                 :board board/starting-board-4x4
+                                 :page :choose-player-X)
+                   new-state)))
+      )
+
+    (context "play-again"
+      (with state (-> (sut/setup :postgres)
+                      (assoc :page :game-over)))
+
+      (it "clicks somewhere outside the Play Again button"
+        (let [click-pos {:x 1 :y 1}
+              new-state (sut/on-mouse-click @state click-pos)]
+          (should= @state new-state)))
+
+      (it "clicks in the center of the Play Again button"
+        (let [click-x   (+ (:left sut/play-again-button)
+                           (/ sut/button-width 2))
+              click-y   (+ (:top sut/play-again-button)
+                           (/ sut/button-height 2))
+              new-state (sut/on-mouse-click @state {:x click-x :y click-y})]
+          (should= :choose-first-player (:page new-state))
+          (should-not= (:game-id @state) (:game-id new-state))
+          (should= :postgres (:database new-state))))
+
+      (it "clicks on the top-left corner of Play Again button"
+        (let [click-pos {:x (:left sut/play-again-button)
+                         :y (:top sut/play-again-button)}
+              new-state (sut/on-mouse-click @state click-pos)]
+          (should= :choose-first-player (:page new-state))
+          (should-not= (:game-id @state) (:game-id new-state))))
+
+      (it "clicks on the bottom-right corner of Play Again button"
+        (let [click-pos {:x (:right sut/play-again-button)
+                         :y (:bottom sut/play-again-button)}
+              new-state (sut/on-mouse-click @state click-pos)]
+          (should= :choose-first-player (:page new-state))
+          (should-not= (:game-id @state) (:game-id new-state))))
+      )
+
+    (context "play game page"
+
+      (with state (-> (sut/setup :postgres)
+                      (assoc :page :play-game
+                             :board board/starting-board-3x3
+                             :board-size :3x3
+                             :current-token :X
+                             :X :human
+                             :O :easy-ai)))
+
+      (it "clicks on top-left cell of the board"
+        (let [cell-size (/ sut/grid-width 3)
+              click-pos {:x (/ cell-size 2) :y (/ cell-size 2)}
+              new-state (sut/on-mouse-click @state click-pos)]
+          (should= :O (:current-token new-state))
+          (should= :human (:X new-state))
+          (should= :easy-ai (:O new-state))
+          (should= :play-game (:page new-state))
+          (should= :X (get-in (:board new-state) [0 0]))))
+
+      (it "clicks on center cell of the board"
+        (let [cell-size (/ sut/grid-width 3)
+              click-pos {:x (+ cell-size (/ cell-size 2))
+                         :y (+ cell-size (/ cell-size 2))}
+              new-state (sut/on-mouse-click @state click-pos)]
+          (should= :O (:current-token new-state))
+          (should= :X (get-in (:board new-state) [1 1]))))
+
+      (it "clicks on bottom-right cell of the board"
+        (let [cell-size (/ sut/grid-width 3)
+              click-pos {:x (+ (* 2 cell-size) (/ cell-size 2))
+                         :y (+ (* 2 cell-size) (/ cell-size 2))}
+              new-state (sut/on-mouse-click @state click-pos)]
+          (should= :O (:current-token new-state))
+          (should= :X (get-in (:board new-state) [2 2]))))
+
+      (it "clicks on a cell that is already taken"
+        (let [cell-size              (/ sut/grid-width 3)
+              click-pos              {:x (/ cell-size 2) :y (/ cell-size 2)}
+              state-after-first-move (sut/on-mouse-click @state click-pos)
+              new-state              (sut/on-mouse-click state-after-first-move click-pos)]
+          (should= state-after-first-move new-state)))
+      )
+    )
 
   (context "constants"
 
@@ -16,22 +334,10 @@
       (should= [600 600] sut/grid-size))
     )
 
-  (context "clicked?"
-
-    (it "returns true if click is inside button"
-      (should (sut/clicked? 50 50 0 0 100 100)))
-    (it "returns false if click is outside button"
-      (should-not (sut/clicked? 200 200 0 0 100 100)))
-    )
-
   (context "drawing"
     (with-stubs)
 
     (redefs-around [q/fill       (stub :fill)
-                    q/text       (stub :text)
-                    q/rect       (stub :rect)
-                    q/text-align (stub :align)
-                    q/text-size  (stub :text-size)
                     q/stroke     (stub :stroke)
                     q/line       (stub :line)
                     q/background (stub :background)])
@@ -55,124 +361,5 @@
     (it "draws horizontal lines"
       (sut/draw-horizontal-lines 200)
       (should-have-invoked :line))
-
-    (it "->pixel-location centers correctly"
-      (should= (+ (* 2 200) (/ 600 6)) (sut/->pixel-location 2 200)))
-    )
-
-  (context "setup"
-    (with-stubs)
-
-    (redefs-around [q/frame-rate (stub :frame-rate)
-                    random-uuid  (stub :uuid {:return "123"})])
-
-    (it "creates a new game on setup"
-      (should= (sut/create-new-game) (sut/setup)))
-
-    (it "sets up frame rate"
-      (sut/setup)
-      (should-have-invoked :frame-rate {:with [60]}))
-    )
-
-  (context "create-new-game"
-
-    (it "returns a new game with correct structure"
-      (let [game (sut/create-new-game)]
-        (should (uuid? (:game-id game)))
-        (should= board/starting-board-3x3 (:board game))
-        (should= :3x3 (:board-size game))
-        (should= 0 (:turn-count game))))
-    )
-
-  (context "choose-first-player"
-
-    (it "chooses X when clicked on left button"
-      (let [state     (sut/create-new-game)
-            click     {:x 100 :y 280}
-            new-state (sut/choose-first-player state click)]
-        (should= :X (:current-token new-state))))
-
-    (it "chooses O when clicked on right button"
-      (let [state     (sut/create-new-game)
-            click     {:x 500 :y 280}
-            new-state (sut/choose-first-player state click)]
-        (should= :O (:current-token new-state))))
-    )
-
-  (context "choose-player-X"
-
-    (it "assigns human"
-      (should= :human (:X (sut/choose-player-X {} {:x 300 :y 190}))))
-    (it "assigns easy-ai"
-      (should= :easy-ai (:X (sut/choose-player-X {} {:x 300 :y 250}))))
-    (it "assigns medium-ai"
-      (should= :medium-ai (:X (sut/choose-player-X {} {:x 300 :y 310}))))
-    (it "assigns expert-ai"
-      (should= :expert-ai (:X (sut/choose-player-X {} {:x 300 :y 370}))))
-    )
-
-  (context "choose-player-O"
-
-    (it "assigns human"
-      (should= :human (:O (sut/choose-player-O {} {:x 300 :y 190}))))
-    (it "assigns easy-ai"
-      (should= :easy-ai (:O (sut/choose-player-O {} {:x 300 :y 250}))))
-    (it "assigns medium-ai"
-      (should= :medium-ai (:O (sut/choose-player-O {} {:x 300 :y 310}))))
-    (it "assigns expert-ai"
-      (should= :expert-ai (:O (sut/choose-player-O {} {:x 300 :y 370}))))
-    )
-
-  (context "mouse-clicked"
-
-    (it "resets to new game if play-again is clicked"
-      (with-redefs [sut/play-again (constantly true)]
-        (should (contains? (sut/mouse-clicked {:board      board/starting-board-3x3
-                                               :board-size :3x3}
-                                              {:x 0 :y 0})
-                           :game-id))))
-
-    (it "build-state-or-player-move"
-      (with-redefs [sut/play-again                 (constantly false)
-                    sut/build-state-or-player-move (stub :build-state)]
-        (sut/mouse-clicked {} {:x 10 :y 10})
-        (should-have-invoked :build-state)))
-    )
-
-  (context "update-state"
-
-    (it "AI move when ai-turn"
-      (with-redefs [sut/ai-turn?     (constantly true)
-                    sut/ai-make-move (stub :ai-move)]
-        (sut/update-state {:X :easy-ai :O :human :current-token :X})
-        (should-have-invoked :ai-move)))
-
-    (it "returns state unchanged when not ai-turn"
-      (let [state {:game-id "123" :board board/starting-board-3x3 :board-size :3x3 :X :human :O :human :current-token :X :turn-count 0}]
-        (should= state (sut/update-state state))))
-    )
-
-  (context "draw-state"
-    (with-stubs)
-
-    (it "calls choose-first-player-page if no current-token"
-      (with-redefs [sut/choose-first-player-page (stub :page)]
-        (sut/draw-state {})
-        (should-have-invoked :page)))
-
-    (it "calls choose-player-X-page if no X chosen"
-      (with-redefs [sut/choose-player-X-page (stub :page)]
-        (sut/draw-state {:current-token :X})
-        (should-have-invoked :page)))
-
-    (it "calls choose-player-O-page if no O chosen"
-      (with-redefs [sut/choose-player-O-page (stub :page)]
-        (sut/draw-state {:current-token :X :X :human})
-        (should-have-invoked :page)))
-
-    (it "calls play-game-page if state fully made"
-      (with-redefs [sut/play-game-page (stub :page)]
-        (sut/draw-state {:current-token :X :X :human :O :human :board-size :3x3 :board board/starting-board-3x3})
-        (should-have-invoked :page)))
     )
   )

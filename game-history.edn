@@ -10,4 +10,81 @@
 {:game-id "14574782-8c13-4006-b699-f9d63794ecda", :turn-count 3, :board-size :3x3, :X :human, :O :expert-ai, :current-token :O, :board [[:X :X "3"] ["4" :O "6"] ["7" "8" "9"]]}
 {:game-id "14574782-8c13-4006-b699-f9d63794ecda", :turn-count 4, :board-size :3x3, :X :human, :O :expert-ai, :current-token :X, :board [[:X :X :O] ["4" :O "6"] ["7" "8" "9"]]}
 {:game-id "14574782-8c13-4006-b699-f9d63794ecda", :turn-count 5, :board-size :3x3, :X :human, :O :expert-ai, :current-token :O, :board [[:X :X :O] [:X :O "6"] ["7" "8" "9"]]}
-{:game-id "14574782-8c13-4006-b699-f9d63794ecda", :turn-count 6, :board-size :3x3, :X :human, :O :expert-ai, :current-token :X, :board [[:X :X :O] [:X :O "6"] [:O "8" "9"]]}
+{:game-id "14574782-8c13-4006-b699-f9d63794ecda", :turn-count 6, :board-size :3x3, :X :human, :O :expert-ai, :current-token :X, :board [[:X :X :O] [:X :O "6"] [:O "8" "9"]]}{:game-id "3e62be9c-5042-4136-8323-b6879e2092d9", :turn-count 1, :board-size :3x3, :X :easy-ai, :O :easy-ai, :current-token :O, :board [["1" "2" "3"] ["4" "5" :X] ["7" "8" "9"]]}
+{:game-id "3e62be9c-5042-4136-8323-b6879e2092d9", :turn-count 2, :board-size :3x3, :X :easy-ai, :O :easy-ai, :current-token :X, :board [["1" "2" "3"] [:O "5" :X] ["7" "8" "9"]]}
+{:game-id "3e62be9c-5042-4136-8323-b6879e2092d9", :turn-count 3, :board-size :3x3, :X :easy-ai, :O :easy-ai, :current-token :O, :board [["1" "2" "3"] [:O "5" :X] ["7" "8" :X]]}
+{:game-id "3e62be9c-5042-4136-8323-b6879e2092d9", :turn-count 4, :board-size :3x3, :X :easy-ai, :O :easy-ai, :current-token :X, :board [["1" "2" "3"] [:O "5" :X] ["7" :O :X]]}
+{:game-id "3e62be9c-5042-4136-8323-b6879e2092d9", :turn-count 5, :board-size :3x3, :X :easy-ai, :O :easy-ai, :current-token :O, :board [["1" "2" "3"] [:O "5" :X] [:X :O :X]]}
+{:game-id "3e62be9c-5042-4136-8323-b6879e2092d9", :turn-count 6, :board-size :3x3, :X :easy-ai, :O :easy-ai, :current-token :X, :board [[:O "2" "3"] [:O "5" :X] [:X :O :X]]}
+{:game-id "3e62be9c-5042-4136-8323-b6879e2092d9", :turn-count 7, :board-size :3x3, :X :easy-ai, :O :easy-ai, :current-token :O, :board [[:O "2" "3"] [:O :X :X] [:X :O :X]]}
+{:game-id "3e62be9c-5042-4136-8323-b6879e2092d9", :turn-count 8, :board-size :3x3, :X :easy-ai, :O :easy-ai, :current-token :X, :board [[:O "2" :O] [:O :X :X] [:X :O :X]]}
+{:game-id "3e62be9c-5042-4136-8323-b6879e2092d9", :turn-count 9, :board-size :3x3, :X :easy-ai, :O :easy-ai, :current-token :O, :board [[:O :X :O] [:O :X :X] [:X :O :X]]}
+{:game-id "46048862-ae5d-49f7-bf9e-a6f429231d42", :turn-count 1, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" "9"]]}
+{:game-id "46048862-ae5d-49f7-bf9e-a6f429231d42", :turn-count 2, :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:X "2" "3"] [:O "5" "6"] ["7" "8" "9"]]}
+{:game-id "46048862-ae5d-49f7-bf9e-a6f429231d42", :turn-count 3, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]]}
+{:game-id "46048862-ae5d-49f7-bf9e-a6f429231d42", :turn-count 4, :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:X :X "3"] [:O :O "6"] ["7" "8" "9"]]}
+{:game-id "46048862-ae5d-49f7-bf9e-a6f429231d42", :turn-count 5, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]]}
+{:game-id "9ff671d7-6bfa-4a02-9265-9c913135ad66", :turn-count 1, :board-size :3x3, :X :human, :O :human, :current-token :X, :board [["1" "2" "3"] ["4" "5" "6"] [:O "8" "9"]]}
+{:game-id "9ff671d7-6bfa-4a02-9265-9c913135ad66", :turn-count 2, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:X "2" "3"] ["4" "5" "6"] [:O "8" "9"]]}
+{:game-id "9ff671d7-6bfa-4a02-9265-9c913135ad66", :turn-count 3, :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:X "2" "3"] ["4" "5" "6"] [:O :O "9"]]}
+{:game-id "9ff671d7-6bfa-4a02-9265-9c913135ad66", :turn-count 4, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:X :X "3"] ["4" "5" "6"] [:O :O "9"]]}
+{:game-id "9ff671d7-6bfa-4a02-9265-9c913135ad66", :turn-count 5, :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:X :X "3"] ["4" "5" "6"] [:O :O :O]]}
+{:game-id "ee72ef93-75df-4eb0-a496-8869d92fa651", :turn-count 1, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [["1" "2" "3"] ["4" "5" "6"] [:X "8" "9"]]}
+{:game-id "ee72ef93-75df-4eb0-a496-8869d92fa651", :turn-count 2, :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:O "2" "3"] ["4" "5" "6"] [:X "8" "9"]]}
+{:game-id "ee72ef93-75df-4eb0-a496-8869d92fa651", :turn-count 3, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:O "2" "3"] ["4" "5" "6"] [:X :X "9"]]}
+{:game-id "ee72ef93-75df-4eb0-a496-8869d92fa651", :turn-count 4, :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:O :O "3"] ["4" "5" "6"] [:X :X "9"]]}
+{:game-id "ee72ef93-75df-4eb0-a496-8869d92fa651", :turn-count 5, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:O :O "3"] ["4" "5" "6"] [:X :X :X]]}
+{:game-id "330dbd63-df77-4b83-9b3b-8f34404905e4", :turn-count 1, :board-size :4x4, :X :human, :O :human, :current-token :X, :board [[:O "2" "3" "4"] ["5" "6" "7" "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:game-id "330dbd63-df77-4b83-9b3b-8f34404905e4", :turn-count 2, :board-size :4x4, :X :human, :O :human, :current-token :O, :board [[:O "2" "3" "4"] [:X "6" "7" "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:game-id "330dbd63-df77-4b83-9b3b-8f34404905e4", :turn-count 3, :board-size :4x4, :X :human, :O :human, :current-token :X, :board [[:O "2" "3" "4"] [:X :O "7" "8"] ["9" "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:game-id "330dbd63-df77-4b83-9b3b-8f34404905e4", :turn-count 4, :board-size :4x4, :X :human, :O :human, :current-token :O, :board [[:O "2" "3" "4"] [:X :O "7" "8"] [:X "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:game-id "330dbd63-df77-4b83-9b3b-8f34404905e4", :turn-count 5, :board-size :4x4, :X :human, :O :human, :current-token :X, :board [[:O "2" "3" "4"] [:X :O "7" "8"] [:X "10" :O "12"] ["13" "14" "15" "16"]]}
+{:game-id "330dbd63-df77-4b83-9b3b-8f34404905e4", :turn-count 6, :board-size :4x4, :X :human, :O :human, :current-token :O, :board [[:O "2" "3" "4"] [:X :O "7" "8"] [:X "10" :O "12"] [:X "14" "15" "16"]]}
+{:game-id "330dbd63-df77-4b83-9b3b-8f34404905e4", :turn-count 7, :board-size :4x4, :X :human, :O :human, :current-token :X, :board [[:O "2" "3" "4"] [:X :O "7" "8"] [:X "10" :O "12"] [:X "14" "15" :O]]}
+{:game-id "ce1a421a-7663-4484-a8ae-c8425860a82b", :turn-count 1, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:X "2" "3"] ["4" "5" "6"] ["7" "8" "9"]]}
+{:game-id "ce1a421a-7663-4484-a8ae-c8425860a82b", :turn-count 2, :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:X "2" "3"] [:O "5" "6"] ["7" "8" "9"]]}
+{:game-id "ce1a421a-7663-4484-a8ae-c8425860a82b", :turn-count 3, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:X :X "3"] [:O "5" "6"] ["7" "8" "9"]]}
+{:game-id "ce1a421a-7663-4484-a8ae-c8425860a82b", :turn-count 4, :board-size :3x3, :X :human, :O :human, :current-token :X, :board [[:X :X "3"] [:O :O "6"] ["7" "8" "9"]]}
+{:game-id "ce1a421a-7663-4484-a8ae-c8425860a82b", :turn-count 5, :board-size :3x3, :X :human, :O :human, :current-token :O, :board [[:X :X :X] [:O :O "6"] ["7" "8" "9"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 1, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :O, :board [["1" "2" "3" "4"] ["5" "6" "7" :X] ["9" "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 2, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :X, :board [["1" "2" "3" "4"] ["5" "6" "7" :X] ["9" "10" "11" :O] ["13" "14" "15" "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 3, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :O, :board [["1" "2" "3" :X] ["5" "6" "7" :X] ["9" "10" "11" :O] ["13" "14" "15" "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 4, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :X, :board [["1" "2" "3" :X] ["5" "6" :O :X] ["9" "10" "11" :O] ["13" "14" "15" "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 5, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :O, :board [["1" "2" "3" :X] ["5" "6" :O :X] ["9" "10" "11" :O] ["13" "14" :X "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 6, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :X, :board [["1" "2" "3" :X] [:O "6" :O :X] ["9" "10" "11" :O] ["13" "14" :X "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 7, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :O, :board [["1" "2" "3" :X] [:O "6" :O :X] ["9" "10" "11" :O] ["13" :X :X "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 8, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :X, :board [["1" "2" :O :X] [:O "6" :O :X] ["9" "10" "11" :O] ["13" :X :X "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 9, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :O, :board [["1" "2" :O :X] [:O "6" :O :X] ["9" "10" "11" :O] [:X :X :X "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 10, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :X, :board [["1" "2" :O :X] [:O "6" :O :X] [:O "10" "11" :O] [:X :X :X "16"]]}
+{:game-id "bf22a94c-0b24-4ee1-a6c3-fb6c651efd47", :turn-count 11, :board-size :4x4, :X :easy-ai, :O :easy-ai, :current-token :O, :board [["1" "2" :O :X] [:O "6" :O :X] [:O "10" "11" :O] [:X :X :X :X]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 1, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :X, :board [["1" "2" "3" "4"] ["5" "6" "7" "8"] [:O "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 2, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :O, :board [["1" "2" "3" "4"] ["5" "6" "7" :X] [:O "10" "11" "12"] ["13" "14" "15" "16"]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 3, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :X, :board [["1" "2" "3" "4"] ["5" "6" "7" :X] [:O "10" "11" "12"] [:O "14" "15" "16"]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 4, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :O, :board [["1" "2" "3" "4"] ["5" "6" :X :X] [:O "10" "11" "12"] [:O "14" "15" "16"]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 5, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :X, :board [["1" "2" "3" "4"] [:O "6" :X :X] [:O "10" "11" "12"] [:O "14" "15" "16"]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 6, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :O, :board [[:X "2" "3" "4"] [:O "6" :X :X] [:O "10" "11" "12"] [:O "14" "15" "16"]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 7, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :X, :board [[:X "2" "3" "4"] [:O "6" :X :X] [:O "10" "11" "12"] [:O "14" "15" :O]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 8, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :O, :board [[:X "2" "3" "4"] [:O "6" :X :X] [:O "10" :X "12"] [:O "14" "15" :O]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 9, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :X, :board [[:X "2" "3" "4"] [:O "6" :X :X] [:O :O :X "12"] [:O "14" "15" :O]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 10, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :O, :board [[:X "2" "3" "4"] [:O "6" :X :X] [:O :O :X "12"] [:O "14" :X :O]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 11, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :X, :board [[:X "2" :O "4"] [:O "6" :X :X] [:O :O :X "12"] [:O "14" :X :O]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 12, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :O, :board [[:X "2" :O "4"] [:O "6" :X :X] [:O :O :X "12"] [:O :X :X :O]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 13, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :X, :board [[:X "2" :O "4"] [:O "6" :X :X] [:O :O :X :O] [:O :X :X :O]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 14, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :O, :board [[:X "2" :O "4"] [:O :X :X :X] [:O :O :X :O] [:O :X :X :O]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 15, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :X, :board [[:X "2" :O :O] [:O :X :X :X] [:O :O :X :O] [:O :X :X :O]]}
+{:game-id "172309e8-536c-4f47-8461-a234e17f6a7f", :turn-count 16, :board-size :4x4, :X :medium-ai, :O :medium-ai, :current-token :O, :board [[:X :X :O :O] [:O :X :X :X] [:O :O :X :O] [:O :X :X :O]]}
+{:game-id "dd75c346-e3c6-4111-bd76-125fd5c83593", :turn-count 1, :board-size :4x4, :X :expert-ai, :O :expert-ai, :current-token :O, :board [["1" "2" "3" "4"] ["5" "6" "7" "8"] ["9" "10" "11" "12"] ["13" "14" "15" :X]]}
+{:game-id "dd75c346-e3c6-4111-bd76-125fd5c83593", :turn-count 2, :board-size :4x4, :X :expert-ai, :O :expert-ai, :current-token :X, :board [["1" "2" "3" "4"] ["5" "6" "7" "8"] ["9" "10" "11" "12"] ["13" "14" :O :X]]}
+{:game-id "dd75c346-e3c6-4111-bd76-125fd5c83593", :turn-count 3, :board-size :4x4, :X :expert-ai, :O :expert-ai, :current-token :O, :board [["1" "2" "3" "4"] ["5" "6" "7" "8"] ["9" "10" "11" :X] ["13" "14" :O :X]]}
+{:game-id "dd75c346-e3c6-4111-bd76-125fd5c83593", :turn-count 4, :board-size :4x4, :X :expert-ai, :O :expert-ai, :current-token :X, :board [["1" "2" "3" "4"] ["5" "6" "7" "8"] ["9" "10" :O :X] ["13" "14" :O :X]]}
+{:game-id "dd75c346-e3c6-4111-bd76-125fd5c83593", :turn-count 5, :board-size :4x4, :X :expert-ai, :O :expert-ai, :current-token :O, :board [["1" "2" "3" "4"] ["5" "6" "7" :X] ["9" "10" :O :X] ["13" "14" :O :X]]}
+{:game-id "dd75c346-e3c6-4111-bd76-125fd5c83593", :turn-count 6, :board-size :4x4, :X :expert-ai, :O :expert-ai, :current-token :X, :board [["1" "2" "3" "4"] ["5" "6" :O :X] ["9" "10" :O :X] ["13" "14" :O :X]]}
+{:game-id "dd75c346-e3c6-4111-bd76-125fd5c83593", :turn-count 7, :board-size :4x4, :X :expert-ai, :O :expert-ai, :current-token :O, :board [["1" "2" "3" :X] ["5" "6" :O :X] ["9" "10" :O :X] ["13" "14" :O :X]]}
+{:game-id "1cf704bb-6ed3-4a1d-8bbb-4946f0d075fb", :turn-count 1, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :O, :board [["1" "2" "3"] ["4" "5" :X] ["7" "8" "9"]]}
+{:game-id "1cf704bb-6ed3-4a1d-8bbb-4946f0d075fb", :turn-count 2, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :X, :board [["1" :O "3"] ["4" "5" :X] ["7" "8" "9"]]}
+{:game-id "1cf704bb-6ed3-4a1d-8bbb-4946f0d075fb", :turn-count 3, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :O, :board [["1" :O "3"] ["4" "5" :X] ["7" :X "9"]]}
+{:game-id "1cf704bb-6ed3-4a1d-8bbb-4946f0d075fb", :turn-count 4, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :X, :board [["1" :O :O] ["4" "5" :X] ["7" :X "9"]]}
+{:game-id "1cf704bb-6ed3-4a1d-8bbb-4946f0d075fb", :turn-count 5, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :O, :board [[:X :O :O] ["4" "5" :X] ["7" :X "9"]]}
+{:game-id "1cf704bb-6ed3-4a1d-8bbb-4946f0d075fb", :turn-count 6, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :X, :board [[:X :O :O] ["4" "5" :X] [:O :X "9"]]}
+{:game-id "1cf704bb-6ed3-4a1d-8bbb-4946f0d075fb", :turn-count 7, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :O, :board [[:X :O :O] [:X "5" :X] [:O :X "9"]]}
+{:game-id "1cf704bb-6ed3-4a1d-8bbb-4946f0d075fb", :turn-count 8, :board-size :3x3, :X :easy-ai, :O :medium-ai, :current-token :X, :board [[:X :O :O] [:X :O :X] [:O :X "9"]]}
