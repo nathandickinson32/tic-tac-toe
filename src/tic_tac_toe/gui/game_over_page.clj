@@ -1,7 +1,8 @@
 (ns tic-tac-toe.gui.game-over-page
   (:require [tic-tac-toe.gui.core :as core]
             [quil.core :as q]
-            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]))
+            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]
+            [tic-tac-toe.gui.draw-pages :refer [draw-state]]))
 
 (def play-again-button
   {:top    (+ (/ core/grid-width 2) 50)
@@ -33,3 +34,6 @@
   (if (play-again? click-position)
     (core/create-new-game (:database state))
     state))
+
+(defmethod draw-state :game-over [state]
+  (game-over-page state))

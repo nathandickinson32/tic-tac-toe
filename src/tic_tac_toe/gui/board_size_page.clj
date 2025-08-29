@@ -2,7 +2,8 @@
   (:require [quil.core :as q]
             [tic-tac-toe.gui.core :as core]
             [tic-tac-toe.board :as board]
-            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]))
+            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]
+            [tic-tac-toe.gui.draw-pages :refer [draw-state]]))
 
 (defn choose-board-size-page []
   (core/white-background)
@@ -47,3 +48,6 @@
                  :page :choose-player-X)
 
     :else state))
+
+(defmethod draw-state :choose-board-size [state]
+  (choose-board-size-page))

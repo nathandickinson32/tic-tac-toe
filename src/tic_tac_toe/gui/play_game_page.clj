@@ -2,7 +2,8 @@
   (:require [tic-tac-toe.gui.core :as core]
             [tic-tac-toe.board :as board]
             [tic-tac-toe.game :as game]
-            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]))
+            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]
+            [tic-tac-toe.gui.draw-pages :refer [draw-state]]))
 
 (defn play-game-page [state]
   (core/white-background)
@@ -25,3 +26,6 @@
 
 (defmethod on-mouse-click :play-game [state click-position]
   (play-human-move state click-position))
+
+(defmethod draw-state :play-game [state]
+  (play-game-page state))

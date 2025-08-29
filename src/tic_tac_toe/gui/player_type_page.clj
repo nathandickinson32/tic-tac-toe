@@ -1,7 +1,8 @@
 (ns tic-tac-toe.gui.player-type-page
   (:require [quil.core :as q]
             [tic-tac-toe.gui.core :as core]
-            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]))
+            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]
+            [tic-tac-toe.gui.draw-pages :refer [draw-state]]))
 
 (defn draw-player-choice-buttons []
   (core/draw-button "Human" (core/button-position-x) 190 core/button-width core/button-height)
@@ -69,3 +70,9 @@
                (expert-ai-clicked? click-position) :expert-ai)]
     (assoc state :O o :page :play-game)
     state))
+
+(defmethod draw-state :choose-player-X [state]
+  (choose-player-X-page))
+
+(defmethod draw-state :choose-player-O [state]
+  (choose-player-O-page))

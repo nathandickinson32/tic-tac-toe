@@ -1,7 +1,8 @@
 (ns tic-tac-toe.gui.first-player-page
   (:require [quil.core :as q]
             [tic-tac-toe.gui.core :as core]
-            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]))
+            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]
+            [tic-tac-toe.gui.draw-pages :refer [draw-state]]))
 
 (defn player-X-button []
   (core/draw-button "Player X"
@@ -48,3 +49,6 @@
     (o-clicked? click-position)
     (assoc state :current-token :O :page :choose-board-size)
     :else state))
+
+(defmethod draw-state :choose-first-player [state]
+  (choose-first-player-page))
