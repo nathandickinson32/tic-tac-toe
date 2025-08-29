@@ -4,8 +4,7 @@
             [next.jdbc :as jdbc]
             [tic-tac-toe.board :as board]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.sql-database.data-source :as datasource]
-            [tic-tac-toe.expert-ai :as expert-ai]))
+            [tic-tac-toe.sql-database.data-source :as datasource]))
 
 (def game-exists-sql
   "SELECT EXISTS (SELECT 1 FROM games WHERE game_id = ?)")

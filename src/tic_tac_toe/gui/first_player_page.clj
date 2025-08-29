@@ -1,7 +1,7 @@
 (ns tic-tac-toe.gui.first-player-page
   (:require [quil.core :as q]
             [tic-tac-toe.gui.core :as core]
-            [tic-tac-toe.gui.mouse :refer [on-mouse-click]]))
+            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]))
 
 (defn player-X-button []
   (core/draw-button "Player X"

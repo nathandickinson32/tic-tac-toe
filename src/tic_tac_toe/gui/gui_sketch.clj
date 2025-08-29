@@ -1,9 +1,9 @@
-(ns tic-tac-toe.gui
+(ns tic-tac-toe.gui.gui-sketch
   (:require [quil.core :as q]
             [quil.middleware :as m]
-            [tic-tac-toe.quil :as quil]
+            [tic-tac-toe.gui.quil :as quil]
             [tic-tac-toe.gui.core :as core]
-            [tic-tac-toe.gui.mouse :refer [on-mouse-click]]))
+            [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]))
 
 (defn -main [database]
   (q/defsketch tic-tac-toe

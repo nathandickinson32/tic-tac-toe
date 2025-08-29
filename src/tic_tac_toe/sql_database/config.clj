@@ -1,4 +1,4 @@
-(ns tic-tac-toe.config)
+(ns tic-tac-toe.sql-database.config)
 
 (def db-spec
   {:dbtype   "postgresql"
