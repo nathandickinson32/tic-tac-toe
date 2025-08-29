@@ -6,10 +6,7 @@
             [tic-tac-toe.records :as records]
             [tic-tac-toe.player-types]
             [clojure.string :as str]
-            [tic-tac-toe.gui.gui-sketch :as gui]
-            [tic-tac-toe.gui.mouse-clicks]
-            [tic-tac-toe.gui.quil]
-            [tic-tac-toe.gui.draw-pages]))
+            [tic-tac-toe.gui.gui-sketch :as gui]))
 
 (defn setup-game [args database]
   (let [replay? (some #(= "--replay" %) args)

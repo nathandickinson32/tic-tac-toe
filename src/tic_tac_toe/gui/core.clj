@@ -70,3 +70,7 @@
             col (range n)
             :let [cell (get-in board [row col])]]
       (when (keyword? cell) (draw-token col row cell board-size)))))
+
+(defn setup [database]
+  (q/frame-rate 60)
+  (create-new-game database))

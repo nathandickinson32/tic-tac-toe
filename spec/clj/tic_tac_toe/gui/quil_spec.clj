@@ -1,6 +1,6 @@
 (ns tic-tac-toe.gui.quil-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.gui.quil :as sut]
+            [tic-tac-toe.gui.update-state :as sut]
             [quil.core :as q]))
 
 (declare state)

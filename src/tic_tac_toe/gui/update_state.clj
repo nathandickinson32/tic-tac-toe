@@ -1,9 +1,7 @@
-(ns tic-tac-toe.gui.quil
-  (:require [quil.core :as q]
-            [tic-tac-toe.board :as board]
+(ns tic-tac-toe.gui.update-state
+  (:require [tic-tac-toe.board :as board]
             [tic-tac-toe.game :as game]
-            [tic-tac-toe.player-types :as player-types]
-            [tic-tac-toe.gui.core :as core]))
+            [tic-tac-toe.player-types :as player-types]))
 
 (defn ai-turn? [state]
   (and (:current-token state)
@@ -22,7 +20,3 @@
     (if (ai-turn? state)
       (ai-make-move state)
       state)))
-
-(defn setup [database]
-  (q/frame-rate 60)
-  (core/create-new-game database))
