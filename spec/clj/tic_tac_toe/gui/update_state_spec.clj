@@ -1,7 +1,7 @@
-(ns tic-tac-toe.gui.quil-spec
+(ns tic-tac-toe.gui.update-state-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.gui.update-state :as sut]
-            [quil.core :as q]))
+            [quil.core :as q]
+            [tic-tac-toe.gui.core :as core]))
 
 (declare state)
 
@@ -11,7 +11,7 @@
   (redefs-around [q/frame-rate (stub :frame-rate)])
 
   (it "sets up the GUI state"
-    (let [state (sut/setup :postgres)]
+    (let [state (core/setup :postgres)]
       (should-have-invoked :frame-rate {:with [60]})
       (should-be uuid? (:game-id state))
       (should= :choose-first-player (:page state))

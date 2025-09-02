@@ -1,5 +1,7 @@
 (ns tic-tac-toe.gui.board-size-page-spec
   (:require [speclj.core :refer :all]
+            [quil.core :as q]
+            [tic-tac-toe.gui.board-size-page :as sut]
             [tic-tac-toe.board :as board]
             [tic-tac-toe.gui.core :as core]
             [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]))
@@ -9,8 +11,49 @@
 (declare state)
 
 (describe "board-size-page"
+  (with-stubs)
 
-  (context "choosing the board size"
+  (context "page rendering"
+
+    (redefs-around [core/white-background (stub :background)
+                    q/text-align          (stub :text-align)
+                    q/text-size           (stub :text-size)
+                    q/text                (stub :text)
+                    core/draw-button      (stub :draw-button)])
+
+    (let [button3x3 ["3x3" (- (/ core/grid-width 2) core/button-width 20)
+                     core/row-top-1 core/button-width core/button-height]
+          button4x4 ["4x4" (+ (/ core/grid-width 2) 20)
+                     core/row-top-1 core/button-width core/button-height]]
+      (it "renders choose board size page"
+        (sut/choose-board-size-page)
+        (should-have-invoked :background)
+        (should-have-invoked :text-align {:with [:center :center]})
+        (should-have-invoked :text-size {:with [24]})
+        (should-have-invoked :text {:with ["Choose board size"
+                                           (/ core/grid-width 2) 220]})
+        (should-have-invoked :draw-button {:with button3x3})
+        (should-have-invoked :draw-button {:with button4x4})))
+    )
+
+  (context "button regions"
+
+    (it "defines 3x3 button region"
+      (should= {:top    core/row-top-1
+                :bottom (+ core/row-top-1 core/button-height)
+                :left   (- (/ core/grid-width 2) core/button-width 20)
+                :right  (+ (- (/ core/grid-width 2) core/button-width 20) core/button-width)}
+               sut/board-3x3-button))
+
+    (it "defines 4x4 button region"
+      (should= {:top    core/row-top-1
+                :bottom (+ core/row-top-1 core/button-height)
+                :left   (+ (/ core/grid-width 2) 20)
+                :right  (+ (+ (/ core/grid-width 2) 20) core/button-width)}
+               sut/board-4x4-button))
+    )
+
+  (context "mouse click handling"
 
     (with state {:page :choose-board-size})
 

@@ -60,8 +60,8 @@
     <orderEntry type="library" name="Deps: cljsjs/p5:1.7.0-0" level="project" />
     <orderEntry type="library" name="Deps: org.bouncycastle/bcmail-jdk14:1.38" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-core:2.18.3" level="project" />
-    <orderEntry type="library" name="Deps: speclj:3.11.0" level="project" />
-    <orderEntry type="library" name="Deps: trptcolin/versioneer:0.2.0" level="project" />
+    <orderEntry type="library" name="Deps: speclj:3.10.0" level="project" />
+    <orderEntry type="library" name="Deps: trptcolin/versioneer:0.1.1" level="project" />
     <orderEntry type="library" name="Deps: xalan:2.7.2" level="project" />
     <orderEntry type="library" name="Deps: org.apache.xmlgraphics/batik-constants:1.14" level="project" />
     <orderEntry type="library" name="Deps: quil/processing-dxf:4.2.3" level="project" />
