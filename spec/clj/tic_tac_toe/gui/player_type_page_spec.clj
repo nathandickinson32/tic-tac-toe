@@ -20,15 +20,15 @@
                     q/text                (stub :text)
                     core/draw-button      (stub :draw-button)])
 
-    (let [human-button ["Human"
-                        (core/button-position-x)
-                        190
-                        core/button-width
-                        core/button-height]
-          easy-ai-button ["Easy Ai"
-                          (core/button-position-x)
-                          250 core/button-width
-                          core/button-height]
+    (let [human-button     ["Human"
+                            (core/button-position-x)
+                            190
+                            core/button-width
+                            core/button-height]
+          easy-ai-button   ["Easy Ai"
+                            (core/button-position-x)
+                            250 core/button-width
+                            core/button-height]
           medium-ai-button ["Medium Ai"
                             (core/button-position-x)
                             310
@@ -39,13 +39,12 @@
                             370
                             core/button-width
                             core/button-height]]
-     (it "renders player choice buttons"
-      (sut/draw-player-choice-buttons)
-      (should-have-invoked :draw-button {:with human-button})
-      (should-have-invoked :draw-button {:with easy-ai-button})
-      (should-have-invoked :draw-button {:with medium-ai-button})
-      (should-have-invoked :draw-button {:with expert-ai-button}))
-     )
+      (it "renders player choice buttons"
+        (sut/draw-player-choice-buttons)
+        (should-have-invoked :draw-button {:with human-button})
+        (should-have-invoked :draw-button {:with easy-ai-button})
+        (should-have-invoked :draw-button {:with medium-ai-button})
+        (should-have-invoked :draw-button {:with expert-ai-button})))
 
 
     (it "renders X player type page"
@@ -55,8 +54,7 @@
         (should-have-invoked :text-align {:with [:center :center]})
         (should-have-invoked :text-size {:with [24]})
         (should-have-invoked :text {:with ["Choose Player X" (/ core/grid-width 2) 150]})
-        (should-have-invoked :player-choice-buttons))
-      )
+        (should-have-invoked :player-choice-buttons)))
 
     (it "renders O player type page"
       (with-redefs [sut/draw-player-choice-buttons (stub :player-choice-buttons)]
@@ -65,8 +63,7 @@
         (should-have-invoked :text-align {:with [:center :center]})
         (should-have-invoked :text-size {:with [24]})
         (should-have-invoked :text {:with ["Choose Player O" (/ core/grid-width 2) 150]})
-        (should-have-invoked :player-choice-buttons))
-      )
+        (should-have-invoked :player-choice-buttons)))
     )
 
   (context "button regions"
@@ -85,7 +82,19 @@
                 :right  (+ (core/button-position-x) core/button-width)}
                sut/easy-ai-button))
 
+    (it "defines medium-ai button"
+      (should= {:top    310
+                :bottom (+ 310 core/button-height)
+                :left   (core/button-position-x)
+                :right  (+ (core/button-position-x) core/button-width)}
+               sut/medium-ai-button))
 
+    (it "defines expert-ai button"
+      (should= {:top    370
+                :bottom (+ 370 core/button-height)
+                :left   (core/button-position-x)
+                :right  (+ (core/button-position-x) core/button-width)}
+               sut/expert-ai-button))
     )
 
   (context "mouse click handling"

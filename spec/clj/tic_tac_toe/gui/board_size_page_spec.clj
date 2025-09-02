@@ -21,9 +21,9 @@
                     q/text                (stub :text)
                     core/draw-button      (stub :draw-button)])
 
-    (let [button3x3 ["3x3" (- (/ core/grid-width 2) core/button-width 20)
+    (let [text3x3 ["3x3" (- (/ core/grid-width 2) core/button-width 20)
                      core/row-top-1 core/button-width core/button-height]
-          button4x4 ["4x4" (+ (/ core/grid-width 2) 20)
+          text4x4 ["4x4" (+ (/ core/grid-width 2) 20)
                      core/row-top-1 core/button-width core/button-height]]
       (it "renders choose board size page"
         (sut/choose-board-size-page)
@@ -32,8 +32,8 @@
         (should-have-invoked :text-size {:with [24]})
         (should-have-invoked :text {:with ["Choose board size"
                                            (/ core/grid-width 2) 220]})
-        (should-have-invoked :draw-button {:with button3x3})
-        (should-have-invoked :draw-button {:with button4x4})))
+        (should-have-invoked :draw-button {:with text3x3})
+        (should-have-invoked :draw-button {:with text4x4})))
     )
 
   (context "button regions"
