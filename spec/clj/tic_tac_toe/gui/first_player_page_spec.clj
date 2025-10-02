@@ -1,6 +1,7 @@
 (ns tic-tac-toe.gui.first-player-page-spec
   (:require [speclj.core :refer :all]
             [quil.core :as q]
+            [tic-tac-toe.gui.draw-pages :as pages]
             [tic-tac-toe.gui.first-player-page :as sut]
             [tic-tac-toe.gui.mouse-clicks :as mouse-clicks]
             [tic-tac-toe.gui.core :as core]))
@@ -27,7 +28,7 @@
                     (+ (/ core/grid-width 2) 20) core/row-top-1
                     core/button-width core/button-height]]
       (it "renders the choose first player page"
-        (sut/choose-first-player-page)
+        (pages/draw-state {:page :choose-first-player})
         (should-have-invoked :background)
         (should-have-invoked :text-align {:with [:center :center]})
         (should-have-invoked :text-size {:with [32]})

@@ -14,16 +14,6 @@
                     (+ (/ core/grid-width 2) 20) core/row-top-1
                     core/button-width core/button-height))
 
-(defn choose-first-player-page []
-  (core/white-background)
-  (q/text-align :center :center)
-  (q/text-size 32)
-  (q/text "Welcome to Tic Tac Toe!" (/ core/grid-width 2) 150)
-  (q/text-size 24)
-  (q/text "Who should go first?" (/ core/grid-width 2) 220)
-  (player-X-button)
-  (player-O-button))
-
 (def x-button
   {:top    core/row-top-1
    :right  (- (/ core/grid-width 2) core/button-padding)
@@ -50,5 +40,12 @@
     (assoc state :current-token :O :page :choose-board-size)
     :else state))
 
-(defmethod draw-state :choose-first-player [state]
-  (choose-first-player-page))
+(defmethod draw-state :choose-first-player [_state]
+  (core/white-background)
+  (q/text-align :center :center)
+  (q/text-size 32)
+  (q/text "Welcome to Tic Tac Toe!" (/ core/grid-width 2) 150)
+  (q/text-size 24)
+  (q/text "Who should go first?" (/ core/grid-width 2) 220)
+  (player-X-button)
+  (player-O-button))
