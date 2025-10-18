@@ -1,6 +1,6 @@
 (ns tic-tac-toe.human-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.board :as board]
+            [tic-tac-toe.boardc :as board]
             [tic-tac-toe.human :as sut]
             [tic-tac-toe.output :as output]))
 

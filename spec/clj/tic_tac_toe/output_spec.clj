@@ -1,10 +1,10 @@
 (ns tic-tac-toe.output-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.output :as sut]
-            [tic-tac-toe.board :as board]
-            [tic-tac-toe.test-boards-3x3-spec :as test-boards-3x3]
-            [tic-tac-toe.test-boards-4x4-spec :as test-boards-4x4]
-            [tic-tac-toe.test-boards-3x3x3-spec :as test-boards-3x3x3]))
+            [tic-tac-toe.boardc :as board]
+            [tic-tac-toe.test-boards-3x3c-spec :as test-boards-3x3]
+            [tic-tac-toe.test-boards-4x4c-spec :as test-boards-4x4]
+            [tic-tac-toe.test-boards-3x3x3c-spec :as test-boards-3x3x3]))
 
 (describe "console output messages"
 
@@ -546,5 +546,17 @@
     (it "displays a message to declare what token made a move"
       (let [output (str "Move By: " (sut/color-green "X") "\n")]
         (should= output (with-out-str (sut/record-of-token-moved "X")))))
+    )
+
+  (context "->clean-user-input"
+
+    (it "returns a string with trimmed whitespace"
+      (with-in-str "  1  " (should= "1" (sut/->clean-user-input))))
+
+    (it "returns a string in all uppercase"
+      (with-in-str "testing" (should= "TESTING" (sut/->clean-user-input))))
+
+    (it "returns a string in all uppercase without whitespace"
+      (with-in-str "   testing   " (should= "TESTING" (sut/->clean-user-input))))
     )
   )

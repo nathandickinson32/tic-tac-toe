@@ -2,7 +2,7 @@
   (:require [speclj.core :refer :all]
             [quil.core :as q]
             [tic-tac-toe.gui.board-size-page :as sut]
-            [tic-tac-toe.board :as board]
+            [tic-tac-toe.boardc :as board]
             [tic-tac-toe.gui.core :as core]
             [tic-tac-toe.gui.mouse-clicks :refer [on-mouse-click]]))
 

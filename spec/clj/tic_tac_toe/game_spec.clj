@@ -1,16 +1,16 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.board :as board]
-            [tic-tac-toe.easy-ai :as easy-ai]
-            [tic-tac-toe.medium-ai :as medium-ai]
-            [tic-tac-toe.expert-ai :as expert-ai]
+            [tic-tac-toe.boardc :as board]
+            [tic-tac-toe.easy-aic :as easy-ai]
+            [tic-tac-toe.medium-aic :as medium-ai]
+            [tic-tac-toe.expert-aic :as expert-ai]
             [tic-tac-toe.human :as human]
             [tic-tac-toe.game :as sut]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.records :as records]
-            [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
-            [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]
-            [tic-tac-toe.test-boards-3x3x3-spec :as test-board-3x3x3]))
+            [tic-tac-toe.test-boards-3x3c-spec :as test-board-3x3]
+            [tic-tac-toe.test-boards-4x4c-spec :as test-board-4x4]
+            [tic-tac-toe.test-boards-3x3x3c-spec :as test-board-3x3x3]))
 
 (def take-turn-state-human-v-human
   {:X :human :O :human :board test-board-3x3/next-move-wins-X :current-token :X :turn-count 0 :board-size :3x3})

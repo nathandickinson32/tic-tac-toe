@@ -1,0 +1,189 @@
+(ns tic-tac-toe.game
+  (:require [tic-tac-toe.boardc :as board]
+            [tic-tac-toe.output :as output]
+            [tic-tac-toe.player-typesc :refer [->player-move]]
+            [tic-tac-toe.easy-aic]
+            [tic-tac-toe.medium-aic]
+            [tic-tac-toe.expert-aic]
+            [tic-tac-toe.records :as records]
+            [clojure.set :as set]))
+
+(declare take-turn)
+
+(def board-sizes {"9" :3x3 "16" :4x4 "27" :3x3x3})
+
+(def tokens {"X" :X "O" :O})
+
+(def players {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai})
+
+(defn switch-player [current-player]
+  (if (= :X current-player)
+    :O
+    :X))
+
+(defn ask-for-board-size []
+  (output/choose-board-size)
+  (let [input (output/->clean-user-input)]
+    (if-let [board-size (get board-sizes input)]
+      board-size
+      (do
+        (output/invalid-board-size-response)
+        (recur)))))
+
+(defn ask-for-token []
+  (output/choose-token)
+  (let [input (output/->clean-user-input)]
+    (if-let [token (get tokens input)]
+      token
+      (do
+        (output/invalid-token-response)
+        (recur)))))
+
+(defn ask-for-player []
+  (output/choose-player)
+  (let [input (output/->clean-user-input)]
+    (if-let [player (get players input)]
+      player
+      (do
+        (output/invalid-response)
+        (recur)))))
+
+(defn ask-for-first-player []
+  (output/choose-first-player)
+  (let [input (output/->clean-user-input)]
+    (if-let [token (get tokens input)]
+      token
+      (do
+        (output/invalid-response)
+        (recur)))))
+
+(defn play-again? [play-new-game database]
+  (output/play-again?)
+  (let [input (output/->clean-user-input)]
+    (when (= input "Y")
+      (play-new-game database))))
+
+(defn Y-or-N []
+  (output/finish-last-game?)
+  (let [input (output/->clean-user-input)]
+    (if (or (= input "Y") (= input "N"))
+      input
+      (do
+        (output/invalid-response)
+        (recur)))))
+
+(defn starting-game-state [board-size players board first-token database]
+  {:board-size    board-size
+   :X             (:X players)
+   :O             (:O players)
+   :board         board
+   :current-token first-token
+   :turn-count    0
+   :game-id       (random-uuid)
+   :database      database})
+
+(defn playable-state [last-state]
+  {:board-size    (:board-size last-state)
+   :X             (:X last-state)
+   :O             (:O last-state)
+   :board         (:board last-state)
+   :current-token (:current-token last-state)
+   :game-id       (:game-id last-state)
+   :turn-count    (:turn-count last-state)
+   :database      (:database last-state)})
+
+(defn unfinished-game? [last-state]
+  (and last-state
+       (not (board/game-over? (:board last-state)
+                              (switch-player (:current-token last-state))
+                              (:board-size last-state)))))
+
+(defn winner-response [new-board new-state board-size current-token]
+  (output/winner-message current-token)
+  (output/determine-board-to-print board-size new-board)
+  new-state)
+
+(defn draw-response [new-board new-state board-size]
+  (output/tie-game-message)
+  (output/determine-board-to-print board-size new-board)
+  new-state)
+
+(defn start-new-game [database]
+  (let [board-size     (ask-for-board-size)
+        board          (board/determine-starting-board board-size)
+        player-1       (ask-for-player)
+        player-1-token (ask-for-token)
+        player-2       (ask-for-player)
+        first-token    (ask-for-first-player)
+        player-2-token (board/switch-player player-1-token)
+        players        {player-1-token player-1
+                        player-2-token player-2}
+        state          (starting-game-state board-size players board first-token database)]
+    (take-turn state)))
+
+(defn end-of-turn [new-state new-board current-token board-size]
+  (cond
+    (board/win? new-board current-token board-size)
+    (winner-response new-board new-state board-size current-token)
+    (board/full-board? new-board board-size)
+    (draw-response new-board new-state board-size)
+    :else (take-turn new-state)))
+
+(defn play-new-game [database]
+  (start-new-game database)
+  (play-again? play-new-game database))
+
+(defn resume-last-game [state]
+  (take-turn state)
+  (play-again? play-new-game (:database state)))
+
+(defn start-new-or-resume [state]
+  (if (= (Y-or-N) "Y")
+    (resume-last-game state)
+    (play-new-game (:database state))))
+
+(defn ->option-to-resume [last-state]
+  (let [state (playable-state last-state)]
+    (start-new-or-resume state)))
+
+(defn start-new-or-option-to-resume [unfinished? state]
+  (if unfinished?
+    (->option-to-resume state)
+    (play-new-game (:database state))))
+
+(defn ->str-move [grid-move board-size]
+  (let [positions (set/map-invert (board/determine-positions board-size))]
+    (get positions grid-move)))
+
+(defn ->new-state [{:keys [board current-token board-size turn-count] :as state} grid-move]
+  (let [new-board   (board/make-move board grid-move current-token)
+        next-player (switch-player current-token)
+        turn-count  (inc turn-count)
+        new-state   (assoc state
+                      :current-token next-player
+                      :board new-board
+                      :turn-count turn-count)
+        str-move    (->str-move grid-move board-size)]
+    (records/save-game new-state str-move)
+    new-state))
+
+(defn take-turn [{:keys [board current-token board-size] :as state}]
+  (output/determine-board-to-print board-size board)
+  (let [grid-move (->player-move state)
+        new-state (->new-state state grid-move)]
+    (end-of-turn new-state (:board new-state) current-token board-size)))
+
+(defn unfinished-edn-game? [last-state database]
+  (if (and (some? last-state)
+           (= :edn-file database))
+    (unfinished-game? (assoc last-state :database :edn-file))
+    false))
+
+(defn start-game [args]
+  (let [database    (if (some #(= % "--edn") args) :edn-file :postgres)
+        last-state  (records/read-last-record)
+        unfinished? (unfinished-edn-game? last-state database)
+        state       (if (= :edn-file database)
+                      (assoc last-state :database database)
+                      (assoc last-state :database database))]
+    (start-new-or-option-to-resume unfinished? state)))

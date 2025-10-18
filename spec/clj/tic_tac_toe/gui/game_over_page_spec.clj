@@ -4,7 +4,7 @@
             [tic-tac-toe.gui.mouse-clicks :as mouse-clicks]
             [tic-tac-toe.gui.core :as core]
             [tic-tac-toe.gui.game-over-page :as sut]
-            [tic-tac-toe.board :as board]))
+            [tic-tac-toe.boardc :as board]))
 
 (defn ->click [x y] {:x x :y y})
 

@@ -4,11 +4,11 @@
             [speclj.core :refer :all]
             [tic-tac-toe.records :as sut]
             [tic-tac-toe.output :as output]
-            [tic-tac-toe.board :as board]
+            [tic-tac-toe.boardc :as board]
             [tic-tac-toe.sql-database.data-source :as datasource]
-            [tic-tac-toe.test-boards-3x3-spec :as test-board-3x3]
-            [tic-tac-toe.test-boards-4x4-spec :as test-board-4x4]
-            [tic-tac-toe.expert-ai :as expert-ai])
+            [tic-tac-toe.test-boards-3x3c-spec :as test-board-3x3]
+            [tic-tac-toe.test-boards-4x4c-spec :as test-board-4x4]
+            [tic-tac-toe.expert-aic :as expert-ai])
   (:import (java.util UUID)))
 
 (def sql-game-data

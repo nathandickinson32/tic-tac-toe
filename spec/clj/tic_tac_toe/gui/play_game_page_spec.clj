@@ -2,7 +2,7 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.gui.play-game-page :as sut]
             [tic-tac-toe.gui.mouse-clicks :as mouse-clicks]
-            [tic-tac-toe.board :as board]
+            [tic-tac-toe.boardc :as board]
             [tic-tac-toe.gui.core :as core]))
 
 (defn ->click [x y] {:x x :y y})

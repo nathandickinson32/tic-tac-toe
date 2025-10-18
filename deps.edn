@@ -1,19 +1,23 @@
 {
- :paths   ["src"]
+ :paths   ["src/clj" "src/cljs" "src/cljc" "resources"]
  :deps    {
            org.clojure/clojure               {:mvn/version "1.12.1"}
            com.github.seancorfield/next.jdbc {:mvn/version "1.3.1048"}
            org.postgresql/postgresql         {:mvn/version "42.7.7"}
            cheshire/cheshire                 {:mvn/version "6.0.0"}
            quil/quil                         {:mvn/version "4.3.1563"}
+           com.cleancoders.c3kit/wire        {:mvn/version "2.7.0"}
            }
  :aliases {
-           :test {:extra-deps  {speclj/speclj {:mvn/version "3.10.0"}}
-                  :extra-paths ["spec/clj" "spec/bb" "dev"]}
+           :test {:extra-deps  {speclj/speclj                  {:mvn/version "3.10.0"}
+                                com.cleancoders.c3kit/scaffold {:mvn/version "2.2.0"}
+                                org.clojure/clojurescript      {:mvn/version "1.12.42"}}
+                  :extra-paths ["spec/clj" "spec/bb" "dev" "spec/cljs" "spec/cljc"]}
            :spec {:main-opts ["-m" "speclj.main" "-c"]}
            :run  {:main-opts ["-m" "tic-tac-toe.main"]}
            :cov  {:main-opts  ["-m" "speclj.cloverage" "-c" "--" "-p" "src" "-s" "spec/clj"]
                   :extra-deps {cloverage/cloverage {:mvn/version "1.2.4"}}}
-           :gui {:main-opts ["-m" "tic-tac-toe.gui"]}
+           :gui  {:main-opts ["-m" "tic-tac-toe.gui"]}
+           :cljs {:main-opts ["-m" "c3kit.scaffold.cljs"]}
            }
  }
