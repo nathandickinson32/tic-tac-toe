@@ -61,8 +61,8 @@ throw cljs.core.ex_info.call(null,"Code must be either 1000 or between 3000 and 
 });
 c3kit.wire.mock.memory_websocket.send = (function c3kit$wire$mock$memory_websocket$send(data){
 var sock = this;
-var G__15268 = c3kit.wire.socket.ready_state.call(null,sock);
-switch (G__15268) {
+var G__23431 = c3kit.wire.socket.ready_state.call(null,sock);
+switch (G__23431) {
 case (0):
 throw cljs.core.ex_info.call(null,"MemSocket is still in CONNECTING state.",data);
 
@@ -74,7 +74,7 @@ break;
 default:
 return taoensso.timbre._log_BANG_.call(null,taoensso.timbre._STAR_config_STAR_,new cljs.core.Keyword(null,"error","error",-978969032),"c3kit.wire.mock.memory-websocket",null,null,null,new cljs.core.Keyword(null,"p","p",151049309),new cljs.core.Keyword(null,"auto","auto",-566279492),(new cljs.core.Delay((function (){
 return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["MemSocket is already in CLOSING or CLOSED state."], null);
-}),null)),null,(54),null);
+}),null)),null,(76),null);
 
 }
 });
@@ -82,8 +82,8 @@ c3kit.wire.mock.memory_websocket.on_close = (function c3kit$wire$mock$memory_web
 return c3kit.wire.js.dispatch_event.call(null,sock,c3kit.wire.mock.event.__GT_CloseEvent.call(null,sock,code,reason,true));
 });
 c3kit.wire.mock.memory_websocket.close = (function c3kit$wire$mock$memory_websocket$close(var_args){
-var G__15272 = arguments.length;
-switch (G__15272) {
+var G__23434 = arguments.length;
+switch (G__23434) {
 case 1:
 return c3kit.wire.mock.memory_websocket.close.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -115,7 +115,7 @@ c3kit.apron.corec.oset.call(null,sock,"readyState",(3));
 
 return taoensso.timbre._log_BANG_.call(null,taoensso.timbre._STAR_config_STAR_,new cljs.core.Keyword(null,"info","info",-317069002),"c3kit.wire.mock.memory-websocket",null,null,null,new cljs.core.Keyword(null,"p","p",151049309),new cljs.core.Keyword(null,"auto","auto",-566279492),(new cljs.core.Delay((function (){
 return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [["Closing MemSocket with code: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(code)].join('')], null);
-}),null)),null,(55),null);
+}),null)),null,(77),null);
 }));
 
 (c3kit.wire.mock.memory_websocket.close.cljs$core$IFn$_invoke$arity$3 = (function (sock,code,reason){
@@ -129,11 +129,11 @@ c3kit.wire.mock.memory_websocket.on_close.call(null,sock,code,reason);
 
 taoensso.timbre._log_BANG_.call(null,taoensso.timbre._STAR_config_STAR_,new cljs.core.Keyword(null,"info","info",-317069002),"c3kit.wire.mock.memory-websocket",null,null,null,new cljs.core.Keyword(null,"p","p",151049309),new cljs.core.Keyword(null,"auto","auto",-566279492),(new cljs.core.Delay((function (){
 return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [["Closing MemSocket with code: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(code)].join('')], null);
-}),null)),null,(56),null);
+}),null)),null,(78),null);
 
 return taoensso.timbre._log_BANG_.call(null,taoensso.timbre._STAR_config_STAR_,new cljs.core.Keyword(null,"info","info",-317069002),"c3kit.wire.mock.memory-websocket",null,null,null,new cljs.core.Keyword(null,"p","p",151049309),new cljs.core.Keyword(null,"auto","auto",-566279492),(new cljs.core.Delay((function (){
 return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [["Closing MemSocket with reason: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(reason)].join('')], null);
-}),null)),null,(57),null);
+}),null)),null,(79),null);
 }));
 
 (c3kit.wire.mock.memory_websocket.close.cljs$lang$maxFixedArity = 3);
@@ -142,11 +142,11 @@ c3kit.wire.mock.memory_websocket.add_slash_QMARK_ = (function c3kit$wire$mock$me
 return cljs.core.not.call(null,cljs.core.re_find.call(null,/^wss?:\/\/[^\/]*\//,url));
 });
 c3kit.wire.mock.memory_websocket.normalize_url = (function c3kit$wire$mock$memory_websocket$normalize_url(url){
-var G__15279 = url;
+var G__23437 = url;
 if(c3kit.wire.mock.memory_websocket.add_slash_QMARK_.call(null,url)){
-return [cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__15279),"/"].join('');
+return [cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__23437),"/"].join('');
 } else {
-return G__15279;
+return G__23437;
 }
 });
 c3kit.wire.mock.memory_websocket.add_listener = (function c3kit$wire$mock$memory_websocket$add_listener(event_queue,event,listener){
@@ -157,13 +157,13 @@ return null;
 }
 });
 c3kit.wire.mock.memory_websocket.remove_listener = (function c3kit$wire$mock$memory_websocket$remove_listener(event_queue,event,listener){
-return cljs.core.swap_BANG_.call(null,event_queue,cljs.core.update,event,(function (p1__15283_SHARP_){
-return c3kit.apron.corec.removev.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([listener]),p1__15283_SHARP_);
+return cljs.core.swap_BANG_.call(null,event_queue,cljs.core.update,event,(function (p1__23439_SHARP_){
+return c3kit.apron.corec.removev.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([listener]),p1__23439_SHARP_);
 }));
 });
 c3kit.wire.mock.memory_websocket.attempt_handler = (function c3kit$wire$mock$memory_websocket$attempt_handler(event,handler){
 try{return handler.call(null,event);
-}catch (e15285){var e = e15285;
+}catch (e23440){var e = e23440;
 var event_type = c3kit.apron.corec.oget.call(null,event,"type");
 if(cljs.core._EQ_.call(null,"close",event_type)){
 c3kit.apron.corec.oset.call(null,event,"wasClean",false);
@@ -172,61 +172,61 @@ c3kit.apron.corec.oset.call(null,event,"wasClean",false);
 
 return taoensso.timbre._log_BANG_.call(null,taoensso.timbre._STAR_config_STAR_,new cljs.core.Keyword(null,"error","error",-978969032),"c3kit.wire.mock.memory-websocket",null,null,null,new cljs.core.Keyword(null,"p","p",151049309),new cljs.core.Keyword(null,"auto","auto",-566279492),(new cljs.core.Delay((function (){
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [["Error occurred in MemSocket ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(event_type)].join(''),e], null);
-}),null)),null,(58),null);
+}),null)),null,(80),null);
 }});
 c3kit.wire.mock.memory_websocket.dispatch_event = (function c3kit$wire$mock$memory_websocket$dispatch_event(event_queue,event){
 var event_type = c3kit.apron.corec.oget.call(null,event,"type");
 var handlers = cljs.core.seq.call(null,cljs.core.get.call(null,cljs.core.deref.call(null,event_queue),event_type));
-return cljs.core.run_BANG_.call(null,(function (p1__15303_SHARP_){
-return c3kit.wire.mock.memory_websocket.attempt_handler.call(null,event,p1__15303_SHARP_);
+return cljs.core.run_BANG_.call(null,(function (p1__23441_SHARP_){
+return c3kit.wire.mock.memory_websocket.attempt_handler.call(null,event,p1__23441_SHARP_);
 }),handlers);
 });
 c3kit.wire.mock.memory_websocket.create_memory_socket = (function c3kit$wire$mock$memory_websocket$create_memory_socket(url,protocols){
 c3kit.wire.mock.memory_websocket.assert_valid_url.call(null,url);
 
 var event_queue = cljs.core.atom.call(null,cljs.core.PersistentArrayMap.EMPTY);
-var obj15314 = ({"extensions":"","protocol":c3kit.wire.mock.memory_websocket.select_protocol.call(null,protocols),"url":c3kit.wire.mock.memory_websocket.normalize_url.call(null,url),"binaryType":"blob","removeEventListener":(function (event,listener){
+var obj23443 = ({"extensions":"","protocol":c3kit.wire.mock.memory_websocket.select_protocol.call(null,protocols),"url":c3kit.wire.mock.memory_websocket.normalize_url.call(null,url),"binaryType":"blob","removeEventListener":(function (event,listener){
 return c3kit.wire.mock.memory_websocket.remove_listener.call(null,event_queue,event,listener);
 }),"bufferedAmount":(0),"send":c3kit.wire.mock.memory_websocket.send,"readyState":(0),"close":(function() {
-var G__15346 = null;
-var G__15346__0 = (function (){
+var G__23448 = null;
+var G__23448__0 = (function (){
 var this$ = this;
 return c3kit.wire.mock.memory_websocket.close.call(null,this$);
 });
-var G__15346__1 = (function (code){
+var G__23448__1 = (function (code){
 var this$ = this;
 return c3kit.wire.mock.memory_websocket.close.call(null,this$,code);
 });
-var G__15346__2 = (function (code,reason){
+var G__23448__2 = (function (code,reason){
 var this$ = this;
 return c3kit.wire.mock.memory_websocket.close.call(null,this$,code,reason);
 });
-G__15346 = function(code,reason){
+G__23448 = function(code,reason){
 switch(arguments.length){
 case 0:
-return G__15346__0.call(this);
+return G__23448__0.call(this);
 case 1:
-return G__15346__1.call(this,code);
+return G__23448__1.call(this,code);
 case 2:
-return G__15346__2.call(this,code,reason);
+return G__23448__2.call(this,code,reason);
 }
 throw(new Error('Invalid arity: ' + arguments.length));
 };
-G__15346.cljs$core$IFn$_invoke$arity$0 = G__15346__0;
-G__15346.cljs$core$IFn$_invoke$arity$1 = G__15346__1;
-G__15346.cljs$core$IFn$_invoke$arity$2 = G__15346__2;
-return G__15346;
+G__23448.cljs$core$IFn$_invoke$arity$0 = G__23448__0;
+G__23448.cljs$core$IFn$_invoke$arity$1 = G__23448__1;
+G__23448.cljs$core$IFn$_invoke$arity$2 = G__23448__2;
+return G__23448;
 })()
 ,"dispatchEvent":(function (event){
 return c3kit.wire.mock.memory_websocket.dispatch_event.call(null,event_queue,event);
 }),"addEventListener":(function (event,listener){
 return c3kit.wire.mock.memory_websocket.add_listener.call(null,event_queue,event,listener);
 })});
-return obj15314;
+return obj23443;
 });
 c3kit.wire.mock.memory_websocket.__GT_MemSocket = (function c3kit$wire$mock$memory_websocket$__GT_MemSocket(var_args){
-var G__15321 = arguments.length;
-switch (G__15321) {
+var G__23447 = arguments.length;
+switch (G__23447) {
 case 1:
 return c3kit.wire.mock.memory_websocket.__GT_MemSocket.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -248,10 +248,10 @@ return c3kit.wire.mock.memory_websocket.__GT_MemSocket.call(null,url,cljs.core.c
 (c3kit.wire.mock.memory_websocket.__GT_MemSocket.cljs$core$IFn$_invoke$arity$2 = (function (url,protocols){
 c3kit.wire.mock.memory_websocket.assert_valid_url.call(null,url);
 
-var G__15326 = c3kit.wire.mock.memory_websocket.create_memory_socket.call(null,url,protocols);
-c3kit.wire.mock.server.initiate.call(null,G__15326);
+var G__23449 = c3kit.wire.mock.memory_websocket.create_memory_socket.call(null,url,protocols);
+c3kit.wire.mock.server.initiate.call(null,G__23449);
 
-return G__15326;
+return G__23449;
 }));
 
 (c3kit.wire.mock.memory_websocket.__GT_MemSocket.cljs$lang$maxFixedArity = 2);

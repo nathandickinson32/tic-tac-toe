@@ -1,92 +1,98 @@
 (ns tic-tac-toe.main
   (:require [reagent.core :as r]
             [reagent.dom :as rdom]
-            [c3kit.wire.js :as wjs]))
+            [tic-tac-toe.boardc :as board]
+            [tic-tac-toe.gamec :as gamec]))
 
-;; --- Game State ---
-(defonce game-state
-         (r/atom {:board-size 3
-                  :board (vec (repeat 9 nil))
-                  :current-player "X"
-                  :winner nil}))
+(defn empty-board [board-size]
+  (let [size (if (= :3x3 board-size) 3 4)]
+    (vec (repeat size (vec (repeat size nil))))))
 
-;; --- Helpers ---
-(defn winner? [board board-size]
-  (let [indices (range board-size)
-        rows (for [r indices] (map #(+ r (* % board-size)) indices))
-        cols (for [c indices] (map #(+ c (* % board-size)) indices))
-        diag1 (map #(* (+ 1 %) board-size) indices)
-        diag2 (map #(+ (* % (dec board-size)) (dec board-size)) indices)
-        lines (concat rows cols [diag1 diag2])]
-    (some (fn [line]
-            (let [[a b & rest] line]
-              (when (and (board a)
-                         (every? #(= (board a) (board %)) line))
-                (board a))))
-          lines)))
+(defn valid-move? [state [row col]]
+  (and (board/space-available? (:board state) [row col])
+       (not (:winner state))
+       (not (:draw state))))
+
+(defonce app-state
+         (r/atom {:board         (empty-board :3x3)
+                  :board-size    :3x3
+                  :current-token :X
+                  :X             :human
+                  :O             :human
+                  :turn-count    0}))
+
+(defn handle-move [row col]
+  (let [state @app-state
+        move  [row col]]
+    (when (valid-move? state move)
+      (let [new-state (gamec/->new-state state move)
+            new-board (:board new-state)
+            size      (:board-size new-state)
+            winner    (cond
+                        (board/win? new-board :X size) :X
+                        (board/win? new-board :O size) :O)
+            draw      (board/full-board? new-board size)]
+        (swap! app-state merge new-state {:winner winner :draw draw})))))
 
 (defn reset-game []
-  (let [size (:board-size @game-state)]
-    (reset! game-state {:board-size size
-                        :board (vec (repeat (* size size) nil))
-                        :current-player "X"
-                        :winner nil})))
+  (let [size (:board-size @app-state)]
+    (swap! app-state
+           (fn [_]
+             {:board         (empty-board size)
+              :board-size    size
+              :current-token :X
+              :X             :human
+              :O             :human
+              :turn-count    0}))))
 
-;; --- Components ---
-(defn square [i]
-  (let [{:keys [board current-player winner]} @game-state]
+(defn set-board-size [size-keyword]
+  (swap! app-state
+         (fn [_]
+           {
+            :board      (empty-board size-keyword)
+            :board-size size-keyword
+            :current-token :X
+            ;:X             :human
+            ;:O             :human
+            :turn-count 0})))
+
+(defn button-square [row col]
+  (let [{:keys [board winner draw]} @app-state
+        value (get-in board [row col])]
     [:button.square
-     {:on-click #(when (and (nil? (board i)) (nil? winner))
-                   (swap! game-state
-                          (fn [{:keys [board current-player board-size] :as s}]
-                            (let [new-board (assoc board i current-player)
-                                  next-player (if (= current-player "X") "O" "X")
-                                  maybe-winner (winner? new-board board-size)]
-                              (-> s
-                                  (assoc :board new-board)
-                                  (assoc :current-player next-player)
-                                  (assoc :winner maybe-winner))))))}
-     (board i)]))
+     {:on-click #(handle-move row col)
+      :disabled (or value winner draw)}
+     (when value (name value))]))
 
-(defn board []
-  (let [{:keys [board-size board]} @game-state]
-    [:div.board  ;; use .board to match CSS
-     ;; optional inline style for dynamic grid (optional)
-     {:style {"grid-template-columns" (str "repeat(" board-size ", 100px)")}}
-     (for [i (range (count board))]
-       ^{:key i} [square i])]))
+(defn board-grid []
+  (let [size (count (:board @app-state))]
+    [:div.board {:data-size size}
+     (for [row (range size)
+           col (range size)]
+       ^{:key (str row "-" col)}
+       [button-square row col])]))
 
-(defn status []
-  (let [{:keys [current-player winner]} @game-state]
-    [:div.status
-     (cond
-       winner [:h2 (str "Winner: " winner)]
-       :else [:h2 (str "Turn: " current-player)])]))
+(defn status-message []
+  (let [{:keys [current-token winner draw]} @app-state]
+    (cond
+      winner (str "Winner: " winner)
+      draw "Draw!"
+      :else (str "Turn: " current-token))))
 
-(defn reset-button []
-  [:button.reset {:on-click reset-game} "Play Again"])
-
-(defn board-size-selector []
-  [:div
-   [:label "Board size: "]
-   [:select {:value (:board-size @game-state)
-             :on-change #(let [size (js/parseInt (-> % .-target .-value))]
-                           (swap! game-state assoc
-                                  :board-size size
-                                  :board (vec (repeat (* size size) nil))
-                                  :current-player "X"
-                                  :winner nil))}
-    (for [size (range 3 6)]
-      ^{:key size} [:option {:value size} (str size "x" size)])]])
+(defn size-selector []
+  [:div {:style {:margin "15px"}}
+   [:span "Board Size: "]
+   [:button.selection-button {:on-click #(set-board-size :3x3)} "3x3"]
+   [:button.selection-button {:on-click #(set-board-size :4x4)
+             :style    {:margin-left "10px"}} "4x4"]])
 
 (defn app []
   [:div.container
    [:h1 "Tic Tac Toe"]
-   [status]
-   [board-size-selector]
-   [board]
-   [reset-button]])
+   [size-selector]
+   [board-grid]
+   [:div {:style {:margin "10px"}} [status-message]]
+   [:button.reset {:on-click reset-game} "Reset"]])
 
-;; --- Mount app ---
 (defn ^:export main []
-  (rdom/render [app] (wjs/element-by-id "root")))
+  (rdom/render [app] (js/document.getElementById "root")))

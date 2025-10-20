@@ -2,7 +2,7 @@
   (:require [tic-tac-toe.output :as output]
             [tic-tac-toe.boardc]
             [tic-tac-toe.human]
-            [tic-tac-toe.game :as game]
+            [tic-tac-toe.tui-game :as game]
             [tic-tac-toe.records :as records]
             [tic-tac-toe.player-typesc]
             [clojure.string :as str]

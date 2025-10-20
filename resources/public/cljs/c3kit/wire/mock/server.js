@@ -190,8 +190,8 @@ return c3kit.wire.mock.server._shutdown.call(null,cljs.core.deref.call(null,c3ki
 /**
  * Browser access with (set! js/Server repl-options)
  */
-c3kit.wire.mock.server.repl_options = (function (){var obj14288 = ({"send":c3kit.wire.mock.server.send,"flush":c3kit.wire.mock.server.flush,"initiate":c3kit.wire.mock.server.initiate,"shutdown":c3kit.wire.mock.server.shutdown,"close":c3kit.wire.mock.server.close,"messages":cljs.core.comp.call(null,cljs.core.into_array,c3kit.wire.mock.server.messages),"reject":c3kit.wire.mock.server.reject,"open":c3kit.wire.mock.server.open,"receive":c3kit.wire.mock.server.receive,"connections":cljs.core.comp.call(null,cljs.core.into_array,c3kit.wire.mock.server.connections)});
-return obj14288;
+c3kit.wire.mock.server.repl_options = (function (){var obj21526 = ({"send":c3kit.wire.mock.server.send,"flush":c3kit.wire.mock.server.flush,"initiate":c3kit.wire.mock.server.initiate,"shutdown":c3kit.wire.mock.server.shutdown,"close":c3kit.wire.mock.server.close,"messages":cljs.core.comp.call(null,cljs.core.into_array,c3kit.wire.mock.server.messages),"reject":c3kit.wire.mock.server.reject,"open":c3kit.wire.mock.server.open,"receive":c3kit.wire.mock.server.receive,"connections":cljs.core.comp.call(null,cljs.core.into_array,c3kit.wire.mock.server.connections)});
+return obj21526;
 })();
 cljs.core._add_method.call(null,c3kit.wire.mock.server._connections,new cljs.core.Keyword(null,"default","default",-1987822328),(function (_server,_sock){
 return null;

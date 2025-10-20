@@ -9,8 +9,8 @@ c3kit.wire.socket.send_BANG_ = (function c3kit$wire$socket$send_BANG_(ws,data){
 return cljs.core.js_invoke.call(null,ws,"send",data);
 });
 c3kit.wire.socket.close_BANG_ = (function c3kit$wire$socket$close_BANG_(var_args){
-var G__8658 = arguments.length;
-switch (G__8658) {
+var G__11462 = arguments.length;
+switch (G__11462) {
 case 1:
 return c3kit.wire.socket.close_BANG_.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 

@@ -40,10 +40,10 @@ return c3kit.wire.js.dispatch_event.call(null,sock,c3kit.wire.mock.event.__GT_Cl
 cljs.core._add_method.call(null,c3kit.wire.mock.server._connections,new cljs.core.Keyword(null,"memory","memory",-1449401430),(function (server){
 return cljs.core.vec.call(null,cljs.core.keys.call(null,cljs.core.deref.call(null,new cljs.core.Keyword(null,"sockets","sockets",-2073650194).cljs$core$IFn$_invoke$arity$1(server))));
 }));
-cljs.core._add_method.call(null,c3kit.wire.mock.server._initiate,new cljs.core.Keyword(null,"memory","memory",-1449401430),(function (p__15731,sock){
-var map__15732 = p__15731;
-var map__15732__$1 = cljs.core.__destructure_map.call(null,map__15732);
-var sockets = cljs.core.get.call(null,map__15732__$1,new cljs.core.Keyword(null,"sockets","sockets",-2073650194));
+cljs.core._add_method.call(null,c3kit.wire.mock.server._initiate,new cljs.core.Keyword(null,"memory","memory",-1449401430),(function (p__25771,sock){
+var map__25772 = p__25771;
+var map__25772__$1 = cljs.core.__destructure_map.call(null,map__25772);
+var sockets = cljs.core.get.call(null,map__25772__$1,new cljs.core.Keyword(null,"sockets","sockets",-2073650194));
 c3kit.wire.mock.memory_server.assert_connecting_BANG_.call(null,sock);
 
 c3kit.wire.mock.memory_server.assert_uninitialized.call(null,cljs.core.deref.call(null,sockets),sock);
@@ -105,12 +105,12 @@ return cljs.core.get_in.call(null,cljs.core.deref.call(null,new cljs.core.Keywor
 cljs.core._add_method.call(null,c3kit.wire.mock.server._flush,new cljs.core.Keyword(null,"memory","memory",-1449401430),(function (server,sock){
 return cljs.core.swap_BANG_.call(null,new cljs.core.Keyword(null,"sockets","sockets",-2073650194).cljs$core$IFn$_invoke$arity$1(server),cljs.core.update,sock,cljs.core.dissoc,new cljs.core.Keyword(null,"messages","messages",345434482));
 }));
-cljs.core._add_method.call(null,c3kit.wire.mock.server._shutdown,new cljs.core.Keyword(null,"memory","memory",-1449401430),(function (p__15737){
-var map__15738 = p__15737;
-var map__15738__$1 = cljs.core.__destructure_map.call(null,map__15738);
-var server = map__15738__$1;
-var running_QMARK_ = cljs.core.get.call(null,map__15738__$1,new cljs.core.Keyword(null,"running?","running?",-257884763));
-var sockets = cljs.core.get.call(null,map__15738__$1,new cljs.core.Keyword(null,"sockets","sockets",-2073650194));
+cljs.core._add_method.call(null,c3kit.wire.mock.server._shutdown,new cljs.core.Keyword(null,"memory","memory",-1449401430),(function (p__25778){
+var map__25779 = p__25778;
+var map__25779__$1 = cljs.core.__destructure_map.call(null,map__25779);
+var server = map__25779__$1;
+var running_QMARK_ = cljs.core.get.call(null,map__25779__$1,new cljs.core.Keyword(null,"running?","running?",-257884763));
+var sockets = cljs.core.get.call(null,map__25779__$1,new cljs.core.Keyword(null,"sockets","sockets",-2073650194));
 c3kit.wire.mock.memory_server.assert_running_BANG_.call(null,server);
 
 cljs.core.reset_BANG_.call(null,running_QMARK_,false);

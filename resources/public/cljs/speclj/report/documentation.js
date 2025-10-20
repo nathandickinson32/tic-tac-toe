@@ -10,10 +10,10 @@ var component__$1 = cljs.core.deref.call(null,component.parent);
 var level = (0);
 while(true){
 if(cljs.core.truth_(component__$1)){
-var G__7099 = cljs.core.deref.call(null,component__$1.parent);
-var G__7100 = (level + (1));
-component__$1 = G__7099;
-level = G__7100;
+var G__25016 = cljs.core.deref.call(null,component__$1.parent);
+var G__25017 = (level + (1));
+component__$1 = G__25016;
+level = G__25017;
 continue;
 } else {
 return level;
@@ -22,16 +22,16 @@ break;
 }
 });
 speclj.report.documentation.maybe_focused = (function speclj$report$documentation$maybe_focused(text,component){
-var G__7097 = text;
+var G__25015 = text;
 if(cljs.core.truth_(cljs.core.deref.call(null,component.is_focused_QMARK_))){
-return [cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__7097)," ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(speclj.reporting.yellow.call(null,"[FOCUS]"))].join('');
+return [cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__25015)," ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(speclj.reporting.yellow.call(null,"[FOCUS]"))].join('');
 } else {
-return G__7097;
+return G__25015;
 }
 });
 speclj.report.documentation.maybe_profile = (function speclj$report$documentation$maybe_profile(var_args){
-var G__7106 = arguments.length;
-switch (G__7106) {
+var G__25023 = arguments.length;
+switch (G__25023) {
 case 1:
 return speclj.report.documentation.maybe_profile.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -47,20 +47,20 @@ throw (new Error(["Invalid arity: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(
 });
 
 (speclj.report.documentation.maybe_profile.cljs$core$IFn$_invoke$arity$1 = (function (text){
-var G__7109 = text;
+var G__25025 = text;
 if(cljs.core.truth_(speclj.config._STAR_profile_QMARK__STAR_)){
-return ["           ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__7109)].join('');
+return ["           ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__25025)].join('');
 } else {
-return G__7109;
+return G__25025;
 }
 }));
 
 (speclj.report.documentation.maybe_profile.cljs$core$IFn$_invoke$arity$2 = (function (text,result){
-var G__7110 = text;
+var G__25026 = text;
 if(cljs.core.truth_(speclj.config._STAR_profile_QMARK__STAR_)){
-return [cljs.core.str.cljs$core$IFn$_invoke$arity$1(speclj.reporting.yellow.call(null,["[",cljs.core.str.cljs$core$IFn$_invoke$arity$1(speclj.platform.format_seconds.call(null,result.seconds)),"s] "].join(''))),cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__7110)].join('');
+return [cljs.core.str.cljs$core$IFn$_invoke$arity$1(speclj.reporting.yellow.call(null,["[",cljs.core.str.cljs$core$IFn$_invoke$arity$1(speclj.platform.format_seconds.call(null,result.seconds)),"s] "].join(''))),cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__25026)].join('');
 } else {
-return G__7110;
+return G__25026;
 }
 }));
 

@@ -1,11 +1,11 @@
-(ns tic-tac-toe.game-spec
+(ns tic-tac-toe.tui-game-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.boardc :as board]
             [tic-tac-toe.easy-aic :as easy-ai]
             [tic-tac-toe.medium-aic :as medium-ai]
             [tic-tac-toe.expert-aic :as expert-ai]
             [tic-tac-toe.human :as human]
-            [tic-tac-toe.game :as sut]
+            [tic-tac-toe.tui-game :as sut]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.records :as records]
             [tic-tac-toe.test-boards-3x3c-spec :as test-board-3x3]
@@ -27,24 +27,6 @@
 (describe "game conditions"
 
   (around [context] (with-out-str (context)))
-
-  (context "tokens"
-
-    (it "returns a map of available tokens"
-      (should= {"X" :X "O" :O} sut/tokens))
-    )
-
-  (context "board sizes"
-
-    (it "returns a map of potential board sizes"
-      (should= {"9" :3x3 "16" :4x4 "27" :3x3x3} sut/board-sizes))
-    )
-
-  (context "players"
-
-    (it "returns a map of potential players"
-      (should= {"1" :human "2" :easy-ai "3" :medium-ai "4" :expert-ai} sut/players))
-    )
 
   (context "when asking to choose a token"
     (with-stubs)

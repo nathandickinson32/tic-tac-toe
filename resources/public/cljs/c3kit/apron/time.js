@@ -62,8 +62,8 @@ return (new Date());
  * The offset (milliseconds) between the local timezone and UTC. (AZ -> -7hrs)
  */
 c3kit.apron.time.utc_offset = (function c3kit$apron$time$utc_offset(var_args){
-var G__14606 = arguments.length;
-switch (G__14606) {
+var G__22040 = arguments.length;
+switch (G__22040) {
 case 0:
 return c3kit.apron.time.utc_offset.cljs$core$IFn$_invoke$arity$0();
 
@@ -126,8 +126,8 @@ return c3kit.apron.time.from_epoch.call(null,(c3kit.apron.time.millis_since_epoc
  *   e.g. in AZ: (local 2020 1 1 0 0 0) -> 2020-01-01T07:00:00.000-00:00
  */
 c3kit.apron.time.local = (function c3kit$apron$time$local(var_args){
-var G__14612 = arguments.length;
-switch (G__14612) {
+var G__22043 = arguments.length;
+switch (G__22043) {
 case 3:
 return c3kit.apron.time.local.cljs$core$IFn$_invoke$arity$3((arguments[(0)]),(arguments[(1)]),(arguments[(2)]));
 
@@ -165,8 +165,8 @@ return (new Date(year,(month - (1)),day,hour,minute,second));
  *   e.g. (utc 2020 1 1 0 0 0) -> 2020-01-01T00:00:00.000-00:00
  */
 c3kit.apron.time.utc = (function c3kit$apron$time$utc(var_args){
-var G__14623 = arguments.length;
-switch (G__14623) {
+var G__22047 = arguments.length;
+switch (G__22047) {
 case 3:
 return c3kit.apron.time.utc.cljs$core$IFn$_invoke$arity$3((arguments[(0)]),(arguments[(1)]),(arguments[(2)]));
 
@@ -226,8 +226,8 @@ c3kit.apron.time.leap_year_QMARK_ = (function c3kit$apron$time$leap_year_QMARK_(
 return ((((cljs.core._EQ_.call(null,(0),cljs.core.mod.call(null,year,(4)))) && ((!(cljs.core._EQ_.call(null,(0),cljs.core.mod.call(null,year,(100)))))))) || (cljs.core._EQ_.call(null,(0),cljs.core.mod.call(null,year,(400)))));
 });
 c3kit.apron.time.days_in_month = (function c3kit$apron$time$days_in_month(year,month){
-var G__14629 = month;
-switch (G__14629) {
+var G__22055 = month;
+switch (G__22055) {
 case (0):
 return (31);
 
@@ -281,7 +281,7 @@ return (31);
 
 break;
 default:
-throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__14629)].join('')));
+throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__22055)].join('')));
 
 }
 });
@@ -357,10 +357,10 @@ return time.setFullYear(direction.call(null,time.getFullYear(),n));
  *   a Date, the second argument to be a vector representing the amount of time to be changed,
  *   and the last argument to be either a + or - (indicating which direction to modify time).
  */
-c3kit.apron.time.mod_time_by_units = (function c3kit$apron$time$mod_time_by_units(time,p__14640,direction){
-var vec__14641 = p__14640;
-var unit = cljs.core.nth.call(null,vec__14641,(0),null);
-var n = cljs.core.nth.call(null,vec__14641,(1),null);
+c3kit.apron.time.mod_time_by_units = (function c3kit$apron$time$mod_time_by_units(time,p__22061,direction){
+var vec__22062 = p__22061;
+var unit = cljs.core.nth.call(null,vec__22062,(0),null);
+var n = cljs.core.nth.call(null,vec__22062,(1),null);
 var new_date = (new Date(time.getTime()));
 c3kit.apron.time._js_mod_time_by_units.call(null,new_date,unit,n,direction);
 
@@ -389,14 +389,14 @@ return null;
  */
 c3kit.apron.time.before = (function c3kit$apron$time$before(var_args){
 var args__5755__auto__ = [];
-var len__5749__auto___14654 = arguments.length;
-var i__5750__auto___14655 = (0);
+var len__5749__auto___22078 = arguments.length;
+var i__5750__auto___22079 = (0);
 while(true){
-if((i__5750__auto___14655 < len__5749__auto___14654)){
-args__5755__auto__.push((arguments[i__5750__auto___14655]));
+if((i__5750__auto___22079 < len__5749__auto___22078)){
+args__5755__auto__.push((arguments[i__5750__auto___22079]));
 
-var G__14658 = (i__5750__auto___14655 + (1));
-i__5750__auto___14655 = G__14658;
+var G__22080 = (i__5750__auto___22079 + (1));
+i__5750__auto___22079 = G__22080;
 continue;
 } else {
 }
@@ -408,19 +408,19 @@ return c3kit.apron.time.before.cljs$core$IFn$_invoke$arity$variadic((arguments[(
 });
 
 (c3kit.apron.time.before.cljs$core$IFn$_invoke$arity$variadic = (function (time,bits){
-return cljs.core.reduce.call(null,(function (p1__14644_SHARP_,p2__14645_SHARP_){
-return c3kit.apron.time.mod_time.call(null,p1__14644_SHARP_,p2__14645_SHARP_,cljs.core._);
+return cljs.core.reduce.call(null,(function (p1__22065_SHARP_,p2__22066_SHARP_){
+return c3kit.apron.time.mod_time.call(null,p1__22065_SHARP_,p2__22066_SHARP_,cljs.core._);
 }),time,bits);
 }));
 
 (c3kit.apron.time.before.cljs$lang$maxFixedArity = (1));
 
 /** @this {Function} */
-(c3kit.apron.time.before.cljs$lang$applyTo = (function (seq14646){
-var G__14647 = cljs.core.first.call(null,seq14646);
-var seq14646__$1 = cljs.core.next.call(null,seq14646);
+(c3kit.apron.time.before.cljs$lang$applyTo = (function (seq22067){
+var G__22068 = cljs.core.first.call(null,seq22067);
+var seq22067__$1 = cljs.core.next.call(null,seq22067);
 var self__5734__auto__ = this;
-return self__5734__auto__.cljs$core$IFn$_invoke$arity$variadic(G__14647,seq14646__$1);
+return self__5734__auto__.cljs$core$IFn$_invoke$arity$variadic(G__22068,seq22067__$1);
 }));
 
 /**
@@ -429,14 +429,14 @@ return self__5734__auto__.cljs$core$IFn$_invoke$arity$variadic(G__14647,seq14646
  */
 c3kit.apron.time.after = (function c3kit$apron$time$after(var_args){
 var args__5755__auto__ = [];
-var len__5749__auto___14659 = arguments.length;
-var i__5750__auto___14660 = (0);
+var len__5749__auto___22085 = arguments.length;
+var i__5750__auto___22086 = (0);
 while(true){
-if((i__5750__auto___14660 < len__5749__auto___14659)){
-args__5755__auto__.push((arguments[i__5750__auto___14660]));
+if((i__5750__auto___22086 < len__5749__auto___22085)){
+args__5755__auto__.push((arguments[i__5750__auto___22086]));
 
-var G__14661 = (i__5750__auto___14660 + (1));
-i__5750__auto___14660 = G__14661;
+var G__22087 = (i__5750__auto___22086 + (1));
+i__5750__auto___22086 = G__22087;
 continue;
 } else {
 }
@@ -448,19 +448,19 @@ return c3kit.apron.time.after.cljs$core$IFn$_invoke$arity$variadic((arguments[(0
 });
 
 (c3kit.apron.time.after.cljs$core$IFn$_invoke$arity$variadic = (function (time,bits){
-return cljs.core.reduce.call(null,(function (p1__14650_SHARP_,p2__14651_SHARP_){
-return c3kit.apron.time.mod_time.call(null,p1__14650_SHARP_,p2__14651_SHARP_,cljs.core._PLUS_);
+return cljs.core.reduce.call(null,(function (p1__22073_SHARP_,p2__22074_SHARP_){
+return c3kit.apron.time.mod_time.call(null,p1__22073_SHARP_,p2__22074_SHARP_,cljs.core._PLUS_);
 }),time,bits);
 }));
 
 (c3kit.apron.time.after.cljs$lang$maxFixedArity = (1));
 
 /** @this {Function} */
-(c3kit.apron.time.after.cljs$lang$applyTo = (function (seq14652){
-var G__14653 = cljs.core.first.call(null,seq14652);
-var seq14652__$1 = cljs.core.next.call(null,seq14652);
+(c3kit.apron.time.after.cljs$lang$applyTo = (function (seq22075){
+var G__22076 = cljs.core.first.call(null,seq22075);
+var seq22075__$1 = cljs.core.next.call(null,seq22075);
 var self__5734__auto__ = this;
-return self__5734__auto__.cljs$core$IFn$_invoke$arity$variadic(G__14653,seq14652__$1);
+return self__5734__auto__.cljs$core$IFn$_invoke$arity$variadic(G__22076,seq22075__$1);
 }));
 
 c3kit.apron.time.earlier_QMARK_ = c3kit.apron.time.before_QMARK_;

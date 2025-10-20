@@ -52,26 +52,26 @@ return cljs.core.type.call(null,ws);
 })();
 }
 c3kit.wire.mock.event.with_message_props = (function c3kit$wire$mock$event$with_message_props(e,sock,data){
-var G__8662 = e;
-c3kit.apron.corec.oset.call(null,G__8662,"lastEventId","");
+var G__11476 = e;
+c3kit.apron.corec.oset.call(null,G__11476,"lastEventId","");
 
-c3kit.apron.corec.oset.call(null,G__8662,"data",data);
+c3kit.apron.corec.oset.call(null,G__11476,"data",data);
 
-c3kit.apron.corec.oset.call(null,G__8662,"ports",cljs.core.PersistentVector.EMPTY);
+c3kit.apron.corec.oset.call(null,G__11476,"ports",cljs.core.PersistentVector.EMPTY);
 
-c3kit.apron.corec.oset.call(null,G__8662,"origin",cljs.core.re_find.call(null,/^wss?:\/\/[^\\/]*/,c3kit.apron.corec.oget.call(null,sock,"url")));
+c3kit.apron.corec.oset.call(null,G__11476,"origin",cljs.core.re_find.call(null,/^wss?:\/\/[^\\/]*/,c3kit.apron.corec.oget.call(null,sock,"url")));
 
-return G__8662;
+return G__11476;
 });
 c3kit.wire.mock.event.with_close_props = (function c3kit$wire$mock$event$with_close_props(e,code,reason,clean_QMARK_){
-var G__8663 = e;
-c3kit.apron.corec.oset.call(null,G__8663,"code",code);
+var G__11477 = e;
+c3kit.apron.corec.oset.call(null,G__11477,"code",code);
 
-c3kit.apron.corec.oset.call(null,G__8663,"reason",reason);
+c3kit.apron.corec.oset.call(null,G__11477,"reason",reason);
 
-c3kit.apron.corec.oset.call(null,G__8663,"wasClean",clean_QMARK_);
+c3kit.apron.corec.oset.call(null,G__11477,"wasClean",clean_QMARK_);
 
-return G__8663;
+return G__11477;
 });
 cljs.core._add_method.call(null,c3kit.wire.mock.event.__GT_MessageEvent,c3kit.wire.mock.event.JsWebSocket,(function (ws,data){
 return c3kit.wire.mock.event.with_message_props.call(null,(new Event("message")),ws,data);
@@ -86,36 +86,36 @@ cljs.core._add_method.call(null,c3kit.wire.mock.event.__GT_CloseEvent,c3kit.wire
 return c3kit.wire.mock.event.with_close_props.call(null,(new Event("close")),code,reason,clean_QMARK_);
 }));
 c3kit.wire.mock.event.__GT_MemEvent = (function c3kit$wire$mock$event$__GT_MemEvent(element){
-var obj8665 = ({"eventPhase":(0),"cancelable":false,"currentTarget":element,"composed":false,"cancelBubble":false,"isTrusted":true,"returnValue":true,"timeStamp":cljs.core.js_invoke.call(null,performance,"now"),"bubbles":false,"target":element,"srcElement":element,"defaultPrevented":false});
-return obj8665;
+var obj11479 = ({"eventPhase":(0),"cancelable":false,"currentTarget":element,"composed":false,"cancelBubble":false,"isTrusted":true,"returnValue":true,"timeStamp":cljs.core.js_invoke.call(null,performance,"now"),"bubbles":false,"target":element,"srcElement":element,"defaultPrevented":false});
+return obj11479;
 });
 cljs.core._add_method.call(null,c3kit.wire.mock.event.__GT_OpenEvent,new cljs.core.Keyword(null,"default","default",-1987822328),(function (sock){
-var G__8666 = c3kit.wire.mock.event.__GT_MemEvent.call(null,sock);
-c3kit.apron.corec.oset.call(null,G__8666,"type","open");
+var G__11480 = c3kit.wire.mock.event.__GT_MemEvent.call(null,sock);
+c3kit.apron.corec.oset.call(null,G__11480,"type","open");
 
-return G__8666;
+return G__11480;
 }));
 cljs.core._add_method.call(null,c3kit.wire.mock.event.__GT_CloseEvent,new cljs.core.Keyword(null,"default","default",-1987822328),(function (sock,code,reason,clean_QMARK_){
-var G__8667 = c3kit.wire.mock.event.__GT_MemEvent.call(null,sock);
-c3kit.apron.corec.oset.call(null,G__8667,"type","close");
+var G__11481 = c3kit.wire.mock.event.__GT_MemEvent.call(null,sock);
+c3kit.apron.corec.oset.call(null,G__11481,"type","close");
 
-c3kit.wire.mock.event.with_close_props.call(null,G__8667,code,reason,clean_QMARK_);
+c3kit.wire.mock.event.with_close_props.call(null,G__11481,code,reason,clean_QMARK_);
 
-return G__8667;
+return G__11481;
 }));
 cljs.core._add_method.call(null,c3kit.wire.mock.event.__GT_MessageEvent,new cljs.core.Keyword(null,"default","default",-1987822328),(function (sock,data){
-var G__8668 = c3kit.wire.mock.event.__GT_MemEvent.call(null,sock);
-c3kit.apron.corec.oset.call(null,G__8668,"type","message");
+var G__11482 = c3kit.wire.mock.event.__GT_MemEvent.call(null,sock);
+c3kit.apron.corec.oset.call(null,G__11482,"type","message");
 
-c3kit.wire.mock.event.with_message_props.call(null,G__8668,sock,data);
+c3kit.wire.mock.event.with_message_props.call(null,G__11482,sock,data);
 
-return G__8668;
+return G__11482;
 }));
 cljs.core._add_method.call(null,c3kit.wire.mock.event.__GT_ErrorEvent,new cljs.core.Keyword(null,"default","default",-1987822328),(function (sock){
-var G__8669 = c3kit.wire.mock.event.__GT_MemEvent.call(null,sock);
-c3kit.apron.corec.oset.call(null,G__8669,"type","error");
+var G__11483 = c3kit.wire.mock.event.__GT_MemEvent.call(null,sock);
+c3kit.apron.corec.oset.call(null,G__11483,"type","error");
 
-return G__8669;
+return G__11483;
 }));
 
 //# sourceMappingURL=event.js.map
