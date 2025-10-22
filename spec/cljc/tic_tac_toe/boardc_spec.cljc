@@ -33,6 +33,10 @@
                 [2 1 0] [2 1 1] [2 1 2]
                 [2 2 0] [2 2 1] [2 2 2]]
                (sort sut/all-positions-3x3x3)))
+
+    (it "empty nil boards"
+      (should= [[nil nil nil] [nil nil nil] [nil nil nil]] (sut/starting-nil-board :3x3))
+      (should= (vec (repeat 4 (vec (repeat 4 nil)))) (sut/starting-nil-board :4x4)))
     )
 
   (context "when determining what grid positions to get"

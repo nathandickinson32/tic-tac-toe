@@ -3,31 +3,28 @@
                    [c3kit.wire.spec-helperc :refer [should-select]])
   (:require
     [speclj.core]
+    [tic-tac-toe.main :as sut]
     [c3kit.wire.spec-helper :as wire]
-    [tic-tac-toe.main :as sut]))
+    [tic-tac-toe.boardc :as board]))
 
 (describe "main"
 
   (wire/with-root-dom)
 
-  (before (sut/reset-game)
+  (before (sut/reset-game!)
           (wire/render [sut/app]))
 
   (it "renders title"
     (should-select ".container")
     (should-contain "Tic Tac Toe" (wire/text! ".container")))
 
-  (it "empty board sizes"
-    (should= [[nil nil nil] [nil nil nil] [nil nil nil]] (sut/empty-board :3x3))
-    (should= (vec (repeat 4 (vec (repeat 4 nil)))) (sut/empty-board :4x4)))
-
   (it "initializes app-state"
-    (should= :3x3 (:board-size @sut/app-state))
-    (should= :X (:current-token @sut/app-state))
-    (should= :human (:X @sut/app-state))
-    (should= :human (:O @sut/app-state))
-    (should= 0 (:turn-count @sut/app-state))
-    (should= (sut/empty-board :3x3) (:board @sut/app-state)))
+    (should= :3x3 (:board-size @sut/game-state))
+    (should= :X (:current-token @sut/game-state))
+    (should= :human (:X @sut/game-state))
+    (should= :human (:O @sut/game-state))
+    (should= 0 (:turn-count @sut/game-state))
+    (should= (board/starting-nil-board :3x3) (:board @sut/game-state)))
 
   (it "renders a 3x3 board"
     (let [buttons (wire/select-all ".square")]
@@ -40,7 +37,7 @@
       (should-contain "X" (wire/text! "button.square:nth-of-type(1)"))
       (wire/click! "button.square:nth-of-type(1)")
       (should-contain "X" (wire/text! "button.square:nth-of-type(1)"))
-      (should= :O (:current-token @sut/app-state)))
+      (should= :O (:current-token @sut/game-state)))
 
     (it "handles multiple turns"
       (wire/click! "button.square:nth-of-type(1)")
@@ -51,53 +48,53 @@
       (should-contain "X" (wire/text! "button.square:nth-of-type(3)")))
 
     (it "sets winner flag"
-      (swap! sut/app-state assoc
+      (swap! sut/game-state assoc
              :board [[:X :X nil]
                      [:O :O nil]
                      [nil nil nil]]
              :current-token :X)
       (wire/click! "button.square:nth-of-type(3)")
-      (should= :X (:winner @sut/app-state)))
+      (should= :X (:winner @sut/game-state)))
 
     (it "sets draw flag"
-      (swap! sut/app-state assoc
+      (swap! sut/game-state assoc
              :board [[:X :O :X]
                      [:X :O :O]
                      [:O :X nil]]
              :current-token :X)
       (wire/click! "button.square:nth-of-type(9)")
-      (should (:draw @sut/app-state)))
+      (should (:draw @sut/game-state)))
 
     (it "does not allow moves after a win"
-      (swap! sut/app-state assoc :winner :X)
-      (let [current-token (:current-token @sut/app-state)]
+      (let [state         (swap! sut/game-state assoc :winner :X)
+            current-token (:current-token state)]
         (wire/click! "button.square:nth-of-type(5)")
-        (should= current-token (:current-token @sut/app-state))
-        (should-be-nil (get-in @sut/app-state [:board 1 1]))))
+        (should= current-token (:current-token state))
+        (should-be-nil (get-in state [:board 1 1]))))
 
     (it "does not allow moves after a draw"
-      (swap! sut/app-state assoc :draw true)
-      (let [current-token (:current-token @sut/app-state)]
+      (swap! sut/game-state assoc :draw true)
+      (let [current-token (:current-token @sut/game-state)]
         (wire/click! "button.square:nth-of-type(5)")
-        (should= current-token (:current-token @sut/app-state))
-        (should-be-nil (get-in @sut/app-state [:board 1 1]))))
+        (should= current-token (:current-token @sut/game-state))
+        (should-be-nil (get-in @sut/game-state [:board 1 1]))))
     )
 
   (context "status message"
 
     (it "status message for current turn"
       (should-contain "Turn: :X" (wire/text! ".container"))
-      (swap! sut/app-state assoc :current-token :O)
+      (swap! sut/game-state assoc :current-token :O)
       (wire/render [sut/app])
       (should-contain "Turn: :O" (wire/text! ".container")))
 
     (it "displays winner message"
-      (swap! sut/app-state assoc :winner :X)
+      (swap! sut/game-state assoc :winner :X)
       (wire/render [sut/app])
       (should-contain "Winner: :X" (wire/text! ".container")))
 
     (it "displays draw message"
-      (swap! sut/app-state assoc :winner nil :draw true)
+      (swap! sut/game-state assoc :winner nil :draw true)
       (wire/render [sut/app])
       (should-contain "Draw!" (wire/text! ".container")))
     )
@@ -109,30 +106,30 @@
       (should= "Reset" (wire/text! ".reset")))
 
     (it "resets game"
-      (swap! sut/app-state assoc
+      (swap! sut/game-state assoc
              :board [[:X nil nil] [nil nil nil] [nil nil nil]]
              :winner :X
              :draw true)
       (wire/click! ".reset")
-      (should= (sut/empty-board :3x3) (:board @sut/app-state))
-      (should= :X (:current-token @sut/app-state))
-      (should= 0 (:turn-count @sut/app-state))
-      (should-be-nil (:winner @sut/app-state))
-      (should-not (:draw @sut/app-state)))
+      (should= (board/starting-nil-board :3x3) (:board @sut/game-state))
+      (should= :X (:current-token @sut/game-state))
+      (should= 0 (:turn-count @sut/game-state))
+      (should-be-nil (:winner @sut/game-state))
+      (should-not (:draw @sut/game-state)))
 
     (it "resets to 4x4 board"
       (sut/set-board-size :4x4)
-      (sut/handle-move 0 0)
-      (sut/reset-game)
-      (should= (sut/empty-board :4x4) (:board @sut/app-state))
-      (should= :X (:current-token @sut/app-state))
-      (should= :4x4 (:board-size @sut/app-state)))
+      (sut/handle-move [0 0])
+      (sut/reset-game!)
+      (should= (board/starting-nil-board :4x4) (:board @sut/game-state))
+      (should= :X (:current-token @sut/game-state))
+      (should= :4x4 (:board-size @sut/game-state)))
 
     (it "resets to 3x3 board"
       (sut/set-board-size :3x3)
-      (should= (sut/empty-board :3x3) (:board @sut/app-state))
-      (should= :X (:current-token @sut/app-state))
-      (should= :3x3 (:board-size @sut/app-state)))
+      (should= (board/starting-nil-board :3x3) (:board @sut/game-state))
+      (should= :X (:current-token @sut/game-state))
+      (should= :3x3 (:board-size @sut/game-state)))
     )
 
   (context "board size selector"
@@ -149,17 +146,45 @@
       (wire/click! "button:nth-of-type(2)")
       (let [buttons (wire/select-all ".square")]
         (should= 16 (count buttons))
-        (should= :4x4 (:board-size @sut/app-state))
-        (should= (sut/empty-board :4x4) (:board @sut/app-state))
-        (should= 0 (:turn-count @sut/app-state))))
+        (should= :4x4 (:board-size @sut/game-state))
+        (should= (board/starting-nil-board :4x4) (:board @sut/game-state))
+        (should= 0 (:turn-count @sut/game-state))))
 
     (it "clicking 3x3 button changes board size"
-      (swap! sut/app-state assoc :board-size :4x4 :board (sut/empty-board :4x4))
+      (swap! sut/game-state assoc :board-size :4x4 :board (board/starting-nil-board :4x4))
       (wire/click! "button:nth-of-type(1)")
       (let [buttons (wire/select-all ".square")]
         (should= 9 (count buttons))
-        (should= :3x3 (:board-size @sut/app-state))
-        (should= (sut/empty-board :3x3) (:board @sut/app-state))
-        (should= 0 (:turn-count @sut/app-state))))
+        (should= :3x3 (:board-size @sut/game-state))
+        (should= (board/starting-nil-board :3x3) (:board @sut/game-state))
+        (should= 0 (:turn-count @sut/game-state))))
+    )
+
+  (context "Player selector"
+
+    (before (wire/render [sut/app]))
+
+    (it "renders human and Expert AI buttons"
+      (should-select ".container")
+      (should-contain "Player O: " (wire/text! ".container"))
+      (should-contain "Human" (wire/text! "button.human"))
+      (should-contain "Expert AI" (wire/text! "button.ai")))
+
+    (it "clicking expert AI button changes player O"
+      (wire/click! "button.ai")
+      (should= :expert-ai (:O @sut/game-state))
+      (should= 0 (:turn-count @sut/game-state)))
+
+    (it "clicking 3x3 button changes board size"
+      (swap! sut/game-state assoc :O :expert-ai)
+      (wire/click! "button.human")
+      (should= :human (:O @sut/game-state))
+      (should= 0 (:turn-count @sut/game-state)))
+
+    (it "Expert AI move after human move"
+      (swap! sut/game-state assoc :O :expert-ai)
+      (wire/click! "button.square:nth-of-type(1)")
+      (should-contain "X" (wire/text! "button.square:nth-of-type(1)"))
+      (should-contain "O" (wire/text! "button.square:nth-of-type(5)")))
     )
   )

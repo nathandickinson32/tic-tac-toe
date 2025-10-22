@@ -77,6 +77,13 @@ body {
   background-color: #eef;
 }
 
+.selection-button.active {
+  background-color: #333;
+  color: #fff;
+  border-color: #333;
+  transform: scale(1.05);
+}
+
 h1 {
   margin-bottom: 20px;
 }

@@ -48,6 +48,10 @@
    "22" [2 1 0] "23" [2 1 1] "24" [2 1 2]
    "25" [2 2 0] "26" [2 2 1] "27" [2 2 2]})
 
+(defn starting-nil-board [board-size]
+  (let [size (if (= :3x3 board-size) 3 4)]
+    (vec (repeat size (vec (repeat size nil))))))
+
 (defn determine-positions [board-size]
   (condp = board-size
     :3x3 str-positions-3x3
