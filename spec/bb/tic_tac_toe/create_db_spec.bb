@@ -1,7 +1,7 @@
 (ns tic-tac-toe.create-db-spec
   (:require [speclj.core :refer :all]
             [pod.babashka.postgresql :as db]
-            [tic-tac-toe.config :as config]
+            [tic-tac-toe.sql-database.config :as config]
             [tic-tac-toe.create-db :as sut]))
 
 (def exists-sql
@@ -20,10 +20,12 @@
        "     board_size VARCHAR(8) NOT NULL\n"
        "   );\n"
        "   CREATE TABLE IF NOT EXISTS moves (\n"
-       "     game_id VARCHAR NOT NULL,\n"
-       "     token VARCHAR NOT NULL,\n"
+       "     game_id UUID NOT NULL,\n"
+       "     turn_count SMALLINT NOT NULL,\n"
+       "     token VARCHAR(1) NOT NULL,\n"
        "     move VARCHAR(2) NOT NULL\n"
        "   )"))
+
 
 (describe "Create DB"
   (with-stubs)

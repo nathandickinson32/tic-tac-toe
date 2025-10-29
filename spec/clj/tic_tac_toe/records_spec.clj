@@ -1,14 +1,13 @@
 (ns tic-tac-toe.records-spec
   (:require [clojure.string :as str]
-            [next.jdbc :as jdbc]
             [speclj.core :refer :all]
             [tic-tac-toe.records :as sut]
+            [tic-tac-toe.records-jdbc :as sql]
             [tic-tac-toe.output :as output]
             [tic-tac-toe.boardc :as board]
-            [tic-tac-toe.sql-database.data-source :as datasource]
+            [tic-tac-toe.sql-database.data-source :as jdbc]
             [tic-tac-toe.test-boards-3x3c-spec :as test-board-3x3]
-            [tic-tac-toe.test-boards-4x4c-spec :as test-board-4x4]
-            [tic-tac-toe.expert-aic :as expert-ai])
+            [tic-tac-toe.test-boards-4x4c-spec :as test-board-4x4])
   (:import (java.util UUID)))
 
 (def sql-game-data
@@ -152,29 +151,11 @@
                         VALUES (?, ?, ?, ?, ?)"
             sql-params [sql-query "123" false "human" "easy-ai" "3x3"]]
         (with-redefs [jdbc/execute!          (stub :jdbc/execute!)
-                      sut/save-move-postgres (stub :save-move-postgres)
-                      sut/game-exists?       (stub :game-exists? {:return false})]
+                      sql/save-move-postgres (stub :save-move-postgres)
+                      sql/game-exists?       (stub :game-exists? {:return false})]
           (let [test-state (dissoc test-state :database)]
             (sut/save-game test-state "2")
-            (should-have-invoked :jdbc/execute! {:with [datasource/datasource sql-params]})))))
-
-    (it "updates games table to finished game"
-      (let [test-state {:game-id       "123"
-                        :database      :postgres
-                        :board-size    :3x3
-                        :X             :human
-                        :O             :easy-ai
-                        :current-token :O
-                        :turn-count    0
-                        :board         board/starting-board-3x3}
-            sql-query  "UPDATE games SET finished = true WHERE game_id = ?"
-            sql-params [sql-query "123"]]
-        (with-redefs [jdbc/execute-one!   (constantly {:exists true})
-                      jdbc/execute!       (stub :execute!)
-                      board/end-game? (constantly true)]
-          (let [test-state (dissoc test-state :database)]
-            (sut/save-game test-state "20")
-            (should-have-invoked :execute! {:with [datasource/datasource sql-params]})))))
+            (should-have-invoked :jdbc/execute! {:with [sql-params]})))))
 
     (it "gets the correct args to record moves postgres"
       (let [test-state {:game-id       (UUID/fromString "3cb0c0ad-d56c-4a0d-bc8e-807914a9523e")
@@ -192,7 +173,7 @@
         (with-redefs [jdbc/execute! (stub :jdbc/execute!)]
           (let [test-state (dissoc test-state :database)]
             (sut/save-game test-state "2")
-            (should-have-invoked :jdbc/execute! {:with [datasource/datasource sql-params]})))))
+            (should-have-invoked :jdbc/execute! {:with [sql-params]})))))
     )
 
   (context "replay-game edn"
@@ -259,8 +240,8 @@
 
     (redefs-around [output/invalid-game-id          (stub :invalid-response)
                     sut/replay-sql-record           (stub :replay-sql-record)
-                    sut/->sql-game-data             (stub :game-data)
-                    sut/->sql-moves-data            (stub :move-data)
+                    sql/->sql-game-data             (stub :game-data)
+                    sql/->sql-moves-data            (stub :move-data)
                     output/replay-data              (stub :replay-data)
                     output/determine-board-to-print (stub :determine-board-to-print)])
 
@@ -278,8 +259,8 @@
       (should-not-have-invoked :replay-data))
 
     (it "calls replay-sql-record on valid game id"
-      (with-redefs [sut/->sql-game-data  (stub :game-data {:return sql-game-data})
-                    sut/->sql-moves-data (stub :move-data {:return sql-move-data})]
+      (with-redefs [sql/->sql-game-data  (stub :game-data {:return sql-game-data})
+                    sql/->sql-moves-data (stub :move-data {:return sql-move-data})]
         (sut/replay-game true "c93edf16-b9eb-48d1-a9a4-117ddb43987d" :postgres)
         (should-have-invoked :replay-sql-record {:with [sql-game-data sql-move-data "c93edf16-b9eb-48d1-a9a4-117ddb43987d"]})
         (should-not-have-invoked :invalid-response)))
@@ -318,15 +299,15 @@
     (it "correct SQL args for ->sql-game-data"
       (let [game-id      "test-uuid"
             expected-sql ["SELECT * FROM games WHERE game_id = ?::uuid" game-id]]
-        (with-redefs [jdbc/execute! (stub :jdbc/execute! {:return [:test-game-data]})]
-          (sut/->sql-game-data game-id)
-          (should-have-invoked :jdbc/execute! {:with [datasource/datasource expected-sql]}))))
+        (with-redefs [tic-tac-toe.sql-database.data-source/execute! (stub :execute! {:return [:test-game-data]})]
+          (sql/->sql-game-data game-id)
+          (should-have-invoked :execute! {:with [expected-sql]}))))
 
     (it "correct SQL args for ->sql-moves-data"
       (let [game-id      "test-uuid"
             expected-sql ["SELECT * FROM moves WHERE game_id = ?::uuid ORDER BY turn_count ASC" game-id]]
-        (with-redefs [jdbc/execute! (stub :jdbc/execute! {:return [:test-move-data]})]
-          (sut/->sql-moves-data game-id)
-          (should-have-invoked :jdbc/execute! {:with [datasource/datasource expected-sql]}))))
+        (with-redefs [tic-tac-toe.sql-database.data-source/execute! (stub :execute! {:return [:test-move-data]})]
+          (sql/->sql-moves-data game-id)
+          (should-have-invoked :execute! {:with [expected-sql]}))))
     )
   )

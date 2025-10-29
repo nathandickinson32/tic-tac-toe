@@ -92,7 +92,7 @@
 
 (defn size-selector []
   (let [current-size (:board-size @game-state)]
-    [:div {:style {:margin "15px"}}
+    [:div
      [:span "Board Size: "]
      [:button.selection-button
       {:on-click #(set-board-size :3x3)
@@ -115,7 +115,7 @@
 
 (defn player-selector []
   (let [current-type (:O @game-state)]
-    [:div {:style {:margin "15px"}}
+    [:div
      [:span "Player O: "]
      [:button.selection-button.human
       {:on-click #(set-player-type-o :human)
@@ -132,7 +132,7 @@
    [size-selector]
    [player-selector]
    [board-grid!]
-   [:div {:style {:margin "10px"}} [->status-message]]
+   [:div [->status-message]]
    [:button.reset {:on-click reset-game!} "Reset"]])
 
 (defn ^:export main []

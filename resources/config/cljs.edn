@@ -1,6 +1,5 @@
 {:ns-prefix     "tic_tac_toe"
  :ignore-errors ["goog/i18n/bidi.js"]
- :env-keys      ["cc.env" "CC_ENV"]
  :development   {:cache-analysis true
                  :optimizations  :none
                  :output-dir     "resources/public/cljs/"
@@ -10,15 +9,4 @@
                  :specs          true
                  :verbose        true
                  :watch-fn       c3kit.scaffold.cljs/on-dev-compiled
-                 :parallel-build true}
- :production    {:cache-analysis false
-                 :infer-externs  true
-                 :optimizations  :advanced
-                 :output-dir     "resources/public/cljs/"
-                 :output-to      "resources/public/cljs/tic_tac_toe.js"
-                 :pretty-print   false
-                 :sources        ["src/cljc" "src/cljs"]
-                 :specs          false
-                 :verbose        false
-                 :language-in    :ecmascript-next
-                 :language-out   :ecmascript-next}}
+                 :parallel-build true}}

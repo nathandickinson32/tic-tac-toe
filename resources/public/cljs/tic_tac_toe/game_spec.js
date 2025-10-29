@@ -9,11 +9,11 @@ speclj.components.new_before.call(null,(function (){
 return c3kit.wire.spec_helper.render.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [tic_tac_toe.main.app], null));
 }));
 speclj.components.new_characteristic.call(null,"renders to the page",(function (){
-var value__10561__auto___12697 = "#hello-world";
-var node__10562__auto___12698 = c3kit.wire.spec_helper.select.call(null,value__10561__auto___12697);
-if(cljs.core.truth_(node__10562__auto___12698)){
+var value__10561__auto___10616 = "#hello-world";
+var node__10562__auto___10617 = c3kit.wire.spec_helper.select.call(null,value__10561__auto___10616);
+if(cljs.core.truth_(node__10562__auto___10617)){
 } else {
-throw cljs.core.ex_info.call(null,["Expected selector to find node: ",(function (){var temp__5827__auto__ = value__10561__auto___12697;
+throw cljs.core.ex_info.call(null,["Expected selector to find node: ",(function (){var temp__5827__auto__ = value__10561__auto___10616;
 if((temp__5827__auto__ == null)){
 return "nil";
 } else {

@@ -143,8 +143,7 @@
                 "Board Size: " (name (:board-size last-state)))))
 
 (defn replay-winner-message [token]
-  (let [message (str/trim (with-out-str (winner-message token)))]
-    message))
+  (str/trim (with-out-str (winner-message token))))
 
 (defn replay-draw-message []
   (let [message (str/trim (with-out-str (tie-game-message)))]

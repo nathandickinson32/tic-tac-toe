@@ -5,6 +5,7 @@
             [tic-tac-toe.easy-aic]
             [tic-tac-toe.medium-aic]
             [tic-tac-toe.expert-aic]
+            [tic-tac-toe.human]
             [tic-tac-toe.records :as records]
             [tic-tac-toe.game :as game]))
 

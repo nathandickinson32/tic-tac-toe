@@ -1,7 +1,7 @@
 #!/usr/bin/env bb
 
 (ns tic-tac-toe.create-db
-  (:require [tic-tac-toe.config :as config]
+  (:require [tic-tac-toe.sql-database.config :as config]
             [pod.babashka.postgresql :as db]))
 
 (def db-name
