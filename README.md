@@ -9,7 +9,7 @@ Tic Tac Toe implementation in Clojure with multiple interfaces and AI opponents.
 - **Three Interfaces**:
     - Terminal UI (TUI)
     - Desktop GUI (Quil-based)
-    - Web interface (ClojureScript/Reagent) - [Play online](your-blog-url-here)
+    - Web interface (Reused backend logic) - [Play online](https://nathandickinson32.github.io/my-blog/apprenticeship/update/2025/10/21/tic-tac-toe.html)
 - **Game Persistence**: Save and replay games using PostgreSQL or EDN files
 - **Replay System**: Review any previously played game
 
@@ -89,7 +89,7 @@ clojure -M:gui
 
 ### Web Interface
 
-Hosted: 
+Hosted on my blog: 
 https://nathandickinson32.github.io/my-blog/apprenticeship/update/2025/10/21/tic-tac-toe.html
 
 ## Running Tests
