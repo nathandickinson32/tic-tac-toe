@@ -15,6 +15,6 @@
                                    "spec/cljc"
                                    *command-line-args*)}
 
-         game      {:requires ([tic-tac-toe.tui-game :as game])
-                    :task     (game/start-game *command-line-args*)}}
+         game      {:requires ([tic-tac-toe.main :as game])
+                    :task     (apply game/-main *command-line-args*)}}
  }
