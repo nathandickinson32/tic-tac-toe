@@ -31,6 +31,10 @@
           <option name="dirUrl" value="file://$PROJECT_DIR$/spec/gui" />
           <option name="type" value="TEST_SOURCE" />
         </FolderState>
+        <FolderState>
+          <option name="dirUrl" value="file://$PROJECT_DIR$/spec/clj" />
+          <option name="type" value="TEST_SOURCE" />
+        </FolderState>
       </set>
     </option>
     <option name="projectFiles">
